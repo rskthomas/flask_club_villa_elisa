@@ -21,5 +21,6 @@ def config_db(app):
 def reset_db():
     print('Dropping all tables!')
     db.drop_all()
+    print('Creating all tables!')
     db.create_all()
     print('Database reset!')

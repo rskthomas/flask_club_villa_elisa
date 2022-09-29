@@ -1,10 +1,9 @@
-from src.core.auth import create_user
-
 import click
 from flask import Blueprint
-
 from src.core.auth.users import User
 from src.core import database
+
+from src.core.auth import *
 
 usersbp = Blueprint('users', __name__)
 
@@ -17,7 +16,15 @@ def create(name):
     print("Create user: {}".format(name))
     create_user(firstname=name)
 
+@usersbp.cli.command('delete')
+@click.argument('name')
+def delete(name):
+    """ deletes a user """
+    print("Delete user: {}".format(name))
+    delete_user_by_name(firstname=name)
+
 
 @databasebp.cli.command(name="reset")
 def resetdb():
+    """ Resets the database """
     database.reset_db()

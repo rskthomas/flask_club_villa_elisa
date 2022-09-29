@@ -9,4 +9,8 @@ def create_user(**kwargs):
     db.session.add(user)
     db.session.commit()
     return user
+
+def delete_user_by_name(firstname):
+    User.query.filter(User.firstname == firstname).delete()
+    db.session.commit()
     
