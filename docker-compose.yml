@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  web:
+    build: ./admin
+    ports:
+      - 5001:5000
+    environment:
+      FLASK_DEBUG: True
+    volumes:
+    - ./admin:/var/www
