@@ -28,3 +28,8 @@ def delete(name):
 def resetdb():
     """ Resets the database """
     database.reset_db()
+
+@databasebp.cli.command(name="drop")
+def dropdb():
+    """ Drops all tables """
+    database.drop_db()
