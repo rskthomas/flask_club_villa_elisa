@@ -13,4 +13,6 @@ def create_user(**kwargs):
 def delete_user_by_name(firstname):
     User.query.filter(User.firstname == firstname).delete()
     db.session.commit()
-    
+
+def find_user_by_mail_and_pass(email, password):
+    return User.query.filter_by(email=email, password=password).first()
