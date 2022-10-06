@@ -6,7 +6,7 @@ from flask import session
 from src.core import discipline
 
 
-discipline_blueprint = Blueprint("discipline", __name__, url_prefix="/discipline")
+discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
 @discipline_blueprint.get("/create")
 def create():
@@ -22,8 +22,21 @@ def create_post():
     schedule = request.form.get("schedule")
     cost = request.form.get("cost")
     enabled = request.form.get("enabled")
-    if enabled=="": enabled = "false"
+    if enabled=="": enabled = False
+    else: enabled = True
 
     discipline.create_discipline(name=name, category=category, instructors_name=instructors_name, schedule=schedule, cost=cost, enabled=enabled)
     flash("Discipline created")
-    return redirect(url_for("discipline.create"))
+    return redirect(url_for("disciplines.create"))
+
+@discipline_blueprint.get("/")
+def list():
+    disciplines = discipline.get_disciplines()
+    return render_template("discipline/index.html", disciplines=disciplines)
+
+@discipline_blueprint.delete("/delete/<int:id>")
+def delete(id):
+  #TODO CHECK ROLE
+    discipline.delete_discipline_by_id(id)
+    flash("Discipline deleted")
+    return redirect(url_for("discipline.list"))
