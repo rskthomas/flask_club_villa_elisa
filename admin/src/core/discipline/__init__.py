@@ -1,7 +1,7 @@
 from src.core.discipline.discipline import Discipline 
 from src.core.database import db
 
-def list_discipline():
+def get_disciplines():
     return Discipline.query.all()
 
 def create_discipline(**kwargs):
