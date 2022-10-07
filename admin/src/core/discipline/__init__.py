@@ -13,3 +13,13 @@ def create_discipline(**kwargs):
 def delete_discipline_by_id(id):
     Discipline.query.filter(Discipline.id == id).delete()
     db.session.commit()
+    
+def find_discipline_by_id(id):
+    return Discipline.query.filter(Discipline.id == id).first()
+
+def update_discipline(id, **kwargs):
+    discipline = Discipline.query.filter(Discipline.id == id).first()
+    for key, value in kwargs.items():
+        setattr(discipline, key, value)
+    db.session.commit()
+    return discipline
