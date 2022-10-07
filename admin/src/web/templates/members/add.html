@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+  {% block title %} Login {% endblock %}
+  {% block head %} {{ super() }} {% endblock %}
+  {% block content %}
+    <h1>Agregar Miembro</h1>
+    <form action = "{{ url_for('miembros') }}" method="POST">
+    </form>
+  {% endblock %}

@@ -10,7 +10,7 @@ def init_app(app):
 def config_db(app):
     @app.before_first_request
     def init_database():   
-        if not db.inspect(db.engine).has_table("user"):
+        if not db.inspect(db.engine).has_table("user") and not db.inspect(db.engine).has_table("member"):
             reset_db()
         else:
             print('Database already exists!')

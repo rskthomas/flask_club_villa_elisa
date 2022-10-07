@@ -1,14 +1,15 @@
 import click
 from flask import Blueprint
 from src.core.auth.users import User
-from src.core import database
+from src.core import database, seeds
 
 from src.core.auth import *
 
 usersbp = Blueprint('users', __name__)
-
+seedsbp = Blueprint('seeds', __name__)
 databasebp = Blueprint('database', __name__)
 
+# Users ------------
 @usersbp.cli.command('create')
 @click.argument('name')
 def create(name):
@@ -23,7 +24,7 @@ def delete(name):
     print("Delete user: {}".format(name))
     delete_user_by_name(firstname=name)
 
-
+# DB commands -------
 @databasebp.cli.command(name="reset")
 def resetdb():
     """ Resets the database """
@@ -33,3 +34,8 @@ def resetdb():
 def dropdb():
     """ Drops all tables """
     database.drop_db()
+
+# Seeds commands -------
+@seedsbp.cli.command(name="seeds")
+def seedsdb():
+    seeds.run()

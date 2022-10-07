@@ -1,3 +1,4 @@
+from datetime import datetime
 from src.core.database import db
 
 class Member(db.Model):
@@ -12,4 +13,4 @@ class Member(db.Model):
     membership_state    = db.Column(db.Boolean(), default=True)
     phone_number        = db.Column(db.Integer, nullable=True)
     email               = db.Column(db.String(50), unique=True)
-    activation_date     = db.Column(db.String(50), unique=True)
+    activation_date     = db.Column(db.DateTime, default=datetime.now())
