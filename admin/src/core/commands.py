@@ -1,6 +1,7 @@
 import click
 from flask import Blueprint
 from src.core.auth.users import User
+from src.core import system_config
 from src.core import database
 
 from src.core.auth import *

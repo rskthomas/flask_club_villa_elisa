@@ -100,3 +100,23 @@ a.link {
 tr.disabled {
   color: #bbb !important;
 }
+
+.object-property-label{
+  font-weight: bold;
+  display: inline-block;
+  width: 25%;
+}
+
+.object-property-value{
+  display: inline;
+}
+
+.object-property-container {
+  display: block;
+  margin: 1%;
+}
+
+.edit-link {
+  margin-left: 1%;
+  float: left;
+}
