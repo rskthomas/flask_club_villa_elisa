@@ -36,6 +36,6 @@ def dropdb():
     database.drop_db()
 
 # Seeds commands -------
-@seedsbp.cli.command(name="seeds")
+@seedsbp.cli.command(name="initialize")
 def seedsdb():
     seeds.run()

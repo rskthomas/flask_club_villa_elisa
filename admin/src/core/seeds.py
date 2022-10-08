@@ -27,7 +27,7 @@ def run():
         member_number=2,
         address="Su casa", 
         membership_state=True,
-        phone_number=2312321321321, 
+        phone_number=12312321, 
         email="dafran@gmail.com",
         activation_date=datetime.now()
     )
@@ -41,7 +41,7 @@ def run():
         member_number=3,
         address="Su casa", 
         membership_state=True,
-        phone_number=3432434343, 
+        phone_number=12312321, 
         email="pato@gmail.com",
         activation_date=datetime.now()
     )
@@ -55,7 +55,7 @@ def run():
         member_number=4,
         address="Su casa", 
         membership_state=True,
-        phone_number=5654656565, 
+        phone_number=12312321, 
         email="thomy@gmail.com",
         activation_date=datetime.now()
     )
