@@ -105,6 +105,7 @@ tr.disabled {
   font-weight: bold;
   display: inline-block;
   width: 25%;
+  vertical-align: top;
 }
 
 .object-property-value{
@@ -119,4 +120,8 @@ tr.disabled {
 .edit-link {
   margin-left: 1%;
   float: left;
+}
+
+.success {
+    background-color: greenyellow;
 }

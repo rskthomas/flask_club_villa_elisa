@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title%} Miembros{% endblock %}
+{% block navbar%} {{super()}} {% endblock %}
+{% block content%}
+<table class="index-table box">
+  <thead>
+      <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Activo</th>
+          <th>Roles</th>
+      </tr>
+  </thead>
+  <tbody>
+      {% for user in users %}
+      <tr>
+          <th>{{user.id}}</th>
+          <th>{{user.firstname}}</th>
+          <th>{{user.lastname}}</th>
+          <th>{{user.email}}</th>
+          <th>{{user.username}}</th>
+          <th>{{'Si' if user.active else 'No'}}</th>
+          <th> {{ user.roles | map(attribute='name') | join(', ')}}</th>
+      </tr>
+      {% endfor %}
+  </tbody>
+  </table>
+{% endblock%}
