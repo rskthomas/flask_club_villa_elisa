@@ -8,7 +8,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True)
     active = db.Column(db.Boolean(), default=True)
-    roles = db.relationship("Role", secondary='user_role')
+    roles = db.relationship("Role", secondary='user_role',passive_deletes=True)
     password = db.Column(db.String(50))
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
     created_at = db.Column(db.DateTime, default=datetime.now())

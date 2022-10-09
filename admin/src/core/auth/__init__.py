@@ -20,12 +20,19 @@ def delete_user_by_name(firstname):
     db.session.commit()
 
 
-def update_user(id, args):
+def update_user(id, args, role_ids=None):
+    if role_ids is not None:
+        user = User.query.filter_by(id=id).first()
+        roles = Role.query.filter(Role.id.in_(role_ids)).all()
+        user.roles = roles
+        db.session.commit()
+
     db.session.execute(
         update(User)
         .where(User.id == id)
         .values(args)
     )
+
     db.session.commit()
     return
 
