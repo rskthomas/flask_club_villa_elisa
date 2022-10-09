@@ -1,3 +1,4 @@
+from src.web.controllers.auth import login_required
 from src.core.auth import create_user
 from src.core.auth import update_user_roles
 from src.core.auth import delete_user
@@ -32,14 +33,17 @@ def parse_from_params(form):
     return update_args
 
 @users_blueprint.get("/")
+@login_required
 def index():
     return render_template('users/index.html', users=list_user())
 
 @users_blueprint.get("/nuevo")
+@login_required
 def new():
     return render_template('users/new.html', roles=list_roles())
 
 @users_blueprint.post("/crear")
+@login_required
 def create():
 
     user = create_user(**parse_from_params(request.form))
@@ -50,12 +54,14 @@ def create():
 
 
 @users_blueprint.get("/<int:id>/editar")
+@login_required
 def edit(id):
     return render_template('users/edit.html',
                             user=find_user(id),
                             roles=list_roles())
 
 @users_blueprint.post("/update")
+@login_required
 def update():
     user = update_user(request.form['id'], parse_from_params(request.form))
     update_user_roles(user,
@@ -65,6 +71,7 @@ def update():
     return redirect(url_for('users.index'))
 
 @users_blueprint.get("/<int:user_id>/destroy")
+@login_required
 def destroy(user_id):
     delete_user(user_id)
     flash("El usuario se eliminó correctamente", 'success')
