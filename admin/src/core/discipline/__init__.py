@@ -10,15 +10,15 @@ def create_discipline(**kwargs):
     db.session.commit()
     return discipline
 
-def delete_discipline_by_id(id):
+def delete_discipline(id):
     Discipline.query.filter(Discipline.id == id).delete()
     db.session.commit()
 
 
-def find_discipline_by_id(id):
+def find_discipline(id):
     return Discipline.query.filter(Discipline.id == id).first()
 
-def update_discipline_by_id(id, **kwargs):
+def update_discipline(id, **kwargs):
     Discipline.query.filter(Discipline.id == id).first().update(kwargs)
     db.session.commit()
     
