@@ -18,9 +18,7 @@ def delete_discipline_by_id(id):
 def find_discipline_by_id(id):
     return Discipline.query.filter(Discipline.id == id).first()
 
-def update_discipline(id, **kwargs):
-    discipline = Discipline.query.filter(Discipline.id == id).first()
-    for key, value in kwargs.items():
-        setattr(discipline, key, value)
+def update_discipline_by_id(id, **kwargs):
+    Discipline.query.filter(Discipline.id == id).first().update(kwargs)
     db.session.commit()
-    return discipline
+    
