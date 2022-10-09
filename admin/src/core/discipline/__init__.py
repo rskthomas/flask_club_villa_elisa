@@ -13,7 +13,8 @@ def create_discipline(**kwargs):
 def delete_discipline_by_id(id):
     Discipline.query.filter(Discipline.id == id).delete()
     db.session.commit()
-    
+
+
 def find_discipline_by_id(id):
     return Discipline.query.filter(Discipline.id == id).first()
 

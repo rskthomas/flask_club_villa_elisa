@@ -58,9 +58,9 @@ def update_post(id):
   return redirect(url_for("disciplines.update", id=id))
 
 
-@discipline_blueprint.delete("/delete/<int:id>")
+@discipline_blueprint.post("/delete/<int:id>")
 def delete(id):
   #TODO CHECK ROLE
     discipline.delete_discipline_by_id(id)
     flash("Discipline deleted")
-    return redirect(url_for("discipline.list"))
+    return redirect(url_for("disciplines.list"))
