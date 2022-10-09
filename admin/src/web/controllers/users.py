@@ -1,3 +1,4 @@
+from src.core.auth import update_user
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from src.core.auth import list_user, find_user, list_roles
 
@@ -26,7 +27,8 @@ def update():
     update_args["username"] = params["username"]
     update_args["password"] = params["password"]
     update_args["active"] = params["active"] == "on"
-    #update_args["roles"] = params.getlist["roles"]
+
+    update_user(user_id, update_args)
 
     flash('usuario modificado con éxito', 'success')
     return redirect(url_for('users.index'))

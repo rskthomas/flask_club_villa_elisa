@@ -19,6 +19,7 @@ def delete_user_by_name(firstname):
     User.query.filter(User.firstname == firstname).delete()
     db.session.commit()
 
+
 def update_user(id, args):
     db.session.execute(
         update(User)
@@ -27,6 +28,7 @@ def update_user(id, args):
     )
     db.session.commit()
     return
+
 
 def find_user(id):
     return User.query.filter_by(id=id).first()
