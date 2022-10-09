@@ -12,6 +12,7 @@
           <th>Username</th>
           <th>Activo</th>
           <th>Roles</th>
+          <th>Acciones</th>
       </tr>
   </thead>
   <tbody>
@@ -24,6 +25,10 @@
           <th>{{user.username}}</th>
           <th>{{'Si' if user.active else 'No'}}</th>
           <th> {{ user.roles | map(attribute='name') | join(', ')}}</th>
+          <th>
+            <a href="{{user.id}}/editar"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <a href="{{user.id}}/destroy"><i class="fa fa-trash" aria-hidden="true"></i></a>
+          </th>
       </tr>
       {% endfor %}
   </tbody>

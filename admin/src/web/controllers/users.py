@@ -1,3 +1,4 @@
+from src.core.auth import delete_user
 from src.core.auth import update_user
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from src.core.auth import list_user, find_user, list_roles,update_user
@@ -32,4 +33,10 @@ def update():
     update_user(user_id, update_args, role_ids=role_ids)
 
     flash('usuario modificado con éxito', 'success')
+    return redirect(url_for('users.index'))
+
+@users_blueprint.get("/<int:user_id>/destroy")
+def destroy(user_id):
+    delete_user(user_id)
+    flash("El usuario se eliminó correctamente", 'success')
     return redirect(url_for('users.index'))

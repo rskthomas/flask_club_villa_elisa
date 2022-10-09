@@ -36,6 +36,10 @@ def update_user(id, args, role_ids=None):
     db.session.commit()
     return
 
+def delete_user(user_id):
+    db.session.query(User).filter(User.id==user_id).delete()
+    db.session.commit()
+    return
 
 def find_user(id):
     return User.query.filter_by(id=id).first()

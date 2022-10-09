@@ -125,3 +125,7 @@ tr.disabled {
 .success {
     background-color: greenyellow;
 }
+
+i {
+    margin: 7%
+}
