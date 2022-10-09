@@ -25,8 +25,9 @@
         <label class="object-property-label">Valor cuota mensual: </label>
         $ <input class="object-property-value" lang='es-AR' type="number" step="any" value={{system_config.base_monthly_fee}} name="base_monthly_fee"/>
       </div>
+      
       <div class="object-property-container">
-        <label class="object-property-label">Intereses por pago retrasado: </label>
+        <label class="object-property-label">Roles: </label>
         % <input class="object-property-value" type="number" value={{ system_config.delayed_payment_interests_rate * 100}} name="delayed_payment_interests_rate" />
       </div>
 

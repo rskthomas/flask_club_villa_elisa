@@ -1,12 +1,12 @@
 import click
 from flask import Blueprint
-from src.core.auth.users import User
-from src.core import system_config
+from src.core.auth import users, role, user_role
+from src.core.system_config import system_config
 from src.core import database
 
 from src.core.auth import *
 
-usersbp = Blueprint('users', __name__)
+usersbp = Blueprint('user', __name__)
 
 databasebp = Blueprint('database', __name__)
 

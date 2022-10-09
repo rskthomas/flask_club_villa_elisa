@@ -1,14 +1,18 @@
 from flask import Blueprint, render_template, request
-from src.core.system_config import getSystemConfig, updateSystemConfig
+from sqlalchemy import update
+from src.core.system_config import get_system_config, update_system_config
+
 system_config_blueprint = Blueprint('system_config', __name__, url_prefix ='/configuracion')
 
 @system_config_blueprint.get("/")
 def show():
-  return render_template('system_config/show.html', system_config=getSystemConfig())
+  return render_template('system_config/show.html', system_config=get_system_config())
+
 
 @system_config_blueprint.get("/editar")
 def edit():
-  return render_template('system_config/edit.html', system_config=getSystemConfig())
+  return render_template('system_config/edit.html', system_config=get_system_config())
+
 
 @system_config_blueprint.post("/update")
 def update():
@@ -21,5 +25,5 @@ def update():
   update_args["base_monthly_fee"] = params.get("base_monthly_fee")
   update_args["delayed_payment_interests_rate"] = float(params.get("delayed_payment_interests_rate")) / 100
 
-  updateSystemConfig(update_args)
+  update_system_config(update_args)
   return show()

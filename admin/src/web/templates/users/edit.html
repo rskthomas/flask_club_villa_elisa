@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %} Edición de usuario {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+    <h1>Edición de usuario # {{user.id}}</h1>
+    <section>
+        <form action="/users/update" method="post">
+            <input type="hidden" name="id" value="{{user.id}}">
+            <div class="object-property-container">
+                <label class="object-property-label"> Nombre: </label>
+                <input class="object-property-value" type="text" name="firstname" value={{ user.firstname}}  />
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label"> Apellido: </label>
+                <input class="object-property-value" type="text" name="lastname" value="{{ user.lastname }}"  />
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label"> Nobre de usuario: </label>
+                <input class="object-property-value" type="text" name="username" value="{{ user.username }}"  />
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label"> Email: </label>
+                <input class="object-property-value" type="text" name="email" value="{{ user.email }}"  />
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label">Activo: </label>
+                <input class="object-property-value" type="checkbox" {{'checked' if user.active }} name="active"/>
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label"> Password: </label>
+                <input class="object-property-value" type="password" name="password" value="{{ user.password }}"  />
+            </div>
+            <div class="object-property-container">
+                <label class="object-property-label"> Roles: </label>
+                <select class="object-property-value" name="roles" multiple>
+                    {% for role in roles%}
+                        <option value="{{role.id}}" {{'selected' if user.has_role(role.id) }}> {{role.name}} </option>
+                    {% endfor%}
+                </select>
+            </div>
+
+            <a class="edit-link" href="/users"><button type="button">Cancelar</button></a>
+            <input class="edit-link" type="submit" name="Editar" value="Guardar" />
+        </form>
+    </section>
+{% endblock %}
