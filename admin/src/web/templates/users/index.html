@@ -26,11 +26,12 @@
           <th>{{'Si' if user.active else 'No'}}</th>
           <th> {{ user.roles | map(attribute='name') | join(', ')}}</th>
           <th>
-            <a href="{{user.id}}/editar"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-            <a href="{{user.id}}/destroy"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            <a href="{{url_for('users.edit', id=user.id)}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <a href="{{url_for('users.destroy', user_id=user.id)}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
           </th>
       </tr>
       {% endfor %}
   </tbody>
   </table>
+  <a href="{{ url_for('users.new') }}"><button>Crear nuevo usuario + </button></a>
 {% endblock%}

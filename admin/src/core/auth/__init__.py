@@ -20,26 +20,23 @@ def delete_user_by_name(firstname):
     db.session.commit()
 
 
-def update_user(id, args, role_ids=None):
-    if role_ids is not None:
-        user = User.query.filter_by(id=id).first()
-        roles = Role.query.filter(Role.id.in_(role_ids)).all()
-        user.roles = roles
-        db.session.commit()
-
-    db.session.execute(
+def update_user(id, args):
+    user = db.session.execute(
         update(User)
         .where(User.id == id)
         .values(args)
+        .returning(User.id)
     )
 
     db.session.commit()
-    return
+    return user
+
 
 def delete_user(user_id):
     db.session.query(User).filter(User.id==user_id).delete()
     db.session.commit()
     return
+
 
 def find_user(id):
     return User.query.filter_by(id=id).first()
@@ -48,5 +45,12 @@ def find_user(id):
 def find_user_by_mail_and_pass(email, password):
     return User.query.filter_by(email=email, password=password).first()
 
+
 def list_roles():
     return Role.query.all()
+
+
+def update_user_roles(user, role_ids):
+    roles = Role.query.filter(Role.id.in_(role_ids)).all()
+    user.roles = roles
+    db.session.commit()
