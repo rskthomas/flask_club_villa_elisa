@@ -9,11 +9,8 @@ def init_app(app):
 
 def config_db(app):
     @app.before_first_request
-    def init_database():   
-        if not db.inspect(db.engine).has_table("user"):
-            reset_db()
-        else:
-            print('Database already exists!')
+    def init_database():
+        db.create_all()
 
     @app.teardown_request
     def close_session(exception=None):
@@ -27,6 +24,8 @@ def reset_db():
     db.create_all()
     print('Database reset!')
 
+def create_tables():
+    db.create_all()
 
 def drop_db():
     print('Dropping all tables!')
