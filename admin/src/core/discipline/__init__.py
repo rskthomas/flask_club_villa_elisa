@@ -11,14 +11,17 @@ def create_discipline(**kwargs):
     return discipline
 
 def delete_discipline(id):
-    Discipline.query.filter(Discipline.id == id).delete()
+    discipline=find_discipline(id)
+    db.session.delete(discipline)
     db.session.commit()
-
+    return discipline
 
 def find_discipline(id):
-    return Discipline.query.filter(Discipline.id == id).first()
+    return Discipline.query.get(id)
 
 def update_discipline(id, **kwargs):
-    Discipline.query.filter(Discipline.id == id).first().update(kwargs)
+    discipline = find_discipline(id)
+    for key, value in kwargs.items():
+        setattr(discipline, key, value)
     db.session.commit()
-    
+    return discipline

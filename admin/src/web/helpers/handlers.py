@@ -2,9 +2,10 @@ from flask import render_template
 
 def bad_request(e):
   kwargs = {
-    'error_name': '400 Bad REquest',
+    'error_name': '400 Bad Request',
     'error_description': 'La solicitud no es valida'
   }
+  return render_template('error.html', **kwargs), 400
   
 def not_found_error(e):
   kwargs = {

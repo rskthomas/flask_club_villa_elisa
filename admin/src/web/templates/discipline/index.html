@@ -12,16 +12,22 @@
     <th>Horario</th>
     <th>instructor/es</th>
     <th>costo</th>
+    <th>Editar</th>
+    
   </tr>
  {% for discipline in disciplines %}
   <tr>
-    <td>{{ discipline.name }}</td>
+    <td>> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
     <td>{{ discipline.category }}</td>
     <td>{{ discipline.schedule }}</td>
-    <td>{{ discipline.instructor_name }}</td>
-    <td>{{ discipline.cost }}</td>
+    <td>{{ discipline.coach }}</td>
+    <td>{{ discipline.monthly_price }}</td>
+    <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
   </tr>
     {% endfor %}
+
+    <a href="/disciplines/create">Agregar nueva disciplina</a>
+
 </table> 
 
   {% endblock %}
