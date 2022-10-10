@@ -1,20 +1,24 @@
 from flask import Blueprint, render_template, request
 from sqlalchemy import update
 from src.core.system_config import get_system_config, update_system_config
+from src.web.controllers.auth import login_required
 
 system_config_blueprint = Blueprint('system_config', __name__, url_prefix ='/configuracion')
 
 @system_config_blueprint.get("/")
+@login_required
 def show():
   return render_template('system_config/show.html', system_config=get_system_config())
 
 
 @system_config_blueprint.get("/editar")
+@login_required
 def edit():
   return render_template('system_config/edit.html', system_config=get_system_config())
 
 
 @system_config_blueprint.post("/update")
+@login_required
 def update():
   params = request.form
   update_args = {}

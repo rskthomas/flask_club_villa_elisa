@@ -1,3 +1,4 @@
+from flask import redirect
 from flask import Flask
 from flask import render_template
 
@@ -11,7 +12,6 @@ from src.core.commands import databasebp
 from src.web.controllers.auth import auth_blueprint
 from src.web.controllers.users import users_blueprint
 from src.web.controllers.system_config import system_config_blueprint
-
 
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)

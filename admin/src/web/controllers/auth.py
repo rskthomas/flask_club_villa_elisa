@@ -7,6 +7,16 @@ from src.core import auth
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
+def login_required(function):
+    def login_decorator(*args,**kwargs):
+        if session.get('user') is None:
+            flash('Usted debe estar loggeado para acceder a esta página', 'error')
+            return redirect(url_for('auth.login'))
+        return function(*args, **kwargs)
+
+    login_decorator.__name__ = function.__name__
+    return login_decorator
+
 @auth_blueprint.get("/")
 def login():
   return render_template("auth/login.html")
