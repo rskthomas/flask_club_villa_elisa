@@ -1,21 +1,30 @@
+from src.core.auth import can_perform
 from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for
 from flask import session
 from src.core import auth
 
+from functools import wraps
+
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
-def login_required(function):
-    def login_decorator(*args,**kwargs):
-        if session.get('user') is None:
-            flash('Usted debe estar loggeado para acceder a esta página', 'error')
-            return redirect(url_for('auth.login'))
-        return function(*args, **kwargs)
+def login_required(argument):
+    @wraps(argument)
+    def argument_wrapper(function):
+        @wraps(function)
+        def login_decorator(*args,**kwargs):
+            if session.get('user') is None:
+                flash('Usted debe estar loggeado para acceder a esta página', 'error')
+                return redirect(url_for('auth.login'))
+            if not can_perform(session.get('user'), argument):
+                flash('Usted no tiene permisos necesarios', 'error')
+                return redirect(url_for('auth.login'))
+            return function(*args, **kwargs)
 
-    login_decorator.__name__ = function.__name__
-    return login_decorator
+        return login_decorator
+    return argument_wrapper
 
 @auth_blueprint.get("/")
 def login():
@@ -30,7 +39,7 @@ def authenticate():
     flash("Email o clave incorrecta", 'error')
     return(redirect(url_for('auth.login')))
 
-  session['user'] = params["email"]
+  session['user'] = user.id
   flash('La sesión se inició correctamente', 'success')
   return(redirect(url_for("home")))
 
