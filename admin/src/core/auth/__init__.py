@@ -21,7 +21,7 @@ def delete_user_by_name(firstname):
 
 
 def update_user(id, args):
-    user = db.session.execute(
+    db.session.execute(
         update(User)
         .where(User.id == id)
         .values(args)
@@ -29,7 +29,7 @@ def update_user(id, args):
     )
 
     db.session.commit()
-    return user
+    return
 
 
 def delete_user(user_id):
@@ -54,3 +54,4 @@ def update_user_roles(user, role_ids):
     roles = Role.query.filter(Role.id.in_(role_ids)).all()
     user.roles = roles
     db.session.commit()
+    return
