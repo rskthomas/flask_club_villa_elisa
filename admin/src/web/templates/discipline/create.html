@@ -1,37 +1,21 @@
 {% extends "layout.html" %}
-  {% block title %} Cargar Disciplina {% endblock %}
-  {% block head %} {{ super() }} {% endblock %}
-  {% block content %}
-  <h1>Alta de disciplina</h1>
-  <form action="{{ url_for('disciplines.create') }}" method="post">
-                <div >
-                    <div>
-                        <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required />
-                    </div>
-                    <div>
-                        <label for="category">Categoría</label>
-                            <input type="text" id="category" name="category" required />
-                    </div>
-                    <div>
-                        <label for="coach">Nombre del instructor</label>
-                            <input type="text" id="coach" name="coach" required />
-                    </div>
-                    <div>
-                        <label for="schedule">Horario</label>
-                            <input type="text" id="schedule" name="schedule" required/>
-                    </div>
-                    <div>
-                        <label for="monthly_price">Costo Mensual</label>
-                            <input type="text" id="monthly_price" name="monthly_price"required />
-                    </div>
-                    <div>
-                        <label for="active">Habilitado</label>
-                            <input type="checkbox" id="active" value="true" name="active" checked />
-                        </div>
+{% from "_render_field.html" import render_field %}
 
-                </div>
-                    <button type="submit" >Submit</button>
-            </form>
+{% block title %} Cargar Disciplina {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Alta de disciplina</h1>
 
-  {% endblock %}
+<form action="{{ url_for('disciplines.create') }}" method="POST">
+
+        {{ render_field(form.name, class='foo') }}
+        {{ render_field(form.category) }}
+        {{ render_field(form.coach) }}
+        {{ render_field(form.schedule) }}
+        {{ render_field(form.monthly_price) }}
+        {{ render_field(form.active) }}
+    <button type="submit">Submit</button>
+    
+</form>
+
+{% endblock %}

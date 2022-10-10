@@ -7,95 +7,113 @@ from src.core import discipline
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 
-
 discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
 
 @discipline_blueprint.get("/")
-def list():
+def index():
     disciplines = discipline.get_disciplines()
     return render_template("discipline/index.html", disciplines=disciplines)
 
 
 @discipline_blueprint.get("/create")
 def create():
-    return render_template("discipline/create.html")
+    return render_template("discipline/create.html", form=DisciplineForm())
 
 
 @discipline_blueprint.post("/create")
 def create_post():
-    if not request.form:
-        bad_request("No se ha enviado ningun formulario")
+    form = DisciplineForm(request.form)
+    if form.validate():
+        print("form validated")
+        discipline.create_discipline(
+            name=form.name.data,
+            category=form.category.data,
+            coach=form.coach.data,
+            schedule=form.schedule.data,
+            monthly_price=form.monthly_price.data,
+            active=form.active.data,
+        )
+        flash("Disciplina creada correctamente", "success")
+        return redirect(url_for("disciplines.index"))
 
-    name = request.form.get("name")
-    category = request.form.get("category")
-    coach = request.form.get("coach")
-    schedule = request.form.get("schedule")
-    monthly_price = request.form.get("monthly_price")
-    active = request.form.get("active")
-    if active == "":
-        active = False
-    else:
-        active = True
-
-    discipline.create_discipline(
-        name=name,
-        category=category,
-        coach=coach,
-        schedule=schedule,
-        monthly_price=monthly_price,
-        active=active,
-    )
-    flash("Discipline created")
-    return redirect(url_for("disciplines.create"))
+    return render_template("discipline/create.html", form=form)
 
 
-@discipline_blueprint.get("/update/<int:id>")
+@discipline_blueprint.get("/<int:id>/update")
 def update(id):
-    item = discipline.find_discipline_by_id(id)
-    return render_template("discipline/update.html", discipline=item)
+    item = discipline.find_discipline(id)
+
+    if not item:
+        print("item not found")
+        return bad_request("Discipline not found")
+
+    form = DisciplineForm(
+        name=item.name,
+        category=item.category,
+        coach=item.coach,
+        schedule=item.schedule,
+        monthly_price=item.monthly_price,
+        active=item.active,
+    )
+    return render_template("discipline/update.html", form=form, id=id)
 
 
-@discipline_blueprint.put("/update/<int:id>")
+@discipline_blueprint.post("/<int:id>/update")
 def update_discipline(id):
     if not request.form:
-        bad_request("No se ha enviado ningun formulario")
-    name = request.form.get("name")
-    category = request.form.get("category")
-    coach = request.form.get("coach")
-    schedule = request.form.get("schedule")
-    monthly_price = request.form.get("monthly_price")
-    active = request.form.get("active")
-    if active == "":
-        active = False
-    else:
-        active = True
-
-    discipline.update_discipline(
-        id,
-        name=name,
-        category=category,
-        coach=coach,
-        schedule=schedule,
-        monthly_price=monthly_price,
-        active=active,
-    )
-    flash("Discipline updated")
-    return redirect(url_for("disciplines.update", id=id))
+        return bad_request("No se ha enviado ningun formulario")
+    form = DisciplineForm(request.form)
+    if form.validate():
+        discipline.update_discipline(
+            id=id,
+            name=form.name.data,
+            category=form.category.data,
+            coach=form.coach.data,
+            schedule=form.schedule.data,
+            monthly_price=form.monthly_price.data,
+            active=form.active.data,
+        )
+        flash("Disciplina actualizada correctamente", "success")
+        return redirect(url_for("disciplines.index"))
 
 
-@discipline_blueprint.post("/delete/<int:id>")
+@discipline_blueprint.post("/<int:id>/delete")
 def delete(id):
     # TODO CHECK ROLE
-    discipline.delete_discipline_by_id(id)
-    flash("Discipline deleted")
-    return redirect(url_for("disciplines.list"))
+    if not discipline.delete_discipline(id):
+        return bad_request("Discipline not found")
+
+    flash("Disciplina eliminada correctamente", "success")
+    return redirect(url_for("disciplines.index"))
+
+
+@discipline_blueprint.get("/<int:id>/delete")
+def delete_error(id):
+    return bad_request("No se ha enviado ningun formulario")
+
+@discipline_blueprint.get("/<int:id>")
+def show(id):
+    item = discipline.find_discipline(id)
+    return render_template("discipline/show.html", discipline=item)
+
 
 
 class DisciplineForm(Form):
-    name = StringField('Name', [validators.Length(min=4, max=25)])
-    category = StringField('Category', [validators.Length(min=4, max=25)])
-    coach = StringField('Instructors Name', [validators.Length(min=4, max=25)])
-    schedule = StringField('Schedule', [validators.Length(min=4, max=25)])
-    monthly_price = StringField('monthly_price', [validators.Length(min=4, max=25)])
-    active = BooleanField('active')
+    name = StringField(
+        "Nombre", [validators.Length(min=4, max=25), validators.DataRequired()]
+    )
+    category = StringField(
+        "Categoría", [validators.Length(min=4, max=25), validators.DataRequired()]
+    )
+    coach = StringField(
+        "Nombre/s del instructor/es",
+        [validators.Length(min=4, max=50), validators.DataRequired()],
+    )
+    schedule = StringField(
+        "Horario", [validators.Length(min=4, max=50), validators.DataRequired()]
+    )
+    monthly_price = StringField(
+        "Precio Mensual", [validators.Length(min=1, max=15), validators.DataRequired()]
+    )
+    active = BooleanField("Habilitado")

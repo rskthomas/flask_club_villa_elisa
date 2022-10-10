@@ -1,37 +1,21 @@
 {% extends "layout.html" %}
-  {% block title %} Cargar Disciplina {% endblock %}
-  {% block head %} {{ super() }} {% endblock %}
-  {% block content %}
-  <h1>Alta de disciplina</h1>
-  <form action="{{ url_for('disciplines.update', id=discipline.id) }}" method="post">
-                <div >
-                    <div>
-                        <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required value="{{ discipline.name }}">
-                    </div>
-                    <div>
-                        <label for="category">Categoría</label>
-                            <input type="text" id="category" name="category" required value="{{ discipline.category }}" />
-                    </div>
-                    <div>
-                        <label for="instructor_name">Nombre del instructor</label>
-                            <input type="text" id="instructor_name" name="instructor_name" required value="{{ discipline.instructor_name }}" />
-                    </div>
-                    <div>
-                        <label for="schedule">Horario</label>
-                            <input type="text" id="schedule" name="schedule" required value="{{ discipline.schedule }}"/>
-                    </div>
-                    <div>
-                        <label for="cost">Costo Mensual</label>
-                            <input type="text" id="cost" name="cost"required value="{{ discipline.cost }}"/>
-                    </div>
-                    <div>
-                        <label for="enabled">Habilitado</label>
-                            <input type="checkbox" id="enabled" value="true" name="enabled" checked value="{{ discipline.enabled }}" />
-                        </div>
+{% from "_render_field.html" import render_field %}
 
-                </div>
-                    <button type="submit" >Submit</button>
-            </form>
+{% block title %} Cargar Disciplina {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Modificar disciplina</h1>
 
-  {% endblock %}
+<form action="{{ url_for('disciplines.update', id=id) }}" method="post">
+
+    {{ render_field(form.name) }}
+    {{ render_field(form.category) }}
+    {{ render_field(form.coach) }}
+    {{ render_field(form.schedule) }}
+    {{ render_field(form.monthly_price) }}
+    {{ render_field(form.active) }}
+    <button type="submit">Submit</button>
+
+</form>
+
+{% endblock %}
