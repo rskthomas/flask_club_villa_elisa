@@ -1,14 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-AR">
   <head>
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title> {% block title %} {% endblock %}</title>
     {% endblock %}
   </head>
   <body>
     <div id="navbar">{%block navbar %}{% endblock %}</div>
-    <div id="content">{%block content %}{% endblock %}</div>
+    <div id="main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class=flashes>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+      {%block content %}{% endblock %}</div>
     <div id="footer">{%block footer %}{% endblock %}</div>
   </body>
 </html>

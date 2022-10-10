@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %} Configuración del sistema {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+  <h1>Configuración del sistema</h1>
+  <section>
+    <form action="/configuracion/update" method="post">
+      <div class="object-property-container">
+        <label class="object-property-label">Cantidad de items para listados: </label>
+        <input class="object-property-value" type="number" value={{ system_config.items_qty_for_grids}} name="items_qty_for_grids"/>
+      </div>
+      <div class="object-property-container">
+        <label class="object-property-label">Pagos publicos: </label>
+        <input class="object-property-value" type="checkbox"  {{'checked' if system_config.public_payments_available}} name="public_payments_available"/>
+      </div>
+      <div class="object-property-container">
+        <label class="object-property-label">Informacion de contacto pública: </label>
+        <input class="object-property-value" type="checkbox" {{'checked' if system_config.public_contact_info_available}} name="public_contact_info_available"/>
+      </div>
+      <div class="object-property-container">
+        <label class="object-property-label">Texto cabecera de pagos: </label>
+        <input class="object-property-value" type="text" value="{{ system_config.payment_header_text}}" name="payment_header_text"/>
+      </div>
+      <div class="object-property-container">
+        <label class="object-property-label">Valor cuota mensual: </label>
+        $ <input class="object-property-value" lang='es-AR' type="number" step="any" value={{system_config.base_monthly_fee}} name="base_monthly_fee"/>
+      </div>
+      
+      <div class="object-property-container">
+        <label class="object-property-label">Roles: </label>
+        % <input class="object-property-value" type="number" value={{ system_config.delayed_payment_interests_rate * 100}} name="delayed_payment_interests_rate" />
+      </div>
+
+      <a class="edit-link" href="/configuracion"><button type="button">Cancelar</button></a>
+      <input class="edit-link" type="submit" name="Editar" value="Guardar" />
+    </form>
+  </section>
+{% endblock %}
