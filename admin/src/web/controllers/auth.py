@@ -18,7 +18,7 @@ def login_required(argument):
             if session.get('user') is None:
                 flash('Usted debe estar loggeado para acceder a esta página', 'error')
                 return redirect(url_for('auth.login'))
-            if not can_perform(3, argument):
+            if not can_perform(session.get('user'), argument):
                 flash('Usted no tiene permisos necesarios', 'error')
                 return redirect(url_for('auth.login'))
             return function(*args, **kwargs)
@@ -39,7 +39,7 @@ def authenticate():
     flash("Email o clave incorrecta", 'error')
     return(redirect(url_for('auth.login')))
 
-  session['user'] = params["email"]
+  session['user'] = user.id
   flash('La sesión se inició correctamente', 'success')
   return(redirect(url_for("home")))
 
