@@ -1,6 +1,7 @@
 from flask import redirect
 from flask import Flask
 from flask import render_template
+from os import environ
 
 from src.web.config import config
 from src.core import database
@@ -15,6 +16,8 @@ from src.web.controllers.system_config import system_config_blueprint
 
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
+
+    app.secret_key = environ.get("FLASK_SECRET_KEY", 'this is just a secret')
 
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
