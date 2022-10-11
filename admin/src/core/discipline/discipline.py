@@ -2,6 +2,7 @@ from unicodedata import category
 from src.core.database import db
 
 class Discipline(db.Model):
+    """Discipline model"""
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), nullable=True)
     category = db.Column(db.String(50), nullable=True)

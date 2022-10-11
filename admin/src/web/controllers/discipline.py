@@ -3,30 +3,34 @@ from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for
 from flask import session
-from src.core import discipline
+from src.core import discipline as Discipline
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from src.web.controllers.auth import login_required
 
 
 discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
 
 @discipline_blueprint.get("/")
+@login_required("discipline_rw")
 def index():
-    disciplines = discipline.get_disciplines()
+    disciplines = Discipline.get_disciplines()
     return render_template("discipline/index.html", disciplines=disciplines)
 
 
 @discipline_blueprint.get("/create")
+@login_required("discipline_rw")
 def create():
     return render_template("discipline/create.html", form=DisciplineForm())
 
 
 @discipline_blueprint.post("/create")
+@login_required("discipline_rw")
 def create_post():
     form = DisciplineForm(request.form)
     if form.validate():
         print("form validated")
-        discipline.create_discipline(
+        Discipline.create_discipline(
             name=form.name.data,
             category=form.category.data,
             coach=form.coach.data,
@@ -41,8 +45,9 @@ def create_post():
 
 
 @discipline_blueprint.get("/<int:id>/update")
+@login_required("discipline_rw")
 def update(id):
-    item = discipline.find_discipline(id)
+    item = Discipline.find_discipline(id)
 
     if not item:
         print("item not found")
@@ -60,12 +65,13 @@ def update(id):
 
 
 @discipline_blueprint.post("/<int:id>/update")
+@login_required("discipline_rw")
 def update_discipline(id):
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
     form = DisciplineForm(request.form)
     if form.validate():
-        discipline.update_discipline(
+        Discipline.update_discipline(
             id=id,
             name=form.name.data,
             category=form.category.data,
@@ -79,9 +85,9 @@ def update_discipline(id):
 
 
 @discipline_blueprint.post("/<int:id>/delete")
+@login_required("discipline_rwd")
 def delete(id):
-    # TODO CHECK ROLE
-    if not discipline.delete_discipline(id):
+    if not Discipline.delete_discipline(id):
         return bad_request("Discipline not found")
 
     flash("Disciplina eliminada correctamente", "success")
@@ -92,14 +98,17 @@ def delete(id):
 def delete_error(id):
     return bad_request("No se ha enviado ningun formulario")
 
+
 @discipline_blueprint.get("/<int:id>")
+@login_required("discipline_rw")
 def show(id):
-    item = discipline.find_discipline(id)
+    item = Discipline.find_discipline(id)
     return render_template("discipline/show.html", discipline=item)
 
 
-
 class DisciplineForm(Form):
+    """Represents an html form of Discipline model"""
+
     name = StringField(
         "Nombre", [validators.Length(min=4, max=25), validators.DataRequired()]
     )

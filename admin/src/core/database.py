@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 def init_app(app):
+    """Initializes the database"""
     db.init_app(app)
     config_db(app)
 
 
 def config_db(app):
+    """Configures the database"""
     @app.before_first_request
     def init_database():
         db.create_all()
@@ -18,6 +20,7 @@ def config_db(app):
 
 
 def reset_db():
+    """Resets the database"""
     print('Dropping all tables!')
     db.drop_all()
     print('Creating all tables!')
@@ -25,8 +28,10 @@ def reset_db():
     print('Database reset!')
 
 def create_tables():
+    """Creates the database tables"""
     db.create_all()
 
 def drop_db():
+    """Drops all tables from the database"""
     print('Dropping all tables!')
     db.drop_all()
