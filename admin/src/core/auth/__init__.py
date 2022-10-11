@@ -1,6 +1,10 @@
 from sqlalchemy import update
 from src.core.auth.users import User
 from src.core.auth.role import Role
+from src.core.auth.user_role import UserRole
+from src.core.auth.role_permission import RolePermission
+from src.core.auth.permission import Permission
+
 from src.core.database import db
 
 
@@ -55,3 +59,12 @@ def update_user_roles(user, role_ids):
     user.roles = roles
     db.session.commit()
     return
+
+def can_perform(user_id, permission_name):
+    return any(
+        User.query
+        .join(UserRole)
+        .join(RolePermission, UserRole.role_id == RolePermission.role_id)
+        .join(Permission).where(User.id == user_id)
+        .where(Permission.name == permission_name)
+    )
