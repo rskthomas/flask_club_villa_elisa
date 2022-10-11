@@ -92,14 +92,15 @@ def delete(id):
 def delete_error(id):
     return bad_request("No se ha enviado ningun formulario")
 
+
 @discipline_blueprint.get("/<int:id>")
 def show(id):
     item = discipline.find_discipline(id)
     return render_template("discipline/show.html", discipline=item)
 
 
-
 class DisciplineForm(Form):
+    """Represents an html form of Discipline model"""
     name = StringField(
         "Nombre", [validators.Length(min=4, max=25), validators.DataRequired()]
     )
