@@ -12,10 +12,12 @@ databasebp = Blueprint('database', __name__)
 
 @usersbp.cli.command('create')
 @click.argument('name')
-def create(name):
+@click.argument('email')
+@click.argument('password')
+def create(name, email, password):
     """ Creates a user """
     print("Create user: {}".format(name))
-    create_user(firstname=name)
+    create_user(firstname=name, email=email, password=password)
 
 @usersbp.cli.command('delete')
 @click.argument('name')
