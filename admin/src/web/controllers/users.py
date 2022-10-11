@@ -35,7 +35,17 @@ def parse_from_params(form):
 @login_required
 @users_blueprint.get("/")
 def index():
-    return render_template('users/index.html', users=list_user())
+    params = request.args
+    filter = {}
+
+    if params.get('active') == 'true':
+        filter['active'] = True
+    if params.get('active') == 'false':
+        filter['active'] = False
+
+    filter['email'] = params.get('email')
+
+    return render_template('users/index.html', users=list_user(filter))
 
 @login_required
 @users_blueprint.get("/nuevo")
