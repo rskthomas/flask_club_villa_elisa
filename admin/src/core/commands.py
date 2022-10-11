@@ -1,11 +1,12 @@
 import click
 from flask import Blueprint
-from src.core.auth.users import User
+from src.core.auth import users, role, user_role, permission,role_permission
+from src.core.system_config import system_config
 from src.core import database
 
 from src.core.auth import *
 
-usersbp = Blueprint('users', __name__)
+usersbp = Blueprint('user', __name__)
 
 databasebp = Blueprint('database', __name__)
 
@@ -25,6 +26,10 @@ def delete(name):
     print("Delete user: {}".format(name))
     delete_user_by_name(firstname=name)
 
+@databasebp.cli.command(name="create_tables")
+def create_tables():
+    """ Creates missing tables """
+    database.create_tables()
 
 @databasebp.cli.command(name="reset")
 def resetdb():

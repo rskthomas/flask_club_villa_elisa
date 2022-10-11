@@ -1,3 +1,4 @@
+from flask import redirect
 from flask import Flask
 from flask import render_template
 
@@ -11,6 +12,8 @@ from src.core.commands import databasebp
 from src.web.controllers.auth import auth_blueprint
 from src.web.controllers.discipline import discipline_blueprint
 
+from src.web.controllers.users import users_blueprint
+from src.web.controllers.system_config import system_config_blueprint
 
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
@@ -28,6 +31,9 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(databasebp)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(discipline_blueprint)
+    app.register_blueprint(system_config_blueprint)
+    app.register_blueprint(users_blueprint)
+
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)

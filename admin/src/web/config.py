@@ -6,7 +6,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-   
+
 class ProductionConfig(Config):
     DB_USER = environ.get("DB_USER")
     DB_PASS = environ.get("DB_PASS")
