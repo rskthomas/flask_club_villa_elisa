@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title%} Miembros{% endblock %}
+{% block navbar%} {{super()}} {% endblock %}
+{% block content%} 
+
+<table class="index-table box">
+<thead>
+    <tr>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Tipo Id</th>
+        <th>Id Personal</th>
+        <th>Género</th>
+        <th>Nro.</th>
+        <th>Dirección</th>
+        <th>Estado</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Fecha Alta</th>
+    </tr>
+</thead>
+<tbody>
+    {% for mem in members %}
+    <tr>
+        <th>{{mem.id}}</th>
+        <th>{{mem.first_name}}</th>
+        <th>{{mem.last_name}}</th>
+        <th>{{mem.personal_id_type}}</th>
+        <th>{{mem.personal_id}}</th>
+        <th>{{mem.gender}}</th>
+        <th>{{mem.member_number}}</th>
+        <th>{{mem.address}}</th>
+        <th>{{mem.membership_state}}</th>
+        <th>{{mem.phone_number}}</th>
+        <th>{{mem.email}}</th>
+        <th>{{mem.activation_date}}</th>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

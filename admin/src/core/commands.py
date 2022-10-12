@@ -2,14 +2,15 @@ import click
 from flask import Blueprint
 from src.core.auth import users, role, user_role, permission,role_permission
 from src.core.system_config import system_config
-from src.core import database
+from src.core import database, seeds
 
 from src.core.auth import *
 
-usersbp = Blueprint('user', __name__)
-
+usersbp = Blueprint('users', __name__)
+seedsbp = Blueprint('seeds', __name__)
 databasebp = Blueprint('database', __name__)
 
+# Users ------------
 @usersbp.cli.command('create')
 @click.argument('name')
 @click.argument('email')
@@ -40,3 +41,8 @@ def resetdb():
 def dropdb():
     """ Drops all tables """
     database.drop_db()
+
+# Seeds commands -------
+@seedsbp.cli.command(name="initialize")
+def seedsdb():
+    seeds.run()
