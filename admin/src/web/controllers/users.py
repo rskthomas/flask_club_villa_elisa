@@ -28,7 +28,7 @@ def parse_from_params(form):
     update_args["email"] = form["email"]
     update_args["username"] = form["username"]
     update_args["password"] = form["password"]
-    update_args["active"] = form["active"] == "on"
+    update_args["active"] = form.get("active") == "on" or False
 
     return update_args
 
@@ -36,16 +36,16 @@ def parse_from_params(form):
 @users_blueprint.get("/")
 def index():
     params = request.args
-    filter = {}
+    filters = {}
 
     if params.get('active') == 'true':
-        filter['active'] = True
+        filters['active'] = True
     if params.get('active') == 'false':
-        filter['active'] = False
+        filters['active'] = False
 
-    filter['email'] = params.get('email')
+    filters['email'] = params.get('email')
 
-    return render_template('users/index.html', users=list_user(filter))
+    return render_template('users/index.html', users=list_user(filters), filters=filters)
 
 @login_required
 @users_blueprint.get("/nuevo")
