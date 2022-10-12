@@ -8,8 +8,14 @@ from src.core.auth.permission import Permission
 from src.core.database import db
 
 
-def list_user():
-    return User.query.all()
+def list_user(filter={}):
+    query = User.query
+    if filter.get('email'):
+        query = query.where(User.email.ilike("%" + filter['email'] + '%'))
+    if filter.get('active') is not None:
+        query = query.where(User.active == filter['active'])
+
+    return query.all()
 
 
 def create_user(**kwargs):
@@ -52,7 +58,6 @@ def find_user_by_mail_and_pass(email, password):
 
 def list_roles():
     return Role.query.all()
-
 
 def update_user_roles(user, role_ids):
     roles = Role.query.filter(Role.id.in_(role_ids)).all()
