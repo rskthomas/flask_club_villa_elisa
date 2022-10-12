@@ -6,7 +6,7 @@ from src.core import database, seeds
 
 from src.core.auth import *
 
-usersbp = Blueprint('users', __name__)
+usersbp = Blueprint('user', __name__)
 seedsbp = Blueprint('seeds', __name__)
 databasebp = Blueprint('database', __name__)
 
