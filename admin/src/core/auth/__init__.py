@@ -4,18 +4,51 @@ from src.core.auth.role import Role
 from src.core.auth.user_role import UserRole
 from src.core.auth.role_permission import RolePermission
 from src.core.auth.permission import Permission
-
+from src.core.utils import paginated
 from src.core.database import db
 
 
-def list_user(filter={}):
+def base_user_query(filter={}):
+    """
+        Builds sqlalchemy query for User modelwithout fetching the results.
+
+    Args:
+        filter (dict, optional): query filters. email and active keys accepted
+        Defaults to {}.
+
+    Returns:
+        flask_sqlalchemy.BaseQuery
+    """
     query = User.query
     if filter.get('email'):
         query = query.where(User.email.ilike("%" + filter['email'] + '%'))
     if filter.get('active') is not None:
         query = query.where(User.active == filter['active'])
 
-    return query.all()
+    return query
+
+
+def paginated_users(filter={}, current_page=1):
+    """
+        Paginates users from the db based on filter and returns current page
+        received. Page size relies on system config
+
+    Args:
+        filter (dict, optional): filters to be used, same as base_user_query.
+        Defaults to {}.
+        current_page (int, optional): pagination page to be returned.
+            Defaults to 1.
+
+    Returns:
+        dict: paginated results. Have 3 keys
+            items: users of the current page
+            pages: # of pages based on the page size
+    """
+    return paginated(base_user_query(), current_page)
+
+
+def list_user(filter={}):
+    return base_user_query(filter).all();
 
 
 def create_user(**kwargs):

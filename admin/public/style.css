@@ -129,3 +129,11 @@ tr.disabled {
 i {
     margin: 7%
 }
+
+.paginator-container {
+    display: flex;
+    justify-content: center;
+}
+.paginator-number {
+    margin:0.4em
+}

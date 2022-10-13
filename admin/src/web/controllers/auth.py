@@ -10,7 +10,7 @@ from functools import wraps
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
-def login_required(argument):
+def login_required(argument=None):
     @wraps(argument)
     def argument_wrapper(function):
         @wraps(function)
@@ -18,7 +18,7 @@ def login_required(argument):
             if session.get('user') is None:
                 flash('Usted debe estar loggeado para acceder a esta página', 'error')
                 return redirect(url_for('auth.login'))
-            if not can_perform(session.get('user'), argument):
+            if argument and not can_perform(session.get('user'), argument):
                 flash('Usted no tiene permisos necesarios', 'error')
                 return redirect(url_for('auth.login'))
             return function(*args, **kwargs)
