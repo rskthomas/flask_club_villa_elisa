@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+  {% block title %} Miembros {% endblock %}
+  {% block head %} {{ super() }} {% endblock %}
+  {% block content %}
+  <h1>Miembro: {{ member.name}}</h1>
+
+ 
+  <table class="index-table box">
+    <thead>
+        <tr>
+            <th>Nro. Miembro</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Tipo Id</th>
+            <th>Id Personal</th>
+            <th>Género</th>
+            <th>Dirección</th>
+            <th>Estado</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Fecha Alta</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>{{member.id}}</th>
+            <th>{{member.first_name}}</th>
+            <th>{{member.last_name}}</th>
+            <th>{{member.personal_id_type}}</th>
+            <th>{{member.personal_id}}</th>
+            <th>{{member.gender}}</th>    
+            <th>{{member.address}}</th>
+            <th>{{member.membership_state}}</th>
+            <th>{{member.phone_number}}</th>
+            <th>{{member.email}}</th>
+            <th>{{member.activation_date}}</th>
+            <th><a href="/miembros/{{ member.id }}/update">Editar</a></th>
+            <th>
+              <form action="/miembros/{{ member.id }}/delete" method="POST">
+                <input type="submit" value="Eliminar">
+              </form>
+            </th>
+        </tr>
+    </tbody>
+  </table>
+
+  {% endblock %}
