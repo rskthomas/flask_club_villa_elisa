@@ -1,5 +1,6 @@
 from datetime import datetime
 from src.core.database import db
+from src.core.payments import invoice as Invoice
 
 class Member(db.Model):
     id                  = db.Column(db.Integer, primary_key=True, unique=True)
@@ -14,3 +15,5 @@ class Member(db.Model):
     phone_number        = db.Column(db.Integer, nullable=True)
     email               = db.Column(db.String(50), unique=True)
     activation_date     = db.Column(db.DateTime, default=datetime.now())
+    invoices             = db.relationship("Invoice", backref="member", lazy=True)
+
