@@ -12,13 +12,13 @@ def show():
 
 
 @system_config_blueprint.get("/editar")
-@login_required
+@login_required()
 def edit():
   return render_template('system_config/edit.html', system_config=get_system_config())
 
 
 @system_config_blueprint.post("/update")
-@login_required
+@login_required()
 def update():
   params = request.form
   update_args = {}
