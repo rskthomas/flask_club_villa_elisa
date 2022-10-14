@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "_render_field.html" import render_field %}
+
+{% block title %} Cargar Miembro {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Modificar Miembro</h1>
+
+<form action="{{ url_for('member.update_view', id=id) }}" method="post">
+    {{ render_field(form.first_name, class='foo') }}
+    {{ render_field(form.last_name) }}
+    {{ render_field(form.personal_id_type) }}
+    {{ render_field(form.personal_id) }}
+    {{ render_field(form.gender) }}
+    {{ render_field(form.address) }}
+    {{ render_field(form.membership_state) }}
+    {{ render_field(form.phone_number) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.activation_date) }}
+    <button type="submit">Submit</button>
+
+</form>
+
+{% endblock %}
