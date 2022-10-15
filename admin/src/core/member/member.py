@@ -15,5 +15,5 @@ class Member(db.Model):
     phone_number        = db.Column(db.Integer, nullable=True)
     email               = db.Column(db.String(50), unique=True)
     activation_date     = db.Column(db.DateTime, default=datetime.now())
-    invoices             = db.relationship("Invoice", backref="member", lazy=True)
+    invoices            = db.relationship("Invoice", backref="member", lazy=True, cascade="all, delete-orphan", single_parent=True, nullable=True)
 
