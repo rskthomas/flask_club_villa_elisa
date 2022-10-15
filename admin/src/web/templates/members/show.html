@@ -8,15 +8,15 @@
   <table class="index-table box">
     <thead>
         <tr>
-            <th>Nro. Miembro</th>
+            <th>Miembro</th>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th>Tipo Id</th>
-            <th>Id Personal</th>
+            <th>Tipo Doc.</th>
+            <th>Nro.Doc</th>
             <th>Género</th>
-            <th>Dirección</th>
+            <th>Direcc.</th>
             <th>Estado</th>
-            <th>Teléfono</th>
+            <th>Teléf.</th>
             <th>Email</th>
             <th>Fecha Alta</th>
         </tr>
@@ -33,7 +33,7 @@
             <th>{{member.membership_state}}</th>
             <th>{{member.phone_number}}</th>
             <th>{{member.email}}</th>
-            <th>{{member.activation_date}}</th>
+            <th>{{'Si' if member.membership_state else 'No'}}</th>
             <th><a href="/miembros/{{ member.id }}/update">Editar</a></th>
             <th>
               <form action="/miembros/{{ member.id }}/delete" method="POST">

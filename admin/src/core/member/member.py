@@ -5,7 +5,7 @@ class Member(db.Model):
     id                  = db.Column(db.Integer, primary_key=True, unique=True)
     first_name          = db.Column(db.String(50), nullable=False)
     last_name           = db.Column(db.String(50), nullable=False)
-    personal_id_type    = db.Column(db.Integer, nullable=False)
+    personal_id_type    = db.Column(db.String(25), nullable=False)
     personal_id         = db.Column(db.String(25), nullable=False)
     gender              = db.Column(db.String(25), nullable=False)
     address             = db.Column(db.String(255), nullable=False)

@@ -12,8 +12,18 @@ member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 
 @member_blueprint.get("/")
 def index():
-  members = member.list_members()
-  return render_template('members/index.html', members=members)
+    params = request.args
+    filters = {}
+    
+    if params.get('membership_state') == 'true':
+        filters['membership_state'] = True
+    if params.get('membership_state') == 'false':
+        filters['membership_state'] = False
+
+    filters['last_name'] = params.get('last_name')
+
+    members = member.list_members(filters)
+    return render_template('members/index.html', members=members, filters=filters)
 
 
 @member_blueprint.get("/create")
@@ -48,29 +58,18 @@ def update_view(id):
     if not item:
         print("item not found")
         return bad_request("Member not found")
-    form = MemberForm(
-        first_name          = item.first_name,
-        last_name           = item.last_name,
-        personal_id_type    = item.personal_id_type,
-        personal_id         = item.personal_id,
-        gender              = item.gender,
-        address             = item.address,
-        membership_state    = item.membership_state,
-        phone_number        = item.phone_number,
-        email               = item.email,
-        activation_date     = item.activation_date
-    )
-    return render_template("members/update.html", form=form, id=id)
+    return render_template("members/update.html", item=item)
 
 
-@member_blueprint.post("/<int:id>/update")
-def update_confirm(id):
+@member_blueprint.post("/update")
+def update_confirm():
+    member_id = request.form['id']
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
     form = MemberForm(request.form)
     if form.validate():
         member.update_member(
-            id                  = id,
+            id                  = member_id,
             first_name          = form.first_name.data,
             last_name           = form.last_name.data,
             personal_id_type    = form.personal_id_type.data,
@@ -116,7 +115,7 @@ class MemberForm(Form):
     )
     personal_id_type = StringField(
         "Tipo Documento",
-        [validators.Length(min=1, max=3), validators.DataRequired()],
+        [validators.Length(min=1, max=25), validators.DataRequired()],
     )
     personal_id = StringField(
         "Nro. Documento", [validators.Length(min=1, max=25), validators.DataRequired()]
