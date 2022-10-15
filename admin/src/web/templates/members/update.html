@@ -4,21 +4,64 @@
 {% block title %} Cargar Miembro {% endblock %}
 {% block head %} {{ super() }} {% endblock %}
 {% block content %}
-<h1>Modificar Miembro</h1>
+<h1>Edición Miembro # {{item.id}}</h1>
 
-<form action="{{ url_for('member.update_view', id=id) }}" method="post">
-    {{ render_field(form.first_name, class='foo') }}
-    {{ render_field(form.last_name) }}
-    {{ render_field(form.personal_id_type) }}
-    {{ render_field(form.personal_id) }}
-    {{ render_field(form.gender) }}
-    {{ render_field(form.address) }}
-    {{ render_field(form.membership_state) }}
-    {{ render_field(form.phone_number) }}
-    {{ render_field(form.email) }}
-    {{ render_field(form.activation_date) }}
-    <button type="submit">Submit</button>
+<section>
 
-</form>
+    <form action="/miembros/update" method="post">
+        <input type="hidden" name="id" value="{{item.id}}">
+
+
+        <div class="object-property-container">
+            <label class="object-property-label"> Nombre: </label>
+            <input class="object-property-value" type="text" name="first_name" value="{{ item.first_name }}"/>
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Apellido: </label>
+            <input class="object-property-value" type="text" name="last_name" value="{{ item.last_name }}" />
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Tipo Doc.: </label>
+            <select class="object-property-value" name="personal_id_type" value="{{ item.personal_id_type }}" >
+                <option value="DNI" {{'selected' if item.personal_id_type == 'DNI' }}> DNI </option>
+                <option value="LE" {{'selected' if item.personal_id_type == 'LE' }}> LE </option>
+                <option value="LC" {{'selected' if item.personal_id_type == 'LC' }}> LC </option>
+            </select>
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Nro. Doc.: </label>
+            <input class="object-property-value" type="text" name="personal_id" value="{{ item.personal_id }}" />
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Género: </label>
+            <select class="object-property-value" name="gender" value="{{ item.gender }}">
+                <option value="Masculino" {{'selected' if item.gender == 'Masculino' }}> Masculino </option>
+                <option value="Femenino" {{'selected' if item.gender == 'Femenino' }}> Femenino </option>
+                <option value="No binario" {{'selected' if item.gender == 'No binario' }}> No binario </option>
+            </select>
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Dirección: </label>
+            <input class="object-property-value" type="text" name="address" value="{{ item.address }}" />
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label">Activo: </label>
+            <input class="object-property-value" type="checkbox" {{'checked' if item.membership_state }} name="membership_state" />
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Teléfono: </label>
+            <input class="object-property-value" type="text" name="phone_number" value="{{ item.phone_number }}" />
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Mail: </label>
+            <input class="object-property-value" type="text" name="email" value="{{ item.email }}" />
+        </div>
+    
+        <input class="edit-link" type="submit" name="Guardar" value="Guardar" />
+    </form>
+    
+</section>
+
+
 
 {% endblock %}

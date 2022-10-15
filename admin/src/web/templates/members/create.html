@@ -5,21 +5,57 @@
 {% block head %} {{ super() }} {% endblock %}
 {% block content %}
 <h1>Alta de Miembro</h1>
+<section>
 
 <form action="{{ url_for('member.create_view') }}" method="POST">
+    <div class="object-property-container">
+        <label class="object-property-label"> Nombre: </label>
+        <input class="object-property-value" type="text" name="first_name"/>
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Apellido: </label>
+        <input class="object-property-value" type="text" name="last_name" />
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Tipo Doc.: </label>
+        <select class="object-property-value" name="personal_id_type" >
+            <option value="DNI"> DNI </option>
+            <option value="LE"> LE </option>
+            <option value="LC"> LC </option>
+        </select>
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Nro. Doc.: </label>
+        <input class="object-property-value" type="text" name="personal_id" />
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Género: </label>
+        <select class="object-property-value" name="gender" >
+            <option value="Masculino"> Masculino </option>
+            <option value="Femenino"> Femenino </option>
+            <option value="No binario"> No binario </option>
+        </select>
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Dirección: </label>
+        <input class="object-property-value" type="text" name="address" />
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label">Activo: </label>
+        <input class="object-property-value" type="checkbox" name="membership_state"/>
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Teléfono: </label>
+        <input class="object-property-value" type="text" name="phone_number" />
+    </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> Mail: </label>
+        <input class="object-property-value" type="text" name="email" />
+    </div>
 
-        {{ render_field(form.first_name, class='foo') }}
-        {{ render_field(form.last_name) }}
-        {{ render_field(form.personal_id_type) }}
-        {{ render_field(form.personal_id) }}
-        {{ render_field(form.gender) }}
-        {{ render_field(form.address) }}
-        {{ render_field(form.membership_state) }}
-        {{ render_field(form.phone_number) }}
-        {{ render_field(form.email) }}
-        {{ render_field(form.activation_date) }}
-    <button type="submit">Submit</button>
-    
+    <input class="edit-link" type="submit" name="Guardar" value="Guardar" />
 </form>
+
+</section>
 
 {% endblock %}
