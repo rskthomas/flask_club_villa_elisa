@@ -1,8 +1,10 @@
 from src.core.member.member import Member
 from src.core.database import db
 
+
 def list_members():
     return Member.query.all()
+
 
 def create_member(**kwargs):
     mem = Member(**kwargs)
@@ -10,9 +12,19 @@ def create_member(**kwargs):
     db.session.commit()
     return mem
 
+
 def delete_member_by_member_number(mem_number):
     Member.query.filter(Member.member_number == mem_number).delete()
     db.session.commit()
 
+
 def find_member_by_mail(email):
-    return Member.query.filter_by(email=email).first()
+    return Member.query.filter(Member.email == email).first()
+
+
+def search_by_last_name(last_name):
+    return Member.query.filter(Member.last_name == last_name).all()
+
+
+def search_by_id(id):
+    return Member.query.get(id)
