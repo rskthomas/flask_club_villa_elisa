@@ -1,14 +1,15 @@
 from src.core.database import db
+from datetime import date
 
 class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    year = db.Column(db.Integer(), nullable=False, default=db.func.year())
-    month = db.Column(db.Integer(), nullable=False, default=db.func.month())
+    year = db.Column(db.Integer(), nullable=False, default=date.today().year)
+    month = db.Column(db.Integer(), nullable=False, default=date.today().month)
     base_price = db.Column(db.String(50), nullable=False)
     total_price = db.Column(db.String(50), nullable=False)
     paid = db.Column(db.Boolean(), default=False)
     member_number = db.Column(db.Integer, db.ForeignKey('member.id'), nullable=False)
-    payment = db.relationship("Payment", backref="invoice", lazy=True, nullable=True)
+    payment = db.relationship("Payment", backref="invoice", lazy=True)
     #TODO implement extra items when discipline enrollment is finished
 
 class invoice_extra_item(db.Model):
