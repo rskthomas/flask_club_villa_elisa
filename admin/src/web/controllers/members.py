@@ -35,8 +35,7 @@ def create_confirm():
             address             = form.address.data,
             membership_state    = form.membership_state.data,
             phone_number        = form.phone_number.data,
-            email               = form.email.data,
-            activation_date     = form.activation_date.data
+            email               = form.email.data
         )
         flash("Miembro creado correctamente", "success")
         return redirect(url_for("member.index"))
@@ -80,8 +79,7 @@ def update_confirm(id):
             address             = form.address.data,
             membership_state    = form.membership_state.data,
             phone_number        = form.phone_number.data,
-            email               = form.email.data,
-            activation_date     = form.activation_date.data
+            email               = form.email.data
         )
         flash("Miembro actualizado correctamente", "success")
         return redirect(url_for("member.index"))
@@ -118,24 +116,21 @@ class MemberForm(Form):
     )
     personal_id_type = StringField(
         "Tipo Documento",
-        [validators.Length(min=1, max=50), validators.DataRequired()],
+        [validators.Length(min=1, max=3), validators.DataRequired()],
     )
     personal_id = StringField(
-        "Nro. Documento", [validators.Length(min=1, max=12), validators.DataRequired()]
+        "Nro. Documento", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
     gender = StringField(
-        "Género", [validators.Length(min=1, max=50), validators.DataRequired()]
+        "Género", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
     address = StringField(
         "Dirección", [validators.Length(min=1, max=255), validators.DataRequired()]
     )
     phone_number = StringField(
-        "Teléfono", [validators.Length(min=1, max=15), validators.DataRequired()]
+        "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
     email = StringField(
-        "Email", [validators.Length(min=1, max=59), validators.DataRequired()]
-    )
-    activation_date = StringField(
-        "Fecha alta", [validators.Length(10), validators.DataRequired()]
+        "Email", [validators.Length(min=1, max=50), validators.DataRequired()]
     )
     membership_state = BooleanField("Activo")

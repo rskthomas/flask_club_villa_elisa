@@ -32,8 +32,14 @@ def find_member(id):
     return Member.query.get(id)    
 
 def delete_member_by_member_number(mem_number):
+    """Delete a Member by id"""
     Member.query.filter(Member.member_number == mem_number).delete()
     db.session.commit()
 
-def find_member_by_mail(email):
-    return Member.query.filter_by(email=email).first()
+def find_member_by_lastname(lastname):
+    """Find a Member by last_name"""
+    return Member.query.filter_by(last_name=lastname)
+
+def find_member_by_state(state):
+    """Find a Member by membership_state"""
+    return Member.query.filter_by(membership_state=state)
