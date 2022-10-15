@@ -57,8 +57,18 @@
             {% endfor %}
         </tbody>
 
-        <a href="/miembros/create">Agregar nuevo Miembro</a>
+        <a href="/miembros/create"><button>Crear nuevo miembro + </button></a>
     </table>
+</div>
+
+<div class="paginator-container">
+    {% for i in range(1, pages + 1) %}
+    {% if i == current_page %}
+        <div class="paginator-number current-page">{{ i }}</div>
+        {% else %}
+            <a class="paginator-number", href="{{ url_for('member.index', page=i, **filters) }}">{{i}}</a>
+        {%endif%}
+    {% endfor %}
 </div>
 
 {% endblock %}
