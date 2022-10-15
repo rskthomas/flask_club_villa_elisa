@@ -7,6 +7,8 @@ from src.core import member as Member
 from wtforms import Form, SelectField, StringField, PasswordField, validators
 from src.web.controllers.auth import login_required
 from src.core import payments as Payments
+from datetime import date
+
 
 
 payments_blueprint = Blueprint("payments", __name__, url_prefix="/payments")
@@ -33,9 +35,7 @@ def search():
         #TODO fix this: if input is not a number, it will return sql error 
         if member:
             print(f"member found: {member.first_name}")
-            invoices = Payments.member_invoices(input)
-            print(f"member invoices: {invoices}")
-            return redirect(url_for("payments.invoices", id=input, invoices=invoices))
+            return redirect(url_for("payments.invoices", id=input))
 
     elif form.select.data == "last_name":
         # There could be multiple Gonzalez, it is unfair only one is paying
@@ -43,6 +43,7 @@ def search():
         for member in members:
             print(f"member found: {member.first_name}")
         if members:
+            #TODO fix this: payments.results does not recognize both parameters
             return redirect(
                 url_for("payments.results", last_name=input, members=members)
             )
@@ -60,11 +61,22 @@ def results(last_name, members):
 
 
 @payments_blueprint.get("/<int:id>/invoices")
-def invoices(id, invoices=None):
-    # TODO: show all unpaid invoices, each with a button to go to payment page
-    # TODO: show all paid invoices with a button to download payment PDF
-    # if invoices is None: list is empty
-    return f"Acá se muestra facturas para el usuario{id}"
+def invoices(id):
+    member=Member.search_by_id(id)
+
+    #TODO this obviously has issues, check later how to do it
+    last_invoice = Payments.lastInvoice(id)
+    if last_invoice == date.today().month or (not last_invoice and date.today().day < 11):
+        createInvoice(id)
+
+    invoices = Payments.member_invoices(id)
+    return render_template("payments/invoices.html", member=member, invoices=invoices)
+
+def createInvoice(member_id):
+    base_price= 100
+    total_price = base_price 
+    member_number= member_id
+    Payments.createInvoice(member_number=member_number, total_price=total_price, base_price=base_price)
 
 
 @payments_blueprint.get("/<int:id>/invoice/<invoice_id>")
