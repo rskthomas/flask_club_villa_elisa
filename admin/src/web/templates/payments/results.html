@@ -12,17 +12,18 @@
     <th>Numero de socio</th>
     <th>Situación</th>
     <th>Numero de documento</th>
+    <th>Ver Facturas</th>
 
     
   </tr>
  {% for member in members %}
   <tr>
-    <td>> <a href="/disciplines/{{ discipline.id }}">{{ member.name }}</a></td>
     <td>{{ member.first_name }}</td>
     <td>{{ member.last_name  }}</td>
     <td>{{ member.id  }}</td>
-    <td>{{ if member.membership_state: "Sin deudas" else: "Moroso" }}</td>
+    <td>{%if member.membership_state%}Sin deudas{%else%}Moroso{%endif%}</td>
     <td>{{ member.personal_id }}</td>
+    <td>> <a href="/payments/{{ member.id }}/invoices">{{ member.id }}</a></td>
   </tr>
     {% endfor %}
 
