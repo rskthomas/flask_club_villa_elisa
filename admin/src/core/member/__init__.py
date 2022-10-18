@@ -1,5 +1,6 @@
 from src.core.member.member import Member
 from src.core.database import db
+from src.core.utils import paginated
 
 def list_members(filter={}):
     """Get a list of all Members"""
@@ -8,7 +9,7 @@ def list_members(filter={}):
         query = query.where(Member.last_name.ilike("%" + filter['last_name'] + '%'))
     if filter.get('membership_state') is not None:
         query = query.where(Member.membership_state == filter['membership_state'])
-    return query.all()
+    return query
 
 
 def create_member(**kwargs):
@@ -55,3 +56,22 @@ def find_member_by_lastname(lastname):
 def find_member_by_state(state):
     """Find a Member by membership_state"""
     return Member.query.filter_by(membership_state=state)
+
+
+def paginated_members(filter={}, current_page=1):
+    """
+        Paginates Member from the db based on filter and returns current page
+        received. Page size relies on system config
+
+    Args:
+        filter (dict, optional): filters to be used, same as list_members().
+        Defaults to {}.
+        current_page (int, optional): pagination page to be returned.
+            Defaults to 1.
+
+    Returns:
+        dict: paginated results. Have 3 keys
+            items: Members of the current page
+            pages: # of pages based on the page size
+    """
+    return paginated(list_members(filter), current_page)    

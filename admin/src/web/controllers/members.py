@@ -8,7 +8,7 @@ from wtforms import Form, BooleanField, StringField, validators
 
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
-
+filters = {}
 
 @member_blueprint.get("/")
 def index():
@@ -22,8 +22,15 @@ def index():
 
     filters['last_name'] = params.get('last_name')
 
-    members = member.list_members(filters)
-    return render_template('members/index.html', members=members, filters=filters)
+    current_page = int(params.get('page', 1))
+
+    pagination_data = member.paginated_members(filters, current_page)
+
+    return render_template('members/index.html', 
+                            members=pagination_data['items'],
+                            filters=filters,
+                            current_page=current_page,
+                            pages=pagination_data['pages'])
 
 
 @member_blueprint.get("/create")
