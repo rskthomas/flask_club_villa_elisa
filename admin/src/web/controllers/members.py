@@ -5,6 +5,8 @@ from flask import request, flash, redirect, url_for
 from flask import session
 from src.core import member
 from wtforms import Form, BooleanField, StringField, validators
+from wtforms.fields import EmailField
+#from wtforms.fields.html5 import EmailField
 
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
@@ -13,8 +15,7 @@ filters = {}
 @member_blueprint.get("/")
 def index():
     params = request.args
-    
-    
+     
     if params.get('membership_state') == 'true':
         filters['membership_state'] = True
     if params.get('membership_state') == 'false':
@@ -136,7 +137,7 @@ class MemberForm(Form):
     phone_number = StringField(
         "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
-    email = StringField(
-        "Email", [validators.Length(min=1, max=50), validators.DataRequired()]
-    )
+    email = EmailField(
+        'Email', [validators.Length(min=1, max=50), validators.DataRequired(), validators.Email()])
+ 
     membership_state = BooleanField("Activo")
