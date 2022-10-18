@@ -13,8 +13,8 @@ filters = {}
 @member_blueprint.get("/")
 def index():
     params = request.args
-    
-    
+    filters = {}
+
     if params.get('membership_state') == 'true':
         filters['membership_state'] = True
     if params.get('membership_state') == 'false':

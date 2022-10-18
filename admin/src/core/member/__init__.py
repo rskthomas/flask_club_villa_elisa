@@ -51,7 +51,7 @@ def delete_member_by_member_number(mem_number):
 def find_member_by_lastname(lastname):
     """Find a Member by last_name"""
     return Member.query.filter_by(last_name=lastname)
-    
+
 
 def find_member_by_state(state):
     """Find a Member by membership_state"""

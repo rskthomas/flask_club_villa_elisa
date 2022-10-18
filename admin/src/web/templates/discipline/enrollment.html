@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+  {% block title %} Disciplinas {% endblock %}
+  {% block head %} {{ super() }} {% endblock %}
+  {% block content %}
+  <h1>Disciplina: {{ discipline.name}}</h1>
+
+ 
+   <table>
+  <tr>
+    <th>Nombre</th>
+    <th>Categoría</th>
+    <th>Horario</th>
+    <th>instructor/es</th>
+    <th>costo</th>
+    <th>Editar</th>
+    <th>Eliminar</th>
+  </tr>
+  <tr>
+    <td>{{ discipline.name }}</td>
+    <td>{{ discipline.category }}</td>
+    <td>{{ discipline.schedule }}</td>
+    <td>{{ discipline.coach }}</td>
+    <td>{{ discipline.monthly_price }}</td>
+    <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
+    <td><form action="/disciplines/{{ discipline.id }}/delete" method="POST">
+      <input type="submit" value="Eliminar">
+    </form></td>
+  </tr>
+
+</table>
+<h1>Agregue nuevo socio</h1>
+<form autocomplete="off" target="{{url_for('disciplines.create_enrollment', id = discipline.id)}}" method="post">
+    <input id="member_input" name = "dni" onkeyup="showResults(this.value)"/>
+    <input id="chosen_member_id" type="hidden" name="chosen_member_id"/>
+    <div id="result"></div>
+    <input name = "Enviar" type="submit"/>
+</form>
+
+  {% endblock %}

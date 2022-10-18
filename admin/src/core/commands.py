@@ -1,6 +1,7 @@
 import click
 from flask import Blueprint
 from src.core.auth import users, role, user_role, permission,role_permission
+from src.core.discipline import discipline, member_discipline
 from src.core.system_config import system_config
 from src.core import database, seeds
 
