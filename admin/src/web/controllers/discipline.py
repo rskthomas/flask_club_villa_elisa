@@ -1,3 +1,4 @@
+from src.core.discipline import find_discipline, enroll_member
 from src.web.helpers.handlers import bad_request
 from flask import Blueprint
 from flask import render_template
@@ -104,6 +105,32 @@ def delete_error(id):
 def show(id):
     item = Discipline.find_discipline(id)
     return render_template("discipline/show.html", discipline=item)
+
+
+@discipline_blueprint.get("<int:id>/enrollment")
+@login_required()
+def enrollment_form(id):
+    discipline = find_discipline(id)
+    return render_template('discipline/enrollment.html', discipline=discipline)
+
+@discipline_blueprint.post("<int:id>/enrollment")
+@login_required()
+def create_enrollment(id):
+    try:
+        enroll_member(id, request.form.get('chosen_member_id'))
+    except Exception:
+        flash('Ocurrió un error al realizar la inscription', 'error')
+        return render_template('discipline/enrollment.html', discipline=find_discipline(id))
+    flash("el alta se realizó con éxito", 'success')
+
+    return render_template('discipline/show.html', discipline=find_discipline(id))
+
+
+@discipline_blueprint.get("<int:id>/members")
+@login_required()
+def discipline_members(id):
+    discipline = find_discipline(id)
+    return discipline.members
 
 
 class DisciplineForm(Form):

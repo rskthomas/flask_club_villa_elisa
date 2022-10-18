@@ -27,7 +27,42 @@
       <input type="submit" value="Eliminar">
     </form></td>
   </tr>
-    
+
 </table> 
+<h1>Lista de Inscriptos</h1>
+<div>
+    <table class="index-table box">
+        <thead>
+            <tr>
+                <th>Miembro</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Tipo Doc.</th>
+                <th>Nro.Doc.</th>
+                <th>Género</th>
+                <th>Direcc.</th>
+                <th>Estado</th>
+                <th>Teléf.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mem in discipline.members %}
+            <tr>
+                <th><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></th>
+                <th>{{mem.first_name}}</th>
+                <th>{{mem.last_name}}</th>
+                <th>{{mem.personal_id_type}}</th>
+                <th>{{mem.personal_id}}</th>
+                <th>{{mem.gender}}</th>    
+                <th>{{mem.address}}</th>
+                <th>{{mem.phone_number}}</th>
+                <th>{{mem.email}}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        <a href="{{url_for('disciplines.enrollment_form', id=discipline.id)}}">Inscribir nuevo socio</a>
+    </table>
+</div>
 
   {% endblock %}

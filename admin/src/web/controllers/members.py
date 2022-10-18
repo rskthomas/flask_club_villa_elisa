@@ -14,7 +14,7 @@ member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 def index():
     params = request.args
     filters = {}
-    
+
     if params.get('membership_state') == 'true':
         filters['membership_state'] = True
     if params.get('membership_state') == 'false':
