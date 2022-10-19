@@ -6,6 +6,11 @@ from flask import session
 from src.core import member
 from wtforms import Form, BooleanField, StringField, validators
 from wtforms.fields import EmailField
+import pdfkit
+from requests import Response
+
+path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
@@ -121,6 +126,31 @@ def delete_error(id):
 def show(id):
     item = member.find_member(id)
     return render_template("members/show.html", member=item)
+
+
+@member_blueprint.route("/<int:id>/download")
+def route_download(id):
+    item = member.find_member(id)
+    
+    # Get the HTML output
+    out = render_template("members/show.html", member=item)
+    
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+    
+    # Build PDF from HTML 
+    pdf = pdfkit.from_string(out, options=options, configuration=config)
+    
+    # Download the PDF
+    return Response(pdf, mimetype="application/pdf")    
 
 
 class MemberForm(Form):
