@@ -16,7 +16,7 @@
         <p>Estado: {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
     </div>
     {%if not invoice.paid%}
-    <p>BOTON PAGAR</p>
+    <a href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">Pagar</a>
     {%else%}
     <p>BOTON DESCARGAR PDF</p>
     {%endif%}
