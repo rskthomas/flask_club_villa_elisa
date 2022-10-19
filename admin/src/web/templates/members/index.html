@@ -41,18 +41,18 @@
         <tbody>
             {% for mem in members %}
             <tr>
-                <th><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></th>
-                <th>{{mem.first_name}}</th>
-                <th>{{mem.last_name}}</th>
-                <th>{{mem.personal_id_type}}</th>
-                <th>{{mem.personal_id}}</th>
-                <th>{{mem.gender}}</th>    
-                <th>{{mem.address}}</th>
-                <th>{{'Si' if mem.membership_state else 'No'}}</th>
-                <th>{{mem.phone_number}}</th>
-                <th>{{mem.email}}</th>
-                <th>{{mem.activation_date}}</th>
-                <th><a href="/miembros/{{ mem.id }}/update">Editar</a></th>
+                <td><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></td>
+                <td>{{mem.first_name}}</td>
+                <td>{{mem.last_name}}</td>
+                <td>{{mem.personal_id_type}}</td>
+                <td>{{mem.personal_id}}</td>
+                <td>{{mem.gender}}</td>    
+                <td>{{mem.address}}</td>
+                <td>{{'Si' if mem.membership_state else 'No'}}</td>
+                <td>{{mem.phone_number}}</td>
+                <td>{{mem.email}}</td>
+                <td>{{mem.activation_date}}</td>
+                <td><a href="/miembros/{{ mem.id }}/update">Editar</a></td>
             </tr>
             {% endfor %}
         </tbody>

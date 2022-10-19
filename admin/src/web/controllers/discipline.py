@@ -13,20 +13,20 @@ discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplin
 
 
 @discipline_blueprint.get("/")
-@login_required("discipline_rw")
+#@login_required("discipline_rw")
 def index():
     disciplines = Discipline.get_disciplines()
     return render_template("discipline/index.html", disciplines=disciplines)
 
 
 @discipline_blueprint.get("/create")
-@login_required("discipline_rw")
+#@login_required("discipline_rw")
 def create():
     return render_template("discipline/create.html", form=DisciplineForm())
 
 
 @discipline_blueprint.post("/create")
-@login_required("discipline_rw")
+#@login_required("discipline_rw")
 def create_post():
     form = DisciplineForm(request.form)
     if form.validate():
@@ -46,7 +46,7 @@ def create_post():
 
 
 @discipline_blueprint.get("/<int:id>/update")
-@login_required("discipline_rw")
+#@login_required("discipline_rw")
 def update(id):
     item = Discipline.find_discipline(id)
 
@@ -65,15 +65,16 @@ def update(id):
     return render_template("discipline/update.html", form=form, id=id)
 
 
-@discipline_blueprint.post("/<int:id>/update")
-@login_required("discipline_rw")
-def update_discipline(id):
+@discipline_blueprint.post("/update")
+#@login_required("discipline_rw")
+def update_discipline():
+    discipline_id = request.form['id']
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
     form = DisciplineForm(request.form)
     if form.validate():
         Discipline.update_discipline(
-            id=id,
+            id=discipline_id,
             name=form.name.data,
             category=form.category.data,
             coach=form.coach.data,
@@ -86,7 +87,7 @@ def update_discipline(id):
 
 
 @discipline_blueprint.post("/<int:id>/delete")
-@login_required("discipline_rwd")
+#@login_required("discipline_rwd")
 def delete(id):
     if not Discipline.delete_discipline(id):
         return bad_request("Discipline not found")
@@ -101,20 +102,20 @@ def delete_error(id):
 
 
 @discipline_blueprint.get("/<int:id>")
-@login_required("discipline_rw")
+#@login_required("discipline_rw")
 def show(id):
     item = Discipline.find_discipline(id)
     return render_template("discipline/show.html", discipline=item)
 
 
 @discipline_blueprint.get("<int:id>/enrollment")
-@login_required()
+#@login_required()
 def enrollment_form(id):
     discipline = find_discipline(id)
     return render_template('discipline/enrollment.html', discipline=discipline)
 
 @discipline_blueprint.post("<int:id>/enrollment")
-@login_required()
+#@login_required()
 def create_enrollment(id):
     try:
         enroll_member(id, request.form.get('chosen_member_id'))
@@ -127,7 +128,7 @@ def create_enrollment(id):
 
 
 @discipline_blueprint.get("<int:id>/members")
-@login_required()
+#@login_required()
 def discipline_members(id):
     discipline = find_discipline(id)
     return discipline.members

@@ -5,6 +5,7 @@ from flask import request, flash, redirect, url_for
 from flask import session
 from src.core import member
 from wtforms import Form, BooleanField, StringField, validators
+from wtforms.fields import EmailField
 
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
@@ -13,8 +14,7 @@ filters = {}
 @member_blueprint.get("/")
 def index():
     params = request.args
-    filters = {}
-
+     
     if params.get('membership_state') == 'true':
         filters['membership_state'] = True
     if params.get('membership_state') == 'false':
@@ -65,7 +65,19 @@ def update_view(id):
     if not item:
         print("item not found")
         return bad_request("Member not found")
-    return render_template("members/update.html", item=item)
+
+    form = MemberForm(
+        first_name          = item.first_name,
+        last_name           = item.last_name,
+        personal_id_type    = item.personal_id_type,
+        personal_id         = item.personal_id,
+        gender              = item.gender,
+        address             = item.address,
+        membership_state    = item.membership_state,
+        phone_number        = item.phone_number,
+        email               = item.email
+    )    
+    return render_template("members/update.html", form=form, id=id)
 
 
 @member_blueprint.post("/update")
@@ -136,7 +148,7 @@ class MemberForm(Form):
     phone_number = StringField(
         "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
-    email = StringField(
-        "Email", [validators.Length(min=1, max=50), validators.DataRequired()]
-    )
+    email = EmailField(
+        'Email', [validators.Length(min=1, max=50), validators.DataRequired(), validators.Email()])
+ 
     membership_state = BooleanField("Activo")
