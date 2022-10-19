@@ -4,33 +4,32 @@
   {% block content %}
   <h1>Lista de Disciplinas</h1>
 
-  <div>
-    <table class="index-table box">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Categoría</th>
-          <th>Horario</th>
-          <th>instructor/es</th>
-          <th>costo</th>
-          <th>Editar</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        {% for discipline in disciplines %}
-          <tr>
-            <td>> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
-            <td>{{ discipline.category }}</td>
-            <td>{{ discipline.schedule }}</td>
-            <td>{{ discipline.coach }}</td>
-            <td>{{ discipline.monthly_price }}</td>
-            <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
-          </tr>
-            {% endfor %}
-        </tbody>
-        <a href="/disciplines/create"><button>Agregar nueva disciplina + </button></a>
-    </table> 
-  </div>  
+ 
+ <table class="index-table box">
+  <tr>
+    <th>Nombre</th>
+    <th>Categoría</th>
+    <th>Horario</th>
+    <th>instructor/es</th>
+    <th>costo</th>
+    <th>Acciones</th>
+  </tr>
+ {% for discipline in disciplines %}
+  <tr>
+    <td> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
+    <td>{{ discipline.category }}</td>
+    <td>{{ discipline.schedule }}</td>
+    <td>{{ discipline.coach }}</td>
+    <td>{{ discipline.monthly_price }}</td>
+    <td>
+        <a href="{{url_for('disciplines.show', id=discipline.id)}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+        <a href="{{url_for('disciplines.update', id=discipline.id)}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+        <a href="{{url_for('disciplines.delete', id=discipline.id)}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+    </td>
+  </tr>
+    {% endfor %}
+</table> 
+
+<a href="{{url_for('disciplines.create')}}"><button>Agregar nueva disciplina +</button></a>
 
   {% endblock %}

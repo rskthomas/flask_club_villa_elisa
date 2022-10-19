@@ -9,6 +9,8 @@ def list_members(filter={}):
         query = query.where(Member.last_name.ilike("%" + filter['last_name'] + '%'))
     if filter.get('membership_state') is not None:
         query = query.where(Member.membership_state == filter['membership_state'])
+    if filter.get('personal_id'):
+        query = query.where(Member.personal_id.ilike(f"%{ filter.get('personal_id') }%"))
     return query
 
 

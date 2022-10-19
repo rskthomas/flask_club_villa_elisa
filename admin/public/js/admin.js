@@ -23,7 +23,7 @@ function showResults(val) {
      }).then(function (response) {
         data=response.members
        for (i=0; i<data.length; i++) {
-         list += '<li data-member-id=' + data[i].id + '>' + data[i].personal_id + ' - ' + data[i].last_name + '</li>';
+         list += '<li data-member-id=' + data[i].id + '>' + data[i].personal_id_type + " - " + data[i].personal_id + ' - ' + data[i].last_name + '</li>';
        }
        res.innerHTML = '<ul>' + list + '</ul>';
        return true;
