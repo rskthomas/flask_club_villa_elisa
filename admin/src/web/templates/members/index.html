@@ -12,6 +12,8 @@
         </div>
         <div class="object-property-container">
             <label class="object-property-label"> Activo:</label>
+            <input type="radio" name="membership_state" value="any" {{ 'checked' if filters.get('membership_state') == None }} />
+            <label> Todos </label>
             <input type="radio" name="membership_state" value="true" {{ 'checked' if filters.get('membership_state') }}/>
             <label> Si </label>
             <input type="radio" name="membership_state" value="false" {{ 'checked' if filters.get('membership_state') == False }}/>
@@ -36,6 +38,7 @@
                 <th>Teléf.</th>
                 <th>Email</th>
                 <th>Fecha Alta</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -51,8 +54,12 @@
                 <td>{{'Si' if mem.membership_state else 'No'}}</td>
                 <td>{{mem.phone_number}}</td>
                 <td>{{mem.email}}</td>
-                <td>{{mem.activation_date}}</td>
-                <td><a href="/miembros/{{ mem.id }}/update">Editar</a></td>
+                <td>{{mem.activation_date.strftime('%d-%m-%Y') }}</td>
+                <td>
+                    <a href="/miembros/{{ mem.id }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a href="/miembros/{{ mem.id }}/update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="/miembros/{{ mem.id }}/delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

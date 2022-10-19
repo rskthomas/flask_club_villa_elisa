@@ -2,15 +2,17 @@ from src.web.helpers.handlers import bad_request
 from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for, make_response
-from flask import session
+from src.web.controllers.auth import login_required
+from src.web.forms.member import MemberForm
 from src.core import member
-from wtforms import Form, BooleanField, StringField, validators
-from wtforms.fields import EmailField
+
 import pdfkit
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
 
+
+@login_required()
 @member_blueprint.get("/")
 def index():
     params = request.args
@@ -19,6 +21,8 @@ def index():
         filters['membership_state'] = True
     if params.get('membership_state') == 'false':
         filters['membership_state'] = False
+    if params.get('membership_state') == 'any':
+        filters['membership_state'] = None    
 
     filters['last_name'] = params.get('last_name')
 
@@ -33,11 +37,13 @@ def index():
                             pages=pagination_data['pages'])
 
 
+@login_required()
 @member_blueprint.get("/create")
 def create_view():
     return render_template("members/create.html", form=MemberForm())
 
 
+@login_required()
 @member_blueprint.post("/create")
 def create_confirm():
     form = MemberForm(request.form)
@@ -59,6 +65,7 @@ def create_confirm():
     return render_template("members/create.html", form=form)
 
 
+@login_required()
 @member_blueprint.get("/<int:id>/update")
 def update_view(id):
     item = member.find_member(id)
@@ -80,6 +87,7 @@ def update_view(id):
     return render_template("members/update.html", form=form, id=id)
 
 
+@login_required()
 @member_blueprint.post("/update")
 def update_confirm():
     member_id = request.form['id']
@@ -103,7 +111,8 @@ def update_confirm():
         return redirect(url_for("member.index"))
 
 
-@member_blueprint.post("/<int:id>/delete")
+@login_required()
+@member_blueprint.get("/<int:id>/delete")
 def delete(id):
     if not member.delete_member(id):
         return bad_request("Member not found")
@@ -112,17 +121,14 @@ def delete(id):
     return redirect(url_for("member.index"))
 
 
-@member_blueprint.get("/<int:id>/delete")
-def delete_error(id):
-    return bad_request("No se ha enviado ningun formulario")
-
-
+@login_required()
 @member_blueprint.get("/<int:id>")
 def show(id):
     item = member.find_member(id)
     return render_template("members/show.html", member=item)
 
 
+@login_required()
 @member_blueprint.route("/download")
 def route_download():
     params = request.args
@@ -166,32 +172,3 @@ def route_download():
     return (response)  
 
 
-class MemberForm(Form):
-    """Represents an html form of Member model"""
-
-    first_name = StringField(
-        "Nombre", [validators.Length(min=4, max=50), validators.DataRequired()]
-    )
-    last_name = StringField(
-        "Apellido", [validators.Length(min=4, max=50), validators.DataRequired()]
-    )
-    personal_id_type = StringField(
-        "Tipo Documento",
-        [validators.Length(min=1, max=25), validators.DataRequired()],
-    )
-    personal_id = StringField(
-        "Nro. Documento", [validators.Length(min=1, max=25), validators.DataRequired()]
-    )
-    gender = StringField(
-        "Género", [validators.Length(min=1, max=25), validators.DataRequired()]
-    )
-    address = StringField(
-        "Dirección", [validators.Length(min=1, max=255), validators.DataRequired()]
-    )
-    phone_number = StringField(
-        "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
-    )
-    email = EmailField(
-        'Email', [validators.Length(min=1, max=50), validators.DataRequired(), validators.Email()])
- 
-    membership_state = BooleanField("Activo")
