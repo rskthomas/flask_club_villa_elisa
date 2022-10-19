@@ -17,6 +17,8 @@ from src.web.controllers.users import users_blueprint
 from src.web.controllers.system_config import system_config_blueprint
 from src.web.controllers.members import member_blueprint
 from src.web.controllers.api import api_blueprint
+from src.web.controllers.payments import payments_blueprint
+
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
     app.secret_key = environ.get("FLASK_SECRET_KEY", 'this is just a secret')
@@ -41,7 +43,7 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(users_blueprint)
     app.register_blueprint(member_blueprint)
     app.register_blueprint(api_blueprint)
-
+    app.register_blueprint(payments_blueprint)
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)

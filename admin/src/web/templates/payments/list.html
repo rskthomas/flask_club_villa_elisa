@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %} Disciplinas {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Facturas del usuario {{member.last_name}}</h1>
+
+
+{% if not invoices %}
+<p>No hay facturas</p>
+{%else%}
+{% for invoice in invoices %}
+
+<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s;">
+    <div style=" padding: 2px 16px;">
+        <a href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">Factura del mes: {{invoice.month}}</a>
+        <p>Estado: {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
+    </div>
+    {%if invoice.paid%}
+    <p>BOTON DESCARGAR COMPROBANTE</p>
+ 
+    
+    {%endif%}
+
+</div>
+{% endfor %}
+{%endif%}
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %} Invoice {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Factura número {{invoice.id}}</h1>
+
+<address>
+	<p>Club Deportivo Villa Elisa</p>
+		<p>(+54) 0221 487-0193</p>
+	</address>
+    
+<p> <strong>Fecha:</strong> Mes {{invoice.month}} del año {{invoice.year}}   </p>
+<p> <strong>Cliente:</strong>{{invoice.member.last_name}}, {{invoice.member.first_name}} </p>
+<p> <strong>Dirección:</strong> {{invoice.member.address}} </p>
+<p> <strong>Telefono:</strong> {{invoice.member.phone_number}} </p>
+<p> <strong>Email:</strong> {{invoice.member.email}} </p>
+<p> <strong>Cuota base:</strong> {{invoice.base_price}} </p>
+<p> <strong>Estado:</strong> {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
+
+<p><strong>Cargos adicionales:</strong></p>
+{% for item in invoice.extra_items %}
+<p> {{item.description}} </p>
+
+{% endfor %}
+
+<p> <strong>Monto Total:</strong> {{invoice.total_price}} </p>
+
+{% if invoice.paid %}
+<p> Factura Pagada el día: {{invoice.payment.payment_date}}  </p>
+<p> Monto total recibido: {{invoice.payment.amount}}  </p>
+
+{% else%}
+
+<form action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
+    <input type="submit" value="Pagar">
+</form>
+
+{% endif%}
+
+
+{% endblock %}

@@ -44,6 +44,7 @@ def find_member(id):
     return Member.query.get(id)
 
 
+
 def delete_member_by_member_number(mem_number):
     """Delete a Member by id"""
     Member.query.filter(Member.member_number == mem_number).delete()
