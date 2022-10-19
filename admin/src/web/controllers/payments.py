@@ -4,7 +4,13 @@ from flask import render_template
 from flask import request, flash, redirect, url_for
 from flask import session
 from src.core import member as Member
-from wtforms import Form, SelectField, StringField, PasswordField, validators
+from wtforms import (
+    Form,
+    SelectField,
+    StringField,
+    validators,
+    ValidationError,
+)
 from src.web.controllers.auth import login_required
 from src.core import payments as Payments
 from datetime import date
@@ -25,15 +31,12 @@ def search():
         flash("Hubo un error con el formulario", "danger")
         return redirect(url_for("payments.index"))
 
-
     input = form.search.data
 
     if form.select.data == "member_id":
-        #TODO: validate that input is a number if member_id is selected
         route = "payments.invoices"
         member = Member.search_by_id(input)
     elif form.select.data == "last_name":
-        #TODO: This doesnt work if there is a match (missing 1 required positional argument: 'id')
         route = "payments.results"
         member = Member.search_by_last_name(input)
 
@@ -53,45 +56,41 @@ def results(id):
     )
 
 
-@payments_blueprint.get("/<int:id>/invoices")
+@payments_blueprint.get("/member/<int:id>/invoices")
 def invoices(id):
     member = Member.search_by_id(id)
 
-    # TODO this obviously has issues, check later how to do it
-    last_invoice = Payments.lastInvoice(id)
+    last_invoice = Payments.last_invoice(id)
+    #If the invoice has not been issued this month, create a new one
     if last_invoice == date.today().month or (
-        not last_invoice and date.today().day < 11
+        #Also it should be issued first days of the month
+        not last_invoice and date.today().day < 20
     ):
-        createInvoice(id)
+        Payments.create_invoice(member=member)
 
     invoices = Payments.member_invoices(id)
-    return render_template("payments/invoices.html", member=member, invoices=invoices)
+    return render_template("payments/list.html", member=member, invoices=invoices)
 
 
-def createInvoice(member_id):
-    base_price = 100
-    total_price = base_price
-    member_number = member_id
-    Payments.createInvoice(
-        member_number=member_number, total_price=total_price, base_price=base_price
-    )
-
-
-@payments_blueprint.get("/<int:id>/invoice/<invoice_id>")
+@payments_blueprint.get("/invoice/<int:invoice_id>")
 def show_invoice(invoice_id):
-    # TODO: show invoice information and payment button
-    pass
+    invoice = Payments.get_invoice(invoice_id)
+    return render_template("payments/show.html", invoice=invoice)
 
 
-@payments_blueprint.post("/<int:id>/invoice/<invoice_id>/pay")
+@payments_blueprint.post("/invoice/<int:invoice_id>/pay")
 def pay_invoice(invoice_id):
-    # TODO: pay invoice, generate payment and redirect to invoice page with a success message
-    pass
+    payment = Payments.pay_invoice(invoice_id)
+    flash("El pago se ha realizado con éxito", "success")
+
+    return redirect(url_for("payments.invoices", id=payment.member_id))
+
+
 
 
 @payments_blueprint.get("/<int:id>/payment/<payment_id>/")
 def download(payment_id):
-    # TODO: download payment PDF
+    # TODO: download payment PDF of invoice + payment approved
     pass
 
 
@@ -104,3 +103,9 @@ class UserSearchForm(Form):
     search = StringField(
         "", [validators.Length(min=1, max=15), validators.DataRequired()]
     )
+
+    def validate_search(form, field):
+        """Validates that if member_id is selected, the input is a number"""
+
+        if form.select.data == "member_id" and not field.data.isdigit():
+            raise ValidationError("El ID debe ser un número")
