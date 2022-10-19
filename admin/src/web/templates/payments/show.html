@@ -17,18 +17,25 @@
 <p> <strong>Cuota base:</strong> {{invoice.base_price}} </p>
 <p> <strong>Estado:</strong> {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
 
-<p>LIST OF EXTRA ITEMS (DISCIPLINES)</p>
-<p>Ej,</p>
-{#add a list of extra_items #}
+<p><strong>Cargos adicionales:</strong></p>
+{% for item in invoice.extra_items %}
+<p> {{item.description}} </p>
+
+{% endfor %}
 
 <p> <strong>Monto Total:</strong> {{invoice.total_price}} </p>
 
+{% if invoice.paid %}
+<p> Factura Pagada el día: {{invoice.payment.payment_date}}  </p>
+<p> Monto total recibido: {{invoice.payment.amount}}  </p>
 
+{% else%}
 
 <form action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
     <input type="submit" value="Pagar">
 </form>
 
+{% endif%}
 
 
 {% endblock %}
