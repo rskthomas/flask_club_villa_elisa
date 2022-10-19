@@ -6,6 +6,7 @@ from src.core.auth import list_roles, update_user_roles
 
 
 users_blueprint = Blueprint('users', __name__, url_prefix ='/users')
+filters = {}
 
 
 def parse_from_params(form):
@@ -34,13 +35,15 @@ def parse_from_params(form):
 @login_required()
 @users_blueprint.get("/")
 def index():
+    
     params = request.args
-    filters = {}
 
     if params.get('active') == 'true':
         filters['active'] = True
     if params.get('active') == 'false':
         filters['active'] = False
+    if params.get('active') == 'any':
+        filters['active'] = None  
 
     filters['email'] = params.get('email')
 

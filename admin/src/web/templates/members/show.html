@@ -4,44 +4,48 @@
   {% block content %}
   <h1>Miembro: {{ member.name}}</h1>
 
- 
-  <table class="index-table box">
-    <thead>
-        <tr>
-            <th>Miembro</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Tipo Doc.</th>
-            <th>Nro.Doc</th>
-            <th>Género</th>
-            <th>Direcc.</th>
-            <th>Estado</th>
-            <th>Teléf.</th>
-            <th>Email</th>
-            <th>Fecha Alta</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{member.id}}</td>
-            <td>{{member.first_name}}</td>
-            <td>{{member.last_name}}</td>
-            <td>{{member.personal_id_type}}</td>
-            <td>{{member.personal_id}}</td>
-            <td>{{member.gender}}</td>    
-            <td>{{member.address}}</td>
-            <td>{{member.membership_state}}</td>
-            <td>{{member.phone_number}}</td>
-            <td>{{member.email}}</td>
-            <td>{{'Si' if member.membership_state else 'No'}}</td>
-            <td><a href="/miembros/{{ member.id }}/update">Editar</a></td>
-            <td>
-              <form action="/miembros/{{ member.id }}/delete" method="POST">
-                <input type="submit" value="Eliminar">
-              </form>
-            </td>
-        </tr>
-    </tbody>
-  </table>
 
+  <div class="object-property-container">
+    <label class="object-property-label">Nombre : </label> 
+    <div class="object-property-value">{{ member.first_name }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Apellido : </label> 
+    <div class="object-property-value">{{ member.last_name }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Tipo Doc.: </label> 
+    <div class="object-property-value">{{ member.personal_id_type }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Nro.Doc: </label> 
+    <div class="object-property-value">{{ member.personal_id }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Género: </label> 
+    <div class="object-property-value">{{ member.gender }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Dirección: </label> 
+    <div class="object-property-value">{{ member.address }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Estado: </label> 
+    <div class="object-property-value">{{ member.membership_state }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Teléfono: </label> 
+    <div class="object-property-value">{{ member.phone_number }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Email: </label> 
+    <div class="object-property-value">{{ member.email }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Fecha Alta: </label> 
+    <div class="object-property-value">{{ member.activation_date }}</div>
+  </div>
+ 
+  <br>
+  <a class="edit-link" href="{{url_for('member.index')}}"><button type="button">Volver</button></a>
   {% endblock %}

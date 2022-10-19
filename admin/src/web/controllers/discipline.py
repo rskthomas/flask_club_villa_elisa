@@ -1,15 +1,16 @@
 from src.core.discipline import DisciplineNotFound, MemberNotFound
 from flask import Blueprint
 from flask import render_template, abort
-from flask import request, flash, redirect, url_for
+from flask import request, flash, redirect, url_for, make_response
 from flask import session
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from src.web.forms.discipline import DisciplineForm
 from src.core.discipline import enroll_member, cancel_enrollment
 from src.core.discipline import find_discipline, delete_discipline
 from src.core.discipline import InactiveDiscipline, InactiveMember
 from src.web.helpers.handlers import bad_request
 from src.core import discipline as Discipline
 from src.web.controllers.auth import login_required
+import pdfkit
 
 
 discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
@@ -165,23 +166,34 @@ def load_discipline(id):
         abort(404)
     return discipline
 
-class DisciplineForm(Form):
-    """Represents an html form of Discipline model"""
 
-    name = StringField(
-        "Nombre", [validators.Length(min=4, max=25), validators.DataRequired()]
-    )
-    category = StringField(
-        "Categoría", [validators.Length(min=4, max=25), validators.DataRequired()]
-    )
-    coach = StringField(
-        "Nombre/s del instructor/es",
-        [validators.Length(min=4, max=50), validators.DataRequired()],
-    )
-    schedule = StringField(
-        "Horario", [validators.Length(min=4, max=50), validators.DataRequired()]
-    )
-    monthly_price = StringField(
-        "Precio Mensual", [validators.Length(min=1, max=15), validators.DataRequired()]
-    )
-    active = BooleanField("Habilitado")
+#@login_required()
+@discipline_blueprint.route("/download")
+def download():
+    disciplines = Discipline.get_disciplines()
+
+     # Get the HTML output
+    out = render_template("discipline/export.html", disciplines=disciplines)
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+    
+    # Build PDF from HTML 
+    pdf = pdfkit.from_string(out, options=options)
+    
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return (response)      
+
+
+

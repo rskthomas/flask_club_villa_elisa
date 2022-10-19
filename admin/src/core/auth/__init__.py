@@ -44,7 +44,7 @@ def paginated_users(filter={}, current_page=1):
             items: users of the current page
             pages: # of pages based on the page size
     """
-    return paginated(base_user_query(), current_page)
+    return paginated(base_user_query(filter), current_page)
 
 
 def list_user(filter={}):
