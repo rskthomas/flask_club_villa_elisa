@@ -114,6 +114,7 @@ def pay_invoice(invoice_id):
         return False
     invoice.paid = True
     payment = Payment(amount = invoice.total_price, invoice_id = invoice.id, member_id = invoice.member_id)
+    invoice = update_invoice(invoice, paid=True, payment=payment.id)
     db.session.add(payment)
     db.session.commit()
     return payment
