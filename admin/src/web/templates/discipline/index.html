@@ -4,30 +4,33 @@
   {% block content %}
   <h1>Lista de Disciplinas</h1>
 
- 
-   <table>
-  <tr>
-    <th>Nombre</th>
-    <th>Categoría</th>
-    <th>Horario</th>
-    <th>instructor/es</th>
-    <th>costo</th>
-    <th>Editar</th>
-    
-  </tr>
- {% for discipline in disciplines %}
-  <tr>
-    <td>> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
-    <td>{{ discipline.category }}</td>
-    <td>{{ discipline.schedule }}</td>
-    <td>{{ discipline.coach }}</td>
-    <td>{{ discipline.monthly_price }}</td>
-    <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
-  </tr>
-    {% endfor %}
-
-    <a href="/disciplines/create">Agregar nueva disciplina</a>
-
-</table> 
+  <div>
+    <table class="index-table box">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Horario</th>
+          <th>instructor/es</th>
+          <th>costo</th>
+          <th>Editar</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {% for discipline in disciplines %}
+          <tr>
+            <td>> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
+            <td>{{ discipline.category }}</td>
+            <td>{{ discipline.schedule }}</td>
+            <td>{{ discipline.coach }}</td>
+            <td>{{ discipline.monthly_price }}</td>
+            <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+        <a href="/disciplines/create"><button>Agregar nueva disciplina + </button></a>
+    </table> 
+  </div>  
 
   {% endblock %}

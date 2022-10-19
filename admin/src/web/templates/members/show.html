@@ -23,23 +23,23 @@
     </thead>
     <tbody>
         <tr>
-            <th>{{member.id}}</th>
-            <th>{{member.first_name}}</th>
-            <th>{{member.last_name}}</th>
-            <th>{{member.personal_id_type}}</th>
-            <th>{{member.personal_id}}</th>
-            <th>{{member.gender}}</th>    
-            <th>{{member.address}}</th>
-            <th>{{member.membership_state}}</th>
-            <th>{{member.phone_number}}</th>
-            <th>{{member.email}}</th>
-            <th>{{'Si' if member.membership_state else 'No'}}</th>
-            <th><a href="/miembros/{{ member.id }}/update">Editar</a></th>
-            <th>
+            <td>{{member.id}}</td>
+            <td>{{member.first_name}}</td>
+            <td>{{member.last_name}}</td>
+            <td>{{member.personal_id_type}}</td>
+            <td>{{member.personal_id}}</td>
+            <td>{{member.gender}}</td>    
+            <td>{{member.address}}</td>
+            <td>{{member.membership_state}}</td>
+            <td>{{member.phone_number}}</td>
+            <td>{{member.email}}</td>
+            <td>{{'Si' if member.membership_state else 'No'}}</td>
+            <td><a href="/miembros/{{ member.id }}/update">Editar</a></td>
+            <td>
               <form action="/miembros/{{ member.id }}/delete" method="POST">
                 <input type="submit" value="Eliminar">
               </form>
-            </th>
+            </td>
         </tr>
     </tbody>
   </table>

@@ -66,7 +66,19 @@ def update_view(id):
     if not item:
         print("item not found")
         return bad_request("Member not found")
-    return render_template("members/update.html", item=item)
+
+    form = MemberForm(
+        first_name          = item.first_name,
+        last_name           = item.last_name,
+        personal_id_type    = item.personal_id_type,
+        personal_id         = item.personal_id,
+        gender              = item.gender,
+        address             = item.address,
+        membership_state    = item.membership_state,
+        phone_number        = item.phone_number,
+        email               = item.email
+    )    
+    return render_template("members/update.html", form=form, id=id)
 
 
 @member_blueprint.post("/update")

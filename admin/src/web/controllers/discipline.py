@@ -64,15 +64,16 @@ def update(id):
     return render_template("discipline/update.html", form=form, id=id)
 
 
-@discipline_blueprint.post("/<int:id>/update")
+@discipline_blueprint.post("/update")
 @login_required("discipline_rw")
-def update_discipline(id):
+def update_discipline():
+    discipline_id = request.form['id']
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
     form = DisciplineForm(request.form)
     if form.validate():
         Discipline.update_discipline(
-            id=id,
+            id=discipline_id,
             name=form.name.data,
             category=form.category.data,
             coach=form.coach.data,

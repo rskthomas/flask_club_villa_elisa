@@ -5,29 +5,32 @@
   <h1>Disciplina: {{ discipline.name}}</h1>
 
  
-   <table>
-  <tr>
-    <th>Nombre</th>
-    <th>Categoría</th>
-    <th>Horario</th>
-    <th>instructor/es</th>
-    <th>costo</th>
-    <th>Editar</th>
-    <th>Eliminar</th>
-    
-  </tr>
-  <tr>
-    <td>{{ discipline.name }}</td>
-    <td>{{ discipline.category }}</td>
-    <td>{{ discipline.schedule }}</td>
-    <td>{{ discipline.coach }}</td>
-    <td>{{ discipline.monthly_price }}</td>
-    <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
-    <td><form action="/disciplines/{{ discipline.id }}/delete" method="POST">
-      <input type="submit" value="Eliminar">
-    </form></td>
-  </tr>
-    
-</table> 
+  <table class="index-table box">
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Horario</th>
+      <th>instructor/es</th>
+      <th>costo</th>
+      <th>Editar</th>
+      <th>Eliminar</th>    
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ discipline.name }}</td>
+      <td>{{ discipline.category }}</td>
+      <td>{{ discipline.schedule }}</td>
+      <td>{{ discipline.coach }}</td>
+      <td>{{ discipline.monthly_price }}</td>
+      <td><a href="/disciplines/{{ discipline.id }}/update">Editar</a></td>
+      <td><form action="/disciplines/{{ discipline.id }}/delete" method="POST">
+        <input type="submit" value="Eliminar">
+      </form></td>
+    </tr>
+  </tbody> 
+      
+  </table> 
 
   {% endblock %}
