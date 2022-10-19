@@ -14,7 +14,8 @@
         {{ render_field(form.schedule) }}
         {{ render_field(form.monthly_price) }}
         {{ render_field(form.active) }}
-    <button type="submit">Submit</button>
+        <input class="edit-link" type="submit" name="Editar" value="Guardar" />
+        <a class="edit-link" href="{{url_for('disciplines.index')}}"><button type="button">Cancelar</button></a>
     
 </form>
 

@@ -18,6 +18,6 @@ def member_as_json(member):
 
 @member_api_blueprint.get('')
 def index():
-    members = list_members({'last_name': request.args.get('q')})
+    members = list_members({'personal_id': request.args.get('q')})
     return { 'members': list(map(member_as_json, members))}
 

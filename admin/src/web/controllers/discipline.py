@@ -1,11 +1,14 @@
-from src.core.discipline import find_discipline, enroll_member
-from src.web.helpers.handlers import bad_request
+from src.core.discipline import DisciplineNotFound, MemberNotFound
 from flask import Blueprint
-from flask import render_template
+from flask import render_template, abort
 from flask import request, flash, redirect, url_for
 from flask import session
-from src.core import discipline as Discipline
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from src.core.discipline import enroll_member, cancel_enrollment
+from src.core.discipline import find_discipline, delete_discipline
+from src.core.discipline import InactiveDiscipline, InactiveMember
+from src.web.helpers.handlers import bad_request
+from src.core import discipline as Discipline
 from src.web.controllers.auth import login_required
 
 
@@ -48,11 +51,7 @@ def create_post():
 @discipline_blueprint.get("/<int:id>/update")
 @login_required("discipline_rw")
 def update(id):
-    item = Discipline.find_discipline(id)
-
-    if not item:
-        print("item not found")
-        return bad_request("Discipline not found")
+    item = load_discipline(id)
 
     form = DisciplineForm(
         name=item.name,
@@ -85,10 +84,10 @@ def update_discipline(id):
         return redirect(url_for("disciplines.index"))
 
 
-@discipline_blueprint.post("/<int:id>/delete")
+@discipline_blueprint.get("/<int:id>/delete")
 @login_required("discipline_rwd")
 def delete(id):
-    if not Discipline.delete_discipline(id):
+    if not delete_discipline(id):
         return bad_request("Discipline not found")
 
     flash("Disciplina eliminada correctamente", "success")
@@ -103,14 +102,14 @@ def delete_error(id):
 @discipline_blueprint.get("/<int:id>")
 @login_required("discipline_rw")
 def show(id):
-    item = Discipline.find_discipline(id)
-    return render_template("discipline/show.html", discipline=item)
+    discipline = load_discipline(id)
+    return render_template("discipline/show.html", discipline=discipline)
 
 
 @discipline_blueprint.get("<int:id>/enrollment")
 @login_required()
 def enrollment_form(id):
-    discipline = find_discipline(id)
+    discipline = load_discipline(id)
     return render_template('discipline/enrollment.html', discipline=discipline)
 
 @discipline_blueprint.post("<int:id>/enrollment")
@@ -118,20 +117,52 @@ def enrollment_form(id):
 def create_enrollment(id):
     try:
         enroll_member(id, request.form.get('chosen_member_id'))
-    except Exception:
-        flash('Ocurrió un error al realizar la inscription', 'error')
+        flash("el alta se realizó con éxito", 'success')
+    except InactiveDiscipline:
+        flash('la disciplina está inactiva', 'error')
         return render_template('discipline/enrollment.html', discipline=find_discipline(id))
-    flash("el alta se realizó con éxito", 'success')
+    except InactiveMember:
+        flash('No se puede inscribir a un socio inactivo', 'error')
+        return render_template('discipline/enrollment.html', discipline=find_discipline(id))
 
     return render_template('discipline/show.html', discipline=find_discipline(id))
-
 
 @discipline_blueprint.get("<int:id>/members")
 @login_required()
 def discipline_members(id):
-    discipline = find_discipline(id)
+    discipline = load_discipline(id)
     return discipline.members
 
+@discipline_blueprint.get("<int:id>/members/<int:member_id>/cancel")
+@login_required()
+def destroy_enrollment(id, member_id):
+    try:
+        cancel_enrollment(id, member_id)
+        flash('La inscripcion del socio ha sido realizada con éxtio', 'success')
+    except DisciplineNotFound:
+        flash('La disciplina no se encontró', 'error')
+        return redirect(url_for('disciplines.index'))
+    except MemberNotFound:
+        flash('El socio no se encontró', 'error')
+        return redirect(url_for('disciplines.index'))
+
+    return redirect(url_for('disciplines.show', id=id))
+
+
+def load_discipline(id):
+    """Looks for a discipline in the DB
+        in case it's not found, returns a 404 error
+
+    Args:
+        id (_type_): id of the discipline
+
+    Returns:
+        sqlAlchemy.model: discipline record
+    """
+    discipline = find_discipline(id)
+    if not discipline:
+        abort(404)
+    return discipline
 
 class DisciplineForm(Form):
     """Represents an html form of Discipline model"""
