@@ -1,12 +1,12 @@
 from src.web.helpers.handlers import bad_request
 from flask import Blueprint
 from flask import render_template
-from flask import request, flash, redirect, url_for
+from flask import request, flash, redirect, url_for, make_response
 from flask import session
 from src.core import member
 from wtforms import Form, BooleanField, StringField, validators
 from wtforms.fields import EmailField
-
+import pdfkit
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
@@ -121,6 +121,49 @@ def delete_error(id):
 def show(id):
     item = member.find_member(id)
     return render_template("members/show.html", member=item)
+
+
+@member_blueprint.route("/download")
+def route_download():
+    params = request.args
+     
+    if params.get('membership_state') == 'true':
+        filters['membership_state'] = True
+    if params.get('membership_state') == 'false':
+        filters['membership_state'] = False
+
+    filters['last_name'] = params.get('last_name')
+
+    current_page = int(params.get('page', 1))
+
+    pagination_data = member.paginated_members(filters, current_page)
+
+    # Get the HTML output
+    out = render_template('members/export.html', 
+                            members=pagination_data['items'],
+                            filters=filters,
+                            current_page=current_page,
+                            pages=pagination_data['pages'])
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+    
+    # Build PDF from HTML 
+    pdf = pdfkit.from_string(out, options=options)
+    
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return (response)  
 
 
 class MemberForm(Form):
