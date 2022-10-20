@@ -4,13 +4,7 @@ from flask import render_template
 from flask import request, flash, redirect, url_for
 from flask import session
 from src.core import member as Member
-from wtforms import (
-    Form,
-    SelectField,
-    StringField,
-    validators,
-    ValidationError,
-)
+from src.web.forms.payments import UserSearchForm
 from src.web.controllers.auth import login_required
 from src.core import payments as Payments
 from datetime import date
@@ -86,26 +80,10 @@ def pay_invoice(invoice_id):
     return redirect(url_for("payments.invoices", id=payment.member_id))
 
 
-
-
 @payments_blueprint.get("/<int:id>/payment/<payment_id>/")
 def download(payment_id):
     # TODO: download payment PDF of invoice + payment approved
     pass
 
 
-class UserSearchForm(Form):
-    choices = [
-        ("member_id", "ID del miembro"),
-        ("last_name", "Apellido"),
-    ]
-    select = SelectField("Buscar por:", choices=choices)
-    search = StringField(
-        "", [validators.Length(min=1, max=15), validators.DataRequired()]
-    )
 
-    def validate_search(form, field):
-        """Validates that if member_id is selected, the input is a number"""
-
-        if form.select.data == "member_id" and not field.data.isdigit():
-            raise ValidationError("El ID debe ser un número")
