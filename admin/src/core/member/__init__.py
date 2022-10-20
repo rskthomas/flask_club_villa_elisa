@@ -107,3 +107,9 @@ def paginated_members(filter={}, current_page=1):
             pages: # of pages based on the page size
     """
     return paginated(list_members(filter), current_page)    
+
+
+def get_member_disciplines(member_id):
+    """Get a list of all disciplines of a member"""
+    member = find_member(member_id)
+    return member.disciplines
