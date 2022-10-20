@@ -1,6 +1,12 @@
+from os import abort
+from sqlite3 import InternalError
 from src.core.member.member import Member
 from src.core.database import db
 from src.core.utils import paginated
+from sqlalchemy.exc import IntegrityError
+
+class IntegrytyException(Exception):
+    pass
 
 def list_members(filter={}):
     """Get a list of all Members"""
@@ -15,20 +21,43 @@ def list_members(filter={}):
 
 
 def create_member(**kwargs):
-    """Create a new Member"""
-    member = Member(**kwargs)
-    db.session.add(member)
-    db.session.commit()
-    return member
+    """Create a new Member
+
+    Args:
+        kwargs: all fields of object Member 
+
+    Raises:
+        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+    """
+    try:
+        member = Member(**kwargs)
+        db.session.add(member)
+        db.session.commit()
+        return member
+    except IntegrityError:
+        db.session.rollback()
+        raise IntegrytyException  
 
 
 def update_member(id, **kwargs):
-    """Update a Member"""
-    member = find_member(id)
-    for key, value in kwargs.items():
-        setattr(member, key, value)
-    db.session.commit()
-    return member
+    """Update a Member
+
+    Args:
+        id: identifier of Member
+        args: fields to update 
+
+    Raises:
+        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+    """
+    try:
+        member = find_member(id)
+        for key, value in kwargs.items():
+            setattr(member, key, value)
+        db.session.commit()
+        return member
+    except IntegrityError:
+        db.session.rollback()
+        raise IntegrytyException    
 
 
 def delete_member(id):

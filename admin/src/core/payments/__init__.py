@@ -1,3 +1,4 @@
+import decimal
 from operator import inv
 from re import A, M
 from webbrowser import get
@@ -53,10 +54,10 @@ def _check_recharge(invoice):
 
     if date.today().day > EXPIRATION_DAY and not invoice.expired:
         invoice.expired = True
-        amount = invoice.total_price * get_recharge_percentage()
+        amount = decimal.Decimal(invoice.total_price) * get_recharge_percentage()   #TODO VER QUIZAS LA POSIBILIDAD DE CAMBIAR EL TIPO DE TOTAL PRICE A DECIMAL
         description = f"Recargo de {amount} por vencimiento de factura {invoice.month}/{invoice.year}"
         create_extraItem(invoice_id=invoice.id, amount=amount, description=description)
-        invoice.total_price += amount
+        invoice.total_price = decimal.Decimal(invoice.total_price) + amount
         db.session.commit()
 
 def create_invoice(member):

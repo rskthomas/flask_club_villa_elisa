@@ -35,10 +35,10 @@ def search():
 
     if form.select.data == "member_id":
         route = "payments.invoices"
-        member = Member.search_by_id(input)
+        member = Member.find_member(input)
     elif form.select.data == "last_name":
         route = "payments.results"
-        member = Member.search_by_last_name(input)
+        member = Member.find_member_by_lastname(input)
 
     if not member:
         flash("No se encontró ningún miembro con ese criterio", "danger")
@@ -50,7 +50,7 @@ def search():
 @payments_blueprint.get("/search/results/<string:id>")
 def results(id):
     last_name = id
-    members = Member.search_by_last_name(last_name)
+    members = Member.find_member_by_lastname(last_name)
     return render_template(
         "payments/results.html", members=members, last_name=last_name
     )
@@ -58,13 +58,13 @@ def results(id):
 
 @payments_blueprint.get("/member/<int:id>/invoices")
 def invoices(id):
-    member = Member.search_by_id(id)
+    member = Member.find_member(id)
 
     last_invoice = Payments.last_invoice(id)
     #If the invoice has not been issued this month, create a new one
     if last_invoice == date.today().month or (
         #Also it should be issued first days of the month
-        not last_invoice and date.today().day < 20
+        not last_invoice and date.today().day < 21
     ):
         Payments.create_invoice(member=member)
 

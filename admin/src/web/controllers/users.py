@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from src.web.controllers.auth import login_required
 from src.core.auth import create_user, delete_user, update_user
 from src.core.auth import list_user, find_user, update_user, paginated_users
-from src.core.auth import list_roles, update_user_roles
+from src.core.auth import list_roles, update_user_roles, IntegrytyException
 
 
 users_blueprint = Blueprint('users', __name__, url_prefix ='/users')
@@ -65,11 +65,16 @@ def new():
 @login_required()
 @users_blueprint.post("/crear")
 def create():
-    user = create_user(**parse_from_params(request.form))
-    update_user_roles(user, request.form.getlist('roles'))
+    try:
+        user = create_user(**parse_from_params(request.form))
+        update_user_roles(user, request.form.getlist('roles'))
 
-    flash('El usuario se creó correctamente', 'success')
-    return redirect(url_for('users.index'))
+        flash('El usuario se creó correctamente', 'success')
+        return redirect(url_for('users.index'))
+    except IntegrytyException:
+        flash('El nombre de usuario o email ya existen', 'error')
+        #return redirect(url_for('users.index'))
+        return new()
 
 
 @login_required()
@@ -82,13 +87,16 @@ def edit(id):
 @login_required()
 @users_blueprint.post("/update")
 def update():
-    user_id = request.form['id']
-    update_user(user_id, parse_from_params(request.form))
-    update_user_roles(find_user(user_id), request.form.getlist('roles'))
+    try:
+        user_id = request.form['id']
+        update_user(user_id, parse_from_params(request.form))
+        update_user_roles(find_user(user_id), request.form.getlist('roles'))
 
-    flash('usuario modificado con éxito', 'success')
-    return redirect(url_for('users.index'))
-
+        flash('usuario modificado con éxito', 'success')
+        return redirect(url_for('users.index'))
+    except IntegrytyException:
+        flash('El nombre de usuario o email ya existen', 'error')
+        return edit(user_id)
 
 @login_required()
 @users_blueprint.get("/<int:user_id>/destroy")
