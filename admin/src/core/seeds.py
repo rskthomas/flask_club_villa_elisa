@@ -10,7 +10,6 @@ def run():
         personal_id_type=1, 
         personal_id="11111111", 
         gender="M",
-        member_number=1,
         address="Mi casa", 
         membership_state=True,
         phone_number="12312321", 
@@ -24,7 +23,6 @@ def run():
         personal_id_type=1, 
         personal_id="222222222", 
         gender="M",
-        member_number=2,
         address="Su casa", 
         membership_state=True,
         phone_number="12312321", 
@@ -38,7 +36,6 @@ def run():
         personal_id_type=1, 
         personal_id="33333333", 
         gender="M",
-        member_number=3,
         address="Su casa", 
         membership_state=True,
         phone_number="12312321", 
@@ -52,10 +49,24 @@ def run():
         personal_id_type=1, 
         personal_id="44444444", 
         gender="M",
-        member_number=4,
         address="Su casa", 
         membership_state=True,
         phone_number="12312321", 
         email="thomy@gmail.com",
         activation_date=datetime.now()
     )
+    member.db.engine.execute("""insert
+                into
+                public.system_config
+                    (items_qty_for_grids,
+                    public_payments_available,
+                    public_contact_info_available,
+                    payment_header_text,
+                    base_monthly_fee,
+                    delayed_payment_interests_rate)
+                values( 10,
+                        false,
+                        false,
+                        'This is a header',
+                        100,
+                        0.1);""")
