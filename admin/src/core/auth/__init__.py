@@ -1,4 +1,5 @@
 from sqlalchemy import update
+from sqlalchemy.exc import IntegrityError
 from src.core.auth.users import User
 from src.core.auth.role import Role
 from src.core.auth.user_role import UserRole
@@ -7,6 +8,8 @@ from src.core.auth.permission import Permission
 from src.core.utils import paginated
 from src.core.database import db
 
+class IntegrytyException(Exception):
+    pass
 
 def base_user_query(filter={}):
     """
@@ -52,10 +55,22 @@ def list_user(filter={}):
 
 
 def create_user(**kwargs):
-    user = User(**kwargs)
-    db.session.add(user)
-    db.session.commit()
-    return user
+    """Create a new User
+
+    Args:
+        kwargs: all fields of object Member 
+
+    Raises:
+        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+    """
+    try:
+        user = User(**kwargs)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    except IntegrityError:
+        db.session.rollback()
+        raise IntegrytyException    
 
 
 def delete_user_by_name(firstname):
@@ -64,16 +79,29 @@ def delete_user_by_name(firstname):
 
 
 def update_user(id, args):
-    db.session.execute(
-        update(User)
-        .where(User.id == id)
-        .values(args)
-        .returning(User.id)
-    )
+    """Update a User
 
-    db.session.commit()
-    return
+    Args:
+        id: identifier of user
+        args: fields to update 
 
+    Raises:
+        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+    """
+    try:
+        db.session.execute(
+            update(User)
+            .where(User.id == id)
+            .values(args)
+            .returning(User.id)
+        )
+
+        db.session.commit()
+        return
+    except IntegrityError:
+        db.session.rollback()
+        raise IntegrytyException  
+        
 
 def delete_user(user_id):
     db.session.query(User).filter(User.id==user_id).delete()

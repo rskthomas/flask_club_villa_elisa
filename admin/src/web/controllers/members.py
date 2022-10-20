@@ -2,6 +2,7 @@ from src.web.helpers.handlers import bad_request
 from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for, make_response
+from src.core.member import IntegrytyException
 from src.web.controllers.auth import login_required
 from src.web.forms.member import MemberForm
 from src.core import member
@@ -47,21 +48,26 @@ def create_view():
 @member_blueprint.post("/create")
 def create_confirm():
     form = MemberForm(request.form)
-    if form.validate():
-        print("form validated")
-        member.create_member(
-            first_name          = form.first_name.data,
-            last_name           = form.last_name.data,
-            personal_id_type    = form.personal_id_type.data,
-            personal_id         = form.personal_id.data,
-            gender              = form.gender.data,
-            address             = form.address.data,
-            membership_state    = form.membership_state.data,
-            phone_number        = form.phone_number.data,
-            email               = form.email.data
-        )
-        flash("Miembro creado correctamente", "success")
-        return redirect(url_for("member.index"))
+    try:
+        if form.validate():
+            print("form validated")
+            member.create_member(
+                first_name          = form.first_name.data,
+                last_name           = form.last_name.data,
+                personal_id_type    = form.personal_id_type.data,
+                personal_id         = form.personal_id.data,
+                gender              = form.gender.data,
+                address             = form.address.data,
+                membership_state    = form.membership_state.data,
+                phone_number        = form.phone_number.data,
+                email               = form.email.data
+            )
+            flash("Miembro creado correctamente", "success")
+            return redirect(url_for("member.index"))
+        
+    except IntegrytyException:
+        flash('Ya existe el email ingresado', 'error')
+        return render_template("members/create.html", form=form)
     return render_template("members/create.html", form=form)
 
 
@@ -94,21 +100,27 @@ def update_confirm():
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
     form = MemberForm(request.form)
-    if form.validate():
-        member.update_member(
-            id                  = member_id,
-            first_name          = form.first_name.data,
-            last_name           = form.last_name.data,
-            personal_id_type    = form.personal_id_type.data,
-            personal_id         = form.personal_id.data,
-            gender              = form.gender.data,
-            address             = form.address.data,
-            membership_state    = form.membership_state.data,
-            phone_number        = form.phone_number.data,
-            email               = form.email.data
-        )
-        flash("Miembro actualizado correctamente", "success")
-        return redirect(url_for("member.index"))
+
+    try:
+        if form.validate():
+            member.update_member(
+                id                  = member_id,
+                first_name          = form.first_name.data,
+                last_name           = form.last_name.data,
+                personal_id_type    = form.personal_id_type.data,
+                personal_id         = form.personal_id.data,
+                gender              = form.gender.data,
+                address             = form.address.data,
+                membership_state    = form.membership_state.data,
+                phone_number        = form.phone_number.data,
+                email               = form.email.data
+            )
+            flash("Miembro actualizado correctamente", "success")
+            return redirect(url_for("member.index"))
+    except IntegrytyException:
+        flash('Ya existe el email ingresado', 'error')
+        return redirect(url_for("member.update_view", id=member_id))    
+    return redirect(url_for("member.update_view", id=member_id))      
 
 
 @login_required()

@@ -16,6 +16,7 @@ def update_system_config(args):
   )
   db.session.commit()
   return
+  
 def get_monthly_fee():
   return SystemConfig.query.first().base_monthly_fee
 

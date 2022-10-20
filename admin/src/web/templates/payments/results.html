@@ -23,7 +23,7 @@
     <td>{{ member.id  }}</td>
     <td>{%if member.membership_state%}Sin deudas{%else%}Moroso{%endif%}</td>
     <td>{{ member.personal_id }}</td>
-    <td>> <a href="/payments/{{ member.id }}/invoices">{{ member.id }}</a></td>
+    <td>> <a href="/payments/member/{{ member.id }}/invoices">{{ member.id }}</a></td>
   </tr>
     {% endfor %}
 
