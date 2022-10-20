@@ -3,8 +3,8 @@ from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    firstname = db.Column(db.String(50), nullable=True)
-    lastname = db.Column(db.String(50), nullable=True)
+    firstname = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True)
     active = db.Column(db.Boolean(), default=True)

@@ -11,7 +11,7 @@
         </div>
         <div class="object-property-container">
             <label class="object-property-label"> Activo:</label>
-            <input type="radio" name="active" value="any" {{ 'checked' if (filters.get('active') == None) }} />
+            <input type="radio" name="active" value="any" {{ 'checked' if filters.get('active') == None }} />
             <label> Todos </label>
             <input type="radio" name="active" value="true" {{ 'checked' if filters.get('active') }}/>
             <label> Si </label>
