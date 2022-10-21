@@ -18,9 +18,10 @@ from src.web.controllers.members import member_blueprint
 from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 
+
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
-    app.secret_key = environ.get("FLASK_SECRET_KEY", 'this is just a secret')
+    app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
 
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
