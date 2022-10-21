@@ -8,8 +8,10 @@ from src.core.auth.permission import Permission
 from src.core.utils import paginated
 from src.core.database import db
 
+
 class IntegrytyException(Exception):
     pass
+
 
 def base_user_query(filter={}):
     """
@@ -23,10 +25,10 @@ def base_user_query(filter={}):
         flask_sqlalchemy.BaseQuery
     """
     query = User.query
-    if filter.get('email'):
-        query = query.where(User.email.ilike("%" + filter['email'] + '%'))
-    if filter.get('active') is not None:
-        query = query.where(User.active == filter['active'])
+    if filter.get("email"):
+        query = query.where(User.email.ilike("%" + filter["email"] + "%"))
+    if filter.get("active") is not None:
+        query = query.where(User.active == filter["active"])
 
     return query
 
@@ -51,14 +53,14 @@ def paginated_users(filter={}, current_page=1):
 
 
 def list_user(filter={}):
-    return base_user_query(filter).all();
+    return base_user_query(filter).all()
 
 
 def create_user(**kwargs):
     """Create a new User
 
     Args:
-        kwargs: all fields of object Member 
+        kwargs: all fields of object Member
 
     Raises:
         IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
@@ -70,10 +72,12 @@ def create_user(**kwargs):
         return user
     except IntegrityError:
         db.session.rollback()
-        raise IntegrytyException    
+        raise IntegrytyException
 
 
 def delete_user_by_name(firstname):
+    """Delete a User given its firstname"""
+
     User.query.filter(User.firstname == firstname).delete()
     db.session.commit()
 
@@ -83,54 +87,78 @@ def update_user(id, args):
 
     Args:
         id: identifier of user
-        args: fields to update 
+        args: fields to update
 
     Raises:
         IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
     """
     try:
         db.session.execute(
-            update(User)
-            .where(User.id == id)
-            .values(args)
-            .returning(User.id)
+            update(User).where(User.id == id).values(args).returning(User.id)
         )
 
         db.session.commit()
         return
     except IntegrityError:
         db.session.rollback()
-        raise IntegrytyException  
-        
+        raise IntegrytyException
+
 
 def delete_user(user_id):
-    db.session.query(User).filter(User.id==user_id).delete()
+    """Delete a User given its id"""
+    db.session.query(User).filter(User.id == user_id).delete()
     db.session.commit()
     return
 
 
 def find_user(id):
+    """ " find user by id"""
     return User.query.filter_by(id=id).first()
 
 
 def find_user_by_mail_and_pass(email, password):
+    """Find user by email and password
+
+    Args:
+        email (string): email of the user
+        password (string): password of the user
+
+    Returns:
+        User: user object
+    """
+
     return User.query.filter_by(email=email, password=password).first()
 
 
 def list_roles():
+    """returns a list of all roles"""
     return Role.query.all()
 
+
 def update_user_roles(user, role_ids):
+    """Updates user roles
+
+    Args:
+        user (User): user object
+        role_ids (int): id of the role to be added
+    """
     roles = Role.query.filter(Role.id.in_(role_ids)).all()
     user.roles = roles
     db.session.commit()
     return
 
+
 def can_perform(user_id, permission_name):
+    """Checks if user has permission to perform an action
+
+    Args:
+        user_id (int): id of the user
+        permission_name (string): name of the permission
+    """
     return any(
-        User.query
-        .join(UserRole)
+        User.query.join(UserRole)
         .join(RolePermission, UserRole.role_id == RolePermission.role_id)
-        .join(Permission).where(User.id == user_id)
+        .join(Permission)
+        .where(User.id == user_id)
         .where(Permission.name == permission_name)
     )
