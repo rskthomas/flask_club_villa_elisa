@@ -90,20 +90,22 @@ def create():
 @login_required()
 @users_blueprint.get("/<int:id>/editar")
 def edit(id):
-    item = find_user(id)
-    if not item:
+    user = find_user(id)
+    if not user:
         print("item not found")
         return bad_request("User not found")
 
     form = UserForm(
-        firstname=item.firstname,
-        lastname=item.lastname,
-        username=item.username,
-        email=item.email,
-        password=item.password,
-        active=item.active,
+        firstname=user.firstname,
+        lastname=user.lastname,
+        username=user.username,
+        email=user.email,
+        password=user.password,
+        active=user.active,
     )
-    return render_template("users/edit.html", form=form, id=id, roles=list_roles())
+    return render_template("users/edit.html",
+        form=form, id=id, roles=list_roles(), user=user
+    )
 
 
 @login_required()
