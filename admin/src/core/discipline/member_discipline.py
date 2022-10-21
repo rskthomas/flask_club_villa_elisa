@@ -3,6 +3,8 @@ from sqlalchemy import ForeignKey
 from src.core.database import db
 
 class MemberDiscipline(db.Model):
+  """MemberDiscipline Model that links a member to a discipline"""
+  
   __table_name__ = 'member_disciplines'
   member_id = db.Column(db.Integer,
                         ForeignKey('member.id', ondelete="CASCADE"),
