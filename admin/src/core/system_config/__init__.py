@@ -21,4 +21,4 @@ def get_monthly_fee():
   return SystemConfig.query.first().base_monthly_fee
 
 def get_recharge_percentage():
-  return SystemConfig.query.first().delayed_payment_interests_rate
+  return (SystemConfig.query.first().delayed_payment_interests_rate)

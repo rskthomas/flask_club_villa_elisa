@@ -54,10 +54,10 @@ def _check_recharge(invoice):
 
     if date.today().day > EXPIRATION_DAY and not invoice.expired:
         invoice.expired = True
-        amount = decimal.Decimal(invoice.total_price) * get_recharge_percentage()   #TODO VER QUIZAS LA POSIBILIDAD DE CAMBIAR EL TIPO DE TOTAL PRICE A DECIMAL
+        amount = invoice.total_price * float(get_recharge_percentage())
         description = f"Recargo de {amount} por vencimiento de factura {invoice.month}/{invoice.year}"
         create_extraItem(invoice_id=invoice.id, amount=amount, description=description)
-        invoice.total_price = decimal.Decimal(invoice.total_price) + amount
+        invoice.total_price = invoice.total_price + amount
         db.session.commit()
 
 def create_invoice(member):
@@ -69,20 +69,25 @@ def create_invoice(member):
     Returns: new_invoice(Invoice)
     """
     base_price = get_monthly_fee()
-    inv = Invoice(base_price=base_price, member_id=member.id, total_price=0)
+    invoice = Invoice(base_price=base_price, member_id=member.id, total_price=0)
+    db.session.add(invoice)
 
-    total_price = base_price + _calculate_extra_items(member, inv)
-    inv.total_price = total_price
-
-    db.session.add(inv)
+    total_price = base_price + _calculate_extra_items(member, invoice)
+    update_invoice(invoice, total_price=total_price)
     db.session.commit()
     return inv
 
 
 def _calculate_extra_items(member, invoice):
     """Adds extra items for a given invoice, and returns the total price of the invoice"""
-    # TODO: for each discipline a member is enrolled, add an extra item to the invoice and return the whole amount
-    return 0
+    sum = 0
+    for discipline in member.disciplines:
+        if discipline.active:
+            amount = discipline.monthly_price
+            description = f"Cuota de {discipline.name} por el monto de {amount}"
+            create_extraItem(discipline_id=discipline.id , invoice_id=invoice.id, amount=amount, description=description)
+            sum += int(amount)
+    return sum
 
 
 def create_extraItem(**kwargs):
@@ -92,6 +97,7 @@ def create_extraItem(**kwargs):
         invoice_id(int): id of the invoice
         description(string): description of the extra item
         amount(int): amount of the extra item
+        discipline_id(int): (optional) id of the discipline
 
     Returns: new_extra_item(InvoiceExtraItem)
     """
@@ -145,3 +151,12 @@ def update_invoice(invoice, **kwargs):
         setattr(invoice, key, value)
     db.session.commit()
     return invoice
+
+def member_payments(member_id):
+    """Returns a list of payments for a given member_id"""
+
+    return (
+        Payment.query.filter(Payment.member_id == member_id)
+        .order_by(Payment.payment_date.desc())
+        .all()
+    )

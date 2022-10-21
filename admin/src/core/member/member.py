@@ -16,4 +16,6 @@ class Member(db.Model):
     activation_date     = db.Column(db.DateTime, default=datetime.now())
     invoices            = db.relationship("Invoice", back_populates="member", lazy=True, cascade="all, delete-orphan",single_parent=True)
     payments            = db.relationship("Payment")
+    disciplines        = db.relationship("Discipline", secondary='member_discipline',passive_deletes=True, back_populates="members")
+
 
