@@ -3,6 +3,7 @@ from src.core.database import db
 from datetime import datetime
 
 class SystemConfig(db.Model):
+    """SystemConfig Model represents the global system config in the system"""
     id = db.Column(db.Integer, primary_key=True, unique=True)
     items_qty_for_grids = db.Column(db.Integer, default=1)
     public_payments_available = db.Column(db.Boolean(), default=False)

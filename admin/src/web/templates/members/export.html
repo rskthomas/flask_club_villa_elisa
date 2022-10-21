@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title%} Miembros{% endblock %}
+{% block navbar%} {{super()}} {% endblock %}
+{% block head %} 
+{{ super() }} 
+<meta charset="utf-8">
+{% endblock %}
+{% block content%} 
+<h1>Lista de Miembros</h1>
+<div>
+    <table class="index-table box">
+        <thead>
+            <tr>
+                <th>Miembro</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Tipo Doc.</th>
+                <th>Nro.Doc.</th>
+                <th>Genero</th>
+                <th>Direcc.</th>
+                <th>Estado</th>
+                <th>Telef.</th>
+                <th>Email</th>
+                <th>Fecha Alta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mem in members %}
+            <tr>
+                <td>{{mem.id}}</td>
+                <td>{{mem.first_name}}</td>
+                <td>{{mem.last_name}}</td>
+                <td>{{mem.personal_id_type}}</td>
+                <td>{{mem.personal_id}}</td>
+                <td>{{mem.gender}}</td>    
+                <td>{{mem.address}}</td>
+                <td>{{'Si' if mem.membership_state else 'No'}}</td>
+                <td>{{mem.phone_number}}</td>
+                <td>{{mem.email}}</td>
+                <td>{{mem.activation_date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

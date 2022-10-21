@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% from "_render_field.html" import render_field %}
+
+{% block title %} Cargar Miembro {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Edición Miembro # {{id}}</h1>
+
+<section>
+
+    <form action="/miembros/update" method="post">
+        <input type="hidden" name="id" value="{{id}}">
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.first_name.label }}: </label>
+            {{ form.first_name(class="css_class") }}
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.last_name.label }}: </label>
+            {{ form.last_name(class="css_class") }}
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> Tipo Doc.: </label>
+            <select class="object-property-value" name="personal_id_type" value="{{ form.personal_id_type }}" >
+                <option value="DNI" {{'selected' if form.personal_id_type.data == 'DNI' }}> DNI </option>
+                <option value="LE" {{'selected' if form.personal_id_type.data == 'LE' }}> LE </option>
+                <option value="LC" {{'selected' if form.personal_id_type.data == 'LC' }}> LC </option>
+            </select>
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> Nro. Doc.: </label>
+            {{ form.personal_id(class="css_class") }}
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.gender.label }}: </label>
+            <select class="object-property-value" name="gender" value="{{ form.gender(class="css_class") }}">
+                <option value="Masculino" {{'selected' if form.gender.data == 'Masculino' }}> Masculino </option>
+                <option value="Femenino" {{'selected' if form.gender.data == 'Femenino' }}> Femenino </option>
+                <option value="No binario" {{'selected' if form.gender.data == 'No binario' }}> No binario </option>
+            </select>
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.address.label }}: </label>
+            {{ form.address(class="css_class") }}
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.membership_state.label }}: </label>
+            {{ form.membership_state(class="css_class") }}
+        </div>
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.phone_number.label }}: </label>
+            {{ form.phone_number(class="css_class") }}
+        </div>
+        
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.email.label }}: </label>
+            {{ form.email(class="css_class") }}
+        </div>
+    
+        <input class="edit-link" type="submit" name="Guardar" value="Guardar" />
+        <a class="edit-link" href="{{url_for('member.index')}}"><button type="button">Cancelar</button></a>
+    </form>
+    
+</section>
+
+
+
+{% endblock %}

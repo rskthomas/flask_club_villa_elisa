@@ -16,6 +16,7 @@ EXPOSE 5000
 
 RUN cd /var/www && poetry config virtualenvs.create false
 RUN cd /var/www && poetry install --no-dev --no-root --no-interaction --no-ansi
+RUN apt-get update && apt-get install -y wkhtmltopdf
 
 
 CMD [ "poetry", "run", "flask", "run", "--host=0.0.0.0"]

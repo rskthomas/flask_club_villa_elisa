@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block title %} Invoice {% endblock %}
+{% block head %}
+{{ super() }}
+<meta charset="utf-8">
+{% endblock %}
+{% block content %}
+<body>
+	<div class="invoice-box">
+		<table cellpadding="0" cellspacing="0">
+			<tr class="top">
+				<td colspan="2">
+					<table>
+						<tr>
+							<td>
+								Factura #: {{invoice.id}}<br />
+								Emitida: Mes {{invoice.month}} del año {{invoice.year}}<br />
+								Vence: Día 10 del mes {{invoice.month}} del año {{invoice.year}}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr class="information">
+				<td colspan="2">
+					<table>
+						<tr>
+							<td>
+								<address>
+									Club Deportivo Villa Elisa<br />
+									clubdeportivovillaelisa@gmail.com<br />
+									(+54) 0221 487-0193
+								</address>
+							</td>
+
+							<td>
+								Cliente: {{invoice.member.last_name}}, {{invoice.member.first_name}} <br />
+								Dirección: {{invoice.member.address}}<br />
+								Tel: {{invoice.member.phone_number}}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr class="heading">
+				<td>Item</td>
+
+				<td>Monto</td>
+			</tr>
+
+			{% for item in invoice.extra_items %}
+			<tr class="item">
+				<td>{{item.description}}</td>
+
+				<td>{{item.amount}}</td>
+			</tr>
+
+			{% endfor %}
+
+			<tr class="item last">
+				<td>Cuota base</td>
+
+				<td>{{invoice.base_price}} </td>
+			</tr>
+
+			<tr class="total">
+				<td></td>
+
+				<td>Total: {{invoice.total_price}}</td>
+			</tr>
+		</table>
+
+		{% if invoice.paid %}
+
+		<tr class="top">
+			<td colspan="2">
+				<table>
+					<tr>
+						<td>
+							<p> Factura pagada el día: {{invoice.payment.payment_date.strftime('%d-%m-%Y')}} </p>
+							<p> Monto total recibido: {{invoice.payment.amount}} </p>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		{% endif %}
+
+	</div>
+</body>
+
+
+
+{% if not invoice.paid%}
+
+<form action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
+	<input type="submit" value="Pagar">
+</form>
+
+{% endif%}
+<form>
+ <input style="justify-content: center" type="button" value="Volver" onclick="history.back()">
+</form>
+{% endblock %}
