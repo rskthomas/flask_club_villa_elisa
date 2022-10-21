@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, validators
+from wtforms import Form, BooleanField, StringField, validators, IntegerField
 
 class DisciplineForm(Form):
     """Represents an html form of Discipline model"""
@@ -16,7 +16,7 @@ class DisciplineForm(Form):
     schedule = StringField(
         "Horario", [validators.Length(min=4, max=50), validators.DataRequired()]
     )
-    monthly_price = StringField(
-        "Precio Mensual", [validators.Length(min=1, max=15), validators.DataRequired()]
+    monthly_price = IntegerField(
+        "Precio Mensual", [validators.DataRequired()]
     )
     active = BooleanField("Habilitado")
