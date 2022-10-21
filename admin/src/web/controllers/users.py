@@ -1,5 +1,7 @@
+import io
+import csv
+from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from src.web.helpers.handlers import bad_request
-from flask import Blueprint, render_template, request, flash, redirect, url_for
 from src.web.controllers.auth import login_required
 from src.web.forms.users import UserForm
 from src.core.auth import create_user, delete_user, update_user
@@ -8,8 +10,6 @@ from src.core.auth import list_roles, update_user_roles, IntegrytyException
 
 
 users_blueprint = Blueprint("users", __name__, url_prefix="/users")
-filters = {}
-
 
 def parse_from_params(form):
     """
@@ -34,33 +34,81 @@ def parse_from_params(form):
 
     return update_args
 
+def current_page(request):
+    return int(request.args.get("page", 1))
 
-@login_required()
-@users_blueprint.get("/")
-def index():
-
+def parse_filters(request):
+    filters = {}
     params = request.args
-
-    if params.get("active") == "true":
+    if params.get("active").lower() == "true":
         filters["active"] = True
-    if params.get("active") == "false":
+    if params.get("active").lower() == "false":
         filters["active"] = False
     if params.get("active") == "any":
         filters["active"] = None
 
     filters["email"] = params.get("email")
 
-    current_page = int(params.get("page", 1))
+    return filters
 
-    pagination_data = paginated_users(filters, current_page)
+def csv_ready_user(user):
+    """Format Sql alchemy user record into a
+        csv-ready dictionaty
+    Args:
+        SqlAlchemy.record: record mappend from DB
+
+    Returns:
+        dict: csv-ready dict
+    """    """Convers a user into a"""
+    return {
+        'id': user.id,
+        'Nombre': user.firstname,
+        'Apellido': user.lastname,
+        'Nombre de usuario': user.username,
+        'email': user.email,
+        'Activo': "Si" if user.active else "No",
+        'Roles': ', '.join(list(map(lambda x: x.name, user.roles))),
+        'Fecha de alta': user.created_at
+    }
+
+@login_required()
+@users_blueprint.get("/")
+def index():
+    filters = parse_filters(request)
+    pagination_data = paginated_users(filters, current_page(request))
 
     return render_template(
         "users/index.html",
         users=pagination_data["items"],
         filters=filters,
-        current_page=current_page,
+        current_page=current_page(request),
         pages=pagination_data["pages"],
     )
+
+@login_required()
+@users_blueprint.get("/csv_export")
+def csv_export():
+    users_list = list(
+            map(
+                lambda user: csv_ready_user(user),
+                list_user(parse_filters(request))
+            )
+        )
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    header = list(users_list[0].keys())
+
+    writer.writerow(header)
+
+    for user in users_list:
+        row = list(map(str, user.values()))
+        writer.writerow(row)
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    response.headers["Content-type"] = "text/csv"
+    return response
 
 
 @login_required()
