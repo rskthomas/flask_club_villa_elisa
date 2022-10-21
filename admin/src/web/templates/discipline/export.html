@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block title%} Disciplinas{% endblock %}
 {% block navbar%} {{super()}} {% endblock %}
+{% block head %} 
+{{ super() }} 
+<meta charset="utf-8">
+{% endblock %}
 {% block content%} 
 <h1>Lista de Disciplinas</h1>
 <div>

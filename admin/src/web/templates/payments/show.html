@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% block title %} Invoice {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+{% block head %} 
+{{ super() }} 
+<meta charset="utf-8">
+{% endblock %}
 {% block content %}
 <h1>Factura número {{invoice.id}}</h1>
 

@@ -6,7 +6,6 @@ from src.core.member import IntegrytyException
 from src.web.controllers.auth import login_required
 from src.web.forms.member import MemberForm
 from src.core import member
-
 import pdfkit
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")

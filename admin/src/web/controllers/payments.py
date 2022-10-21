@@ -1,13 +1,14 @@
 from src.web.helpers.handlers import bad_request
 from flask import Blueprint
 from flask import render_template
-from flask import request, flash, redirect, url_for
+from flask import request, flash, redirect, url_for, make_response
 from flask import session
 from src.core import member as Member
 from src.web.forms.payments import UserSearchForm
 from src.web.controllers.auth import login_required
 from src.core import payments as Payments
 from datetime import date
+import pdfkit
 
 
 payments_blueprint = Blueprint("payments", __name__, url_prefix="/payments")
@@ -58,7 +59,7 @@ def invoices(id):
     #If the invoice has not been issued this month, create a new one
     if last_invoice == date.today().month or (
         #Also it should be issued first days of the month
-        not last_invoice and date.today().day < 21
+        not last_invoice and date.today().day < 28
     ):
         Payments.create_invoice(member=member)
 
@@ -80,10 +81,32 @@ def pay_invoice(invoice_id):
     return redirect(url_for("payments.invoices", id=payment.member_id))
 
 
-@payments_blueprint.get("/<int:id>/payment/<payment_id>/")
-def download(payment_id):
-    # TODO: download payment PDF of invoice + payment approved
-    pass
+@payments_blueprint.route("/download/<int:invoice_id>")
+def download(invoice_id):
+    invoice = Payments.get_invoice(invoice_id)
+
+    # Get the HTML output
+    out = render_template("payments/show.html", invoice=invoice)
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+    
+    # Build PDF from HTML 
+    pdf = pdfkit.from_string(out, options=options)
+    
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return (response)  
 
 
 
