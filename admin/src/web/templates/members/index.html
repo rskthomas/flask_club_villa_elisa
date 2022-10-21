@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title%} Miembros{% endblock %}
+{% block navbar%} {{super()}} {% endblock %}
+{% block content%} 
+<h1>Lista de Miembros</h1>
+<div class="filter-section">
+    <form url="{{ url_for('member.index') }}" method="GET">
+        <h2> Filtros </h2>
+        <div class="object-property-container">
+            <label class="object-property-label"> Apellido:</label>
+            <input class="object-property-value" type="search" name="last_name" value="{{ filters.get('last_name', '') or '' }}"/>
+        </div>
+        <div class="object-property-container">
+            <label class="object-property-label"> Activo:</label>
+            <input type="radio" name="membership_state" value="any" {{ 'checked' if filters.get('membership_state') == None }} />
+            <label> Todos </label>
+            <input type="radio" name="membership_state" value="true" {{ 'checked' if filters.get('membership_state') }}/>
+            <label> Si </label>
+            <input type="radio" name="membership_state" value="false" {{ 'checked' if filters.get('membership_state') == False }}/>
+            <label> No </label>
+        </div>
+        <input type="submit"/>
+    </form>
+</div>
+<br></br>
+<div>
+    <table class="index-table box">
+        <thead>
+            <tr>
+                <th>Miembro</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Tipo Doc.</th>
+                <th>Nro.Doc.</th>
+                <th>Género</th>
+                <th>Direcc.</th>
+                <th>Estado</th>
+                <th>Teléf.</th>
+                <th>Email</th>
+                <th>Fecha Alta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mem in members %}
+            <tr>
+                <td><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></td>
+                <td>{{mem.first_name}}</td>
+                <td>{{mem.last_name}}</td>
+                <td>{{mem.personal_id_type}}</td>
+                <td>{{mem.personal_id}}</td>
+                <td>{{mem.gender}}</td>    
+                <td>{{mem.address}}</td>
+                <td>{{'Si' if mem.membership_state else 'No'}}</td>
+                <td>{{mem.phone_number}}</td>
+                <td>{{mem.email}}</td>
+                <td>{{mem.activation_date.strftime('%d-%m-%Y') }}</td>
+                <td>
+                    <a href="/miembros/{{ mem.id }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a href="/miembros/{{ mem.id }}/update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="/miembros/{{ mem.id }}/delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        <a href="/miembros/create"><button>Crear nuevo miembro + </button></a>
+        &nbsp;
+        <a href="/miembros/download"><button>Exportar</button></a>
+    </table>
+</div>
+
+<div class="paginator-container">
+    {% for i in range(1, pages + 1) %}
+    {% if i == current_page %}
+        <div class="paginator-number current-page">{{ i }}</div>
+        {% else %}
+            <a class="paginator-number", href="{{ url_for('member.index', page=i, **filters) }}">{{i}}</a>
+        {%endif%}
+    {% endfor %}
+</div>
+
+{% endblock %}

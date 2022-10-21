@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+  {% block title %} Disciplinas {% endblock %}
+  {% block head %} {{ super() }} {% endblock %}
+  {% block content %}
+  <h1>Usuarios con apellido {{last_name}}</h1>
+
+<div>
+    <table class="index-table box">
+        <thead>
+            <tr>
+                <th>Id Miembro</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Tipo Doc.</th>
+                <th>Nro.Doc.</th>
+                <th>Género</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mem in members %}
+            <tr>
+                <td><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></td>
+                <td>{{mem.first_name}}</td>
+                <td>{{mem.last_name}}</td>
+                <td>{{mem.personal_id_type}}</td>
+                <td>{{mem.personal_id}}</td>
+                <td>{{mem.gender}}</td>    
+                <td>{{'Activo' if mem.membership_state else 'Moroso'}}</td>
+                <td>
+                    <a href="/payments/member/{{ mem.id }}/invoices"><button>Ver Facturas</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+      
+    </table>
+</div>
+  <a href="/payments"><button>Volver </button></a>
+
+
+
+  {% endblock %}

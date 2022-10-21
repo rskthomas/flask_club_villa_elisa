@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% from "_render_field.html" import render_field %}
+
+{% block title %} Buscar Usuario {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block content %}
+<h1>Buscar usuario</h1>
+
+<p>Ingrese el ID o apellido del usuario que desea buscar</p>
+<form action="{{ url_for('payments.search') }}" method="POST">
+
+    <dl>
+        {{ render_field(form.select) }}
+        <p>
+            {{ render_field(form.search) }}
+        </p>
+    </dl>
+    <button type="submit">Buscar</button>
+</form>
+
+{% endblock %}

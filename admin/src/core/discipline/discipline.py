@@ -11,3 +11,4 @@ class Discipline(db.Model):
     monthly_price = db.Column(db.String(50), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=True)
     created_at = db.Column(db.DateTime(), default=db.func.now())
+    members = db.relationship("Member", secondary='member_discipline',passive_deletes=True)

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+  {% block title %} Miembros {% endblock %}
+  {% block head %} {{ super() }} {% endblock %}
+  {% block content %}
+  <h1>Miembro: {{ member.name}}</h1>
+
+
+  <div class="object-property-container">
+    <label class="object-property-label">Nombre : </label> 
+    <div class="object-property-value">{{ member.first_name }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Apellido : </label> 
+    <div class="object-property-value">{{ member.last_name }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Tipo Doc.: </label> 
+    <div class="object-property-value">{{ member.personal_id_type }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Nro.Doc: </label> 
+    <div class="object-property-value">{{ member.personal_id }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Género: </label> 
+    <div class="object-property-value">{{ member.gender }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Dirección: </label> 
+    <div class="object-property-value">{{ member.address }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Estado: </label> 
+    <div class="object-property-value">{{ member.membership_state }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Teléfono: </label> 
+    <div class="object-property-value">{{ member.phone_number }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Email: </label> 
+    <div class="object-property-value">{{ member.email }}</div>
+  </div>
+  <div class="object-property-container">
+    <label class="object-property-label">Fecha Alta: </label> 
+    <div class="object-property-value">{{ member.activation_date }}</div>
+  </div>
+ 
+  <br>
+  <a class="edit-link" href="{{url_for('member.index')}}"><button type="button">Volver</button></a>
+  {% endblock %}

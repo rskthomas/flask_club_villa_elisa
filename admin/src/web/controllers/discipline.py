@@ -1,11 +1,16 @@
-from src.web.helpers.handlers import bad_request
+from src.core.discipline import DisciplineNotFound, MemberNotFound
 from flask import Blueprint
-from flask import render_template
-from flask import request, flash, redirect, url_for
+from flask import render_template, abort
+from flask import request, flash, redirect, url_for, make_response
 from flask import session
+from src.web.forms.discipline import DisciplineForm
+from src.core.discipline import enroll_member, cancel_enrollment
+from src.core.discipline import find_discipline, delete_discipline
+from src.core.discipline import InactiveDiscipline, InactiveMember
+from src.web.helpers.handlers import bad_request
 from src.core import discipline as Discipline
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from src.web.controllers.auth import login_required
+import pdfkit
 
 
 discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
@@ -47,11 +52,7 @@ def create_post():
 @discipline_blueprint.get("/<int:id>/update")
 @login_required("discipline_rw")
 def update(id):
-    item = Discipline.find_discipline(id)
-
-    if not item:
-        print("item not found")
-        return bad_request("Discipline not found")
+    item = load_discipline(id)
 
     form = DisciplineForm(
         name=item.name,
@@ -64,15 +65,16 @@ def update(id):
     return render_template("discipline/update.html", form=form, id=id)
 
 
-@discipline_blueprint.post("/<int:id>/update")
+@discipline_blueprint.post("/update")
 @login_required("discipline_rw")
-def update_discipline(id):
+def update_discipline():
+    discipline_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
     form = DisciplineForm(request.form)
     if form.validate():
         Discipline.update_discipline(
-            id=id,
+            id=discipline_id,
             name=form.name.data,
             category=form.category.data,
             coach=form.coach.data,
@@ -84,10 +86,10 @@ def update_discipline(id):
         return redirect(url_for("disciplines.index"))
 
 
-@discipline_blueprint.post("/<int:id>/delete")
+@discipline_blueprint.get("/<int:id>/delete")
 @login_required("discipline_rwd")
 def delete(id):
-    if not Discipline.delete_discipline(id):
+    if not delete_discipline(id):
         return bad_request("Discipline not found")
 
     flash("Disciplina eliminada correctamente", "success")
@@ -102,27 +104,100 @@ def delete_error(id):
 @discipline_blueprint.get("/<int:id>")
 @login_required("discipline_rw")
 def show(id):
-    item = Discipline.find_discipline(id)
-    return render_template("discipline/show.html", discipline=item)
+    discipline = load_discipline(id)
+    return render_template("discipline/show.html", discipline=discipline)
 
 
-class DisciplineForm(Form):
-    """Represents an html form of Discipline model"""
+@discipline_blueprint.get("<int:id>/enrollment")
+@login_required()
+def enrollment_form(id):
+    discipline = load_discipline(id)
+    return render_template("discipline/enrollment.html", discipline=discipline)
 
-    name = StringField(
-        "Nombre", [validators.Length(min=4, max=25), validators.DataRequired()]
-    )
-    category = StringField(
-        "Categoría", [validators.Length(min=4, max=25), validators.DataRequired()]
-    )
-    coach = StringField(
-        "Nombre/s del instructor/es",
-        [validators.Length(min=4, max=50), validators.DataRequired()],
-    )
-    schedule = StringField(
-        "Horario", [validators.Length(min=4, max=50), validators.DataRequired()]
-    )
-    monthly_price = StringField(
-        "Precio Mensual", [validators.Length(min=1, max=15), validators.DataRequired()]
-    )
-    active = BooleanField("Habilitado")
+
+@discipline_blueprint.post("<int:id>/enrollment")
+@login_required()
+def create_enrollment(id):
+    try:
+        enroll_member(id, request.form.get("chosen_member_id"))
+        flash("el alta se realizó con éxito", "success")
+    except InactiveDiscipline:
+        flash("la disciplina está inactiva", "error")
+        return render_template(
+            "discipline/enrollment.html", discipline=find_discipline(id)
+        )
+    except InactiveMember:
+        flash("No se puede inscribir a un socio inactivo", "error")
+        return render_template(
+            "discipline/enrollment.html", discipline=find_discipline(id)
+        )
+
+    return render_template("discipline/show.html", discipline=find_discipline(id))
+
+
+@discipline_blueprint.get("<int:id>/members")
+@login_required()
+def discipline_members(id):
+    discipline = load_discipline(id)
+    return discipline.members
+
+
+@discipline_blueprint.get("<int:id>/members/<int:member_id>/cancel")
+@login_required()
+def destroy_enrollment(id, member_id):
+    try:
+        cancel_enrollment(id, member_id)
+        flash("La inscripcion del socio ha sido realizada con éxtio", "success")
+    except DisciplineNotFound:
+        flash("La disciplina no se encontró", "error")
+        return redirect(url_for("disciplines.index"))
+    except MemberNotFound:
+        flash("El socio no se encontró", "error")
+        return redirect(url_for("disciplines.index"))
+
+    return redirect(url_for("disciplines.show", id=id))
+
+
+def load_discipline(id):
+    """Looks for a discipline in the DB
+        in case it's not found, returns a 404 error
+
+    Args:
+        id (_type_): id of the discipline
+
+    Returns:
+        sqlAlchemy.model: discipline record
+    """
+    discipline = find_discipline(id)
+    if not discipline:
+        abort(404)
+    return discipline
+
+
+@discipline_blueprint.route("/download")
+@login_required()
+def download():
+    disciplines = Discipline.get_disciplines()
+
+    # Get the HTML output
+    out = render_template("discipline/export.html", disciplines=disciplines)
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+
+    # Build PDF from HTML
+    pdf = pdfkit.from_string(out, options=options)
+
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return response

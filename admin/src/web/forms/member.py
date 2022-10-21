@@ -1,0 +1,39 @@
+from wtforms import Form, BooleanField, StringField, validators
+from wtforms.fields import EmailField
+
+
+class MemberForm(Form):
+    """Represents an html form of Member model"""
+
+    first_name = StringField(
+        "Nombre", [validators.Length(min=4, max=50), validators.DataRequired()]
+    )
+    last_name = StringField(
+        "Apellido", [validators.Length(min=4, max=50), validators.DataRequired()]
+    )
+    personal_id_type = StringField(
+        "Tipo Documento",
+        [validators.Length(min=1, max=25), validators.DataRequired()],
+    )
+    personal_id = StringField(
+        "Nro. Documento", [validators.Length(min=1, max=25), validators.DataRequired()]
+    )
+    gender = StringField(
+        "Género", [validators.Length(min=1, max=25), validators.DataRequired()]
+    )
+    address = StringField(
+        "Dirección", [validators.Length(min=1, max=255), validators.DataRequired()]
+    )
+    phone_number = StringField(
+        "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
+    )
+    email = EmailField(
+        "Email",
+        [
+            validators.Length(min=1, max=50),
+            validators.DataRequired(),
+            validators.Email(),
+        ],
+    )
+
+    membership_state = BooleanField("Activo")
