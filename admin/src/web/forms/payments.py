@@ -6,7 +6,10 @@ from wtforms import (
     ValidationError,
 )
 
+
 class UserSearchForm(Form):
+    """Html form for searching a member"""
+
     choices = [
         ("member_id", "ID del miembro"),
         ("last_name", "Apellido"),

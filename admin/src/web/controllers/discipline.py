@@ -68,7 +68,7 @@ def update(id):
 @discipline_blueprint.post("/update")
 @login_required("discipline_rw")
 def update_discipline():
-    discipline_id = request.form['id']
+    discipline_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
     form = DisciplineForm(request.form)
@@ -112,22 +112,28 @@ def show(id):
 @login_required()
 def enrollment_form(id):
     discipline = load_discipline(id)
-    return render_template('discipline/enrollment.html', discipline=discipline)
+    return render_template("discipline/enrollment.html", discipline=discipline)
+
 
 @discipline_blueprint.post("<int:id>/enrollment")
 @login_required()
 def create_enrollment(id):
     try:
-        enroll_member(id, request.form.get('chosen_member_id'))
-        flash("el alta se realizó con éxito", 'success')
+        enroll_member(id, request.form.get("chosen_member_id"))
+        flash("el alta se realizó con éxito", "success")
     except InactiveDiscipline:
-        flash('la disciplina está inactiva', 'error')
-        return render_template('discipline/enrollment.html', discipline=find_discipline(id))
+        flash("la disciplina está inactiva", "error")
+        return render_template(
+            "discipline/enrollment.html", discipline=find_discipline(id)
+        )
     except InactiveMember:
-        flash('No se puede inscribir a un socio inactivo', 'error')
-        return render_template('discipline/enrollment.html', discipline=find_discipline(id))
+        flash("No se puede inscribir a un socio inactivo", "error")
+        return render_template(
+            "discipline/enrollment.html", discipline=find_discipline(id)
+        )
 
-    return render_template('discipline/show.html', discipline=find_discipline(id))
+    return render_template("discipline/show.html", discipline=find_discipline(id))
+
 
 @discipline_blueprint.get("<int:id>/members")
 @login_required()
@@ -135,20 +141,21 @@ def discipline_members(id):
     discipline = load_discipline(id)
     return discipline.members
 
+
 @discipline_blueprint.get("<int:id>/members/<int:member_id>/cancel")
 @login_required()
 def destroy_enrollment(id, member_id):
     try:
         cancel_enrollment(id, member_id)
-        flash('La inscripcion del socio ha sido realizada con éxtio', 'success')
+        flash("La inscripcion del socio ha sido realizada con éxtio", "success")
     except DisciplineNotFound:
-        flash('La disciplina no se encontró', 'error')
-        return redirect(url_for('disciplines.index'))
+        flash("La disciplina no se encontró", "error")
+        return redirect(url_for("disciplines.index"))
     except MemberNotFound:
-        flash('El socio no se encontró', 'error')
-        return redirect(url_for('disciplines.index'))
+        flash("El socio no se encontró", "error")
+        return redirect(url_for("disciplines.index"))
 
-    return redirect(url_for('disciplines.show', id=id))
+    return redirect(url_for("disciplines.show", id=id))
 
 
 def load_discipline(id):
@@ -172,7 +179,7 @@ def load_discipline(id):
 def download():
     disciplines = Discipline.get_disciplines()
 
-     # Get the HTML output
+    # Get the HTML output
     out = render_template("discipline/export.html", disciplines=disciplines)
 
     # PDF options
@@ -185,15 +192,12 @@ def download():
         "margin-left": "1.0cm",
         "encoding": "UTF-8",
     }
-    
-    # Build PDF from HTML 
+
+    # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options)
-    
+
     # Download the PDF
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
-    return (response)      
-
-
-
+    return response

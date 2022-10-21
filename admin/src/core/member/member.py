@@ -3,6 +3,7 @@ from src.core.database import db
 from src.core.payments import invoice as Invoice
 
 class Member(db.Model):
+    """Member Model representing a club member"""
     id                  = db.Column(db.Integer, primary_key=True, unique=True)
     first_name          = db.Column(db.String(50), nullable=False)
     last_name           = db.Column(db.String(50), nullable=False)

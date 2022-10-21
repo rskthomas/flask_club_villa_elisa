@@ -77,6 +77,16 @@ def enroll_member(discipline_id, member_id):
 
 
 def cancel_enrollment(discipline_id, member_id):
+    """Cancel a member enrollment to a discipline
+
+    Args:
+        discipline_id (int): id of the discipline
+        member_id (int): id of the member
+
+    Raises:
+        DisciplineNotFound: raised if the discipline is not found
+        MemberNotFound: raised if the member is not found
+    """
     discipline = find_discipline(discipline_id)
     if not discipline:
         raise DisciplineNotFound
@@ -85,6 +95,7 @@ def cancel_enrollment(discipline_id, member_id):
         raise MemberNotFound
     discipline.members.remove(member)
     db.session.commit()
+
 
 def get_members(discipline_id):
     """Get a list of all members of a discipline"""

@@ -10,7 +10,6 @@ from src.core.commands import usersbp
 from src.core.commands import databasebp
 from src.core.commands import seedsbp
 
-from src.web.controllers.issues import issue_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.web.controllers.discipline import discipline_blueprint
 from src.web.controllers.users import users_blueprint
@@ -19,9 +18,10 @@ from src.web.controllers.members import member_blueprint
 from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 
+
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
-    app.secret_key = environ.get("FLASK_SECRET_KEY", 'this is just a secret')
+    app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
 
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
@@ -35,7 +35,6 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(databasebp)
     app.register_blueprint(seedsbp)
 
-    app.register_blueprint(issue_blueprint)
     app.register_blueprint(auth_blueprint)
 
     app.register_blueprint(discipline_blueprint)

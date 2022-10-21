@@ -1,6 +1,7 @@
 from wtforms import Form, BooleanField, StringField, validators
 from wtforms.fields import EmailField
 
+
 class MemberForm(Form):
     """Represents an html form of Member model"""
 
@@ -27,6 +28,12 @@ class MemberForm(Form):
         "Teléfono", [validators.Length(min=1, max=25), validators.DataRequired()]
     )
     email = EmailField(
-        'Email', [validators.Length(min=1, max=50), validators.DataRequired(), validators.Email()])
- 
+        "Email",
+        [
+            validators.Length(min=1, max=50),
+            validators.DataRequired(),
+            validators.Email(),
+        ],
+    )
+
     membership_state = BooleanField("Activo")

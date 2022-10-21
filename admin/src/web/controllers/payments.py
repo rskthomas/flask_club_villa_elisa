@@ -56,10 +56,11 @@ def invoices(id):
     member = Member.find_member(id)
 
     last_invoice = Payments.last_invoice(id)
-    #If the invoice has not been issued this month, create a new one
+    # If the invoice has not been issued this month, create a new one
     if last_invoice == date.today().month or (
-        #Also it should be issued first days of the month
-        not last_invoice and date.today().day < 28
+        # Also it should be issued first days of the month
+        not last_invoice
+        and date.today().day < 28
     ):
         Payments.create_invoice(member=member)
 
@@ -98,15 +99,12 @@ def download(invoice_id):
         "margin-left": "1.0cm",
         "encoding": "UTF-8",
     }
-    
-    # Build PDF from HTML 
+
+    # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options)
-    
+
     # Download the PDF
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
-    return (response)  
-
-
-
+    return response

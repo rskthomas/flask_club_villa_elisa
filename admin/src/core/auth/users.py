@@ -1,14 +1,17 @@
 from src.core.database import db
 from datetime import datetime
 
+
 class User(db.Model):
+    """User Model representing a user in the system"""
+
     id = db.Column(db.Integer, primary_key=True, unique=True)
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True)
     active = db.Column(db.Boolean(), default=True)
-    roles = db.relationship("Role", secondary='user_role',passive_deletes=True)
+    roles = db.relationship("Role", secondary="user_role", passive_deletes=True)
     password = db.Column(db.String(50))
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
     created_at = db.Column(db.DateTime, default=datetime.now())
