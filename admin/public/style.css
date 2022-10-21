@@ -1,8 +1,185 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
-body {
-  background-color: #4B7399;
-  font-family: 'Montserrat', Helvetica, sans-serif;
+:root {
+  /* Core colors' HSL components */
+  --color--primary--hue: 150;
+  --color--primary--saturation: 100%;
+  --color--primary--lightness: 25%;
+  --color--secondary--hue: 195;
+  --color--secondary--saturation: 15%;
+  --color--secondary--lightness: 50%;
+  --color--success--hue: 150;
+  --color--success--saturation: 100%;
+  --color--success--lightness: 25%;
+  --color--danger--hue: 0;
+  --color--danger--saturation: 75%;
+  --color--danger--lightness: 50%;
+  
+  /* Background colors' HSL components */
+  --background-color--background-surface--hue: 0;
+  --background-color--background-surface--saturation: 0%;
+  --background-color--background-surface--lightness: 90%;
+  --background-color--foreground-surface--hue: 0;
+  --background-color--foreground-surface--saturation: 0%;
+  --background-color--foreground-surface--lightness: 100%;
+
+  /* Foreground colors' HSL components */
+  --foreground-color--primary-surface--hue: 0;
+  --foreground-color--primary-surface--saturation: 0%;
+  --foreground-color--primary-surface--lightness: 100%;
+  --foreground-color--secondary-surface--hue: 0;
+  --foreground-color--secondary-surface--saturation: 0%;
+  --foreground-color--secondary-surface--lightness: 10%;
+  --foreground-color--success-surface--hue: 0;
+  --foreground-color--success-surface--saturation: 0%;
+  --foreground-color--success-surface--lightness: 100%;
+  --foreground-color--danger-surface--hue: 0;
+  --foreground-color--danger-surface--saturation: 0%;
+  --foreground-color--danger-surface--lightness: 100%;
+  --foreground-color--background-surface--hue: 0;
+  --foreground-color--background-surface--saturation: 0%;
+  --foreground-color--background-surface--lightness: 15%;
+  --foreground-color--foreground-surface--hue: 0;
+  --foreground-color--foreground-surface--saturation: 0%;
+  --foreground-color--foreground-surface--lightness: 10%;
+
+  /* Core colors */
+  --color--primary: hsl(
+    var(--color--primary--hue),
+    var(--color--primary--saturation),
+    var(--color--primary--lightness)
+  );
+  --color--secondary: hsl(
+    var(--color--secondary--hue),
+    var(--color--secondary--saturation),
+    var(--color--secondary--lightness)
+  );
+  --color--success: hsl(
+    var(--color--success--hue),
+    var(--color--success--saturation),
+    var(--color--success--lightness)
+  );
+  --color--danger: hsl(
+    var(--color--danger--hue),
+    var(--color--danger--saturation),
+    var(--color--danger--lightness)
+  );
+
+  /* Background colors */
+  --background-color--primary-surface: var(--color--primary);
+  --background-color--secondary-surface: var(--color--secondary);
+  --background-color--success-surface: var(--color--success);
+  --background-color--danger-surface: var(--color--danger);
+  --background-color--background-surface: hsl(
+    var(--background-color--background-surface--hue),
+    var(--background-color--background-surface--saturation),
+    var(--background-color--background-surface--lightness)
+  );
+  --background-color--foreground-surface: hsl(
+    var(--background-color--background-surface--hue),
+    var(--background-color--background-surface--saturation),
+    var(--background-color--background-surface--lightness)
+  );
+  
+  /* Foreground colors */
+  --foreground-color--primary-surface: hsl(
+    var(--foreground-color--primary-surface--hue),
+    var(--foreground-color--primary-surface--saturation),
+    var(--foreground-color--primary-surface--lightness)
+  );
+  --foreground-color--secondary-surface: hsl(
+    var(--foreground-color--secondary-surface--hue),
+    var(--foreground-color--secondary-surface--saturation),
+    var(--foreground-color--secondary-surface--lightness)
+  );
+  --foreground-color--success-surface: hsl(
+    var(--foreground-color--success-surface--hue),
+    var(--foreground-color--success-surface--saturation),
+    var(--foreground-color--success-surface--lightness)
+  );
+  --foreground-color--danger-surface: hsl(
+    var(--foreground-color--danger-surface--hue),
+    var(--foreground-color--danger-surface--saturation),
+    var(--foreground-color--danger-surface--lightness)
+  );
+  --foreground-color--background-surface: hsl(
+    var(--foreground-color--background-surface--hue),
+    var(--foreground-color--background-surface--saturation),
+    var(--foreground-color--background-surface--lightness)
+  );
+  --foreground-color--foreground-surface: hsl(
+    var(--foreground-color--foreground-surface--hue),
+    var(--foreground-color--foreground-surface--saturation),
+    var(--foreground-color--foreground-surface--lightness)
+  );
+
+  /* Fonts */
+  --base-font: 'Saira', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  font-family: var(--base-font);
   font-size: 14px;
+}
+
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100%;
+  background-color: var(--background-color--background-surface);
+}
+
+.top-navigation {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+  column-gap: 16px;
+  height: 64px;
+  padding-block: 4px;
+  padding-inline: 8px;
+  background-color: var(--background-color--primary-surface);
+  color: var(--foreground-color--primary-surface);
+}
+
+.top-navigation__page-heading {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.page_heading__site-name {
+  padding-block: 4px;
+  padding-inline: 8px;
+  border-radius: 4px;
+  color: var(--foreground-color--primary-surface);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color 500ms ease-out;
+}
+
+.page_heading__site-name:hover {
+  background-color: #ffffff20;
+  transition: background-color 125ms ease-out;
+}
+
+.page_heading__section-name {
+  font-size: 22px;
+  font-weight: 200;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
 .clear {

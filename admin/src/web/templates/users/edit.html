@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
-{% block title %} Edición de usuario {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+
+{% block section_name %}
+    Editar usuario {{user.firstname}} {{user.lastname}}
+{% endblock %}
+
 {% block content %}
     <h1>Edición de usuario # {{user.id}}</h1>
     <section>
