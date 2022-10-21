@@ -40,9 +40,9 @@ def current_page(request):
 def parse_filters(request):
     filters = {}
     params = request.args
-    if params.get("active").lower() == "true":
+    if params.get("active",'').lower() == "true":
         filters["active"] = True
-    if params.get("active").lower() == "false":
+    if params.get("active",'').lower() == "false":
         filters["active"] = False
     if params.get("active") == "any":
         filters["active"] = None
