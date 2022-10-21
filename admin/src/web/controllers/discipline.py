@@ -167,8 +167,8 @@ def load_discipline(id):
     return discipline
 
 
-@login_required()
 @discipline_blueprint.route("/download")
+@login_required()
 def download():
     disciplines = Discipline.get_disciplines()
 

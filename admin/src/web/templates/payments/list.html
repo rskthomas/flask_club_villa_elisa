@@ -16,7 +16,7 @@
         <p>Estado: {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
     </div>
     {%if invoice.paid%}
-    <p>BOTON DESCARGAR COMPROBANTE</p>
+    <a href="{{url_for('payments.download',invoice_id=invoice.id)}}"><button>Descargar comprobante</button></a>
  
     
     {%endif%}
