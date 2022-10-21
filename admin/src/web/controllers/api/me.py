@@ -9,18 +9,9 @@ from src.core.payments import member_payments
 
 me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/me")
 
-def discipline_as_json(discipline):
-    return {
-        'id': discipline.id,
-        'category': discipline.category,
-        'coach' : discipline.coach,
-        'schedule': discipline.schedule,
-        'monthly_price': discipline.monthly_price,
-        'active': discipline.active,
-        'created_at': discipline.created_at
-    }
 
 def payment_as_json(payment):
+    """Converts a payment to json and returns it"""
     return {
         'id': payment.id,
         'month': payment.invoice.month,

@@ -7,6 +7,7 @@ from src.core.member import list_members
 member_api_blueprint = Blueprint("members_api", __name__, url_prefix="/miembros")
 
 def member_as_json(member):
+    """Converts a member to json and returns it"""
     return {
         'id': member.id,
         'first_name': member.first_name,
