@@ -11,13 +11,17 @@ system_config_blueprint = Blueprint(
 @system_config_blueprint.get("/")
 @login_required("system_config_show")
 def show():
-    return render_template("system_config/show.html", system_config=get_system_config())
+    return render_template(
+        "system_config/show.html",
+        system_config=get_system_config())
 
 
 @system_config_blueprint.get("/editar")
 @login_required()
 def edit():
-    return render_template("system_config/edit.html", system_config=get_system_config())
+    return render_template(
+        "system_config/edit.html",
+        system_config=get_system_config())
 
 
 @system_config_blueprint.post("/update")

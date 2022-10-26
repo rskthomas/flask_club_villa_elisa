@@ -13,7 +13,10 @@ from src.web.controllers.auth import login_required
 import pdfkit
 
 
-discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
+discipline_blueprint = Blueprint(
+    "disciplines",
+    __name__,
+    url_prefix="/disciplines")
 
 
 @discipline_blueprint.get("/")
@@ -132,7 +135,9 @@ def create_enrollment(id):
             "discipline/enrollment.html", discipline=find_discipline(id)
         )
 
-    return render_template("discipline/show.html", discipline=find_discipline(id))
+    return render_template(
+        "discipline/show.html",
+        discipline=find_discipline(id))
 
 
 @discipline_blueprint.get("<int:id>/members")

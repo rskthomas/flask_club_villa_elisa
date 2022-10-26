@@ -65,7 +65,10 @@ def invoices(id):
         Payments.create_invoice(member=member)
 
     invoices = Payments.member_invoices(id)
-    return render_template("payments/list.html", member=member, invoices=invoices)
+    return render_template(
+        "payments/list.html",
+        member=member,
+        invoices=invoices)
 
 
 @payments_blueprint.get("/invoice/<int:invoice_id>")

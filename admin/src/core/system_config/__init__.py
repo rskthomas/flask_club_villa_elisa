@@ -4,7 +4,8 @@ from src.core.database import db
 
 
 def update_system_config(args):
-    # DONT WANNA BREAK ANYTHING, BUT THIS FUNCTION HAS SAME NAME AS THE ONE BELOW
+    # DONT WANNA BREAK ANYTHING, BUT THIS FUNCTION HAS SAME NAME AS THE ONE
+    # BELOW
     return SystemConfig.first()
 
 

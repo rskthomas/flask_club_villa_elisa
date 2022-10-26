@@ -13,5 +13,8 @@ class UserRole(db.Model):
     role_id = db.Column(
         db.Integer, ForeignKey("role.id", ondelete="CASCADE"), primary_key=True
     )
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.now(),
+        onupdate=datetime.now())
     created_at = db.Column(db.DateTime, default=datetime.now())
