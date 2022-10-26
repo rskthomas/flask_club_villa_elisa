@@ -1,6 +1,7 @@
 import io
 import csv
-from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
+from flask import Blueprint, render_template, request, flash
+from flask import redirect, url_for, make_response
 from src.web.helpers.handlers import bad_request
 from src.web.controllers.auth import login_required
 from src.web.forms.users import UserForm
@@ -10,6 +11,7 @@ from src.core.auth import list_roles, update_user_roles, IntegrytyException
 
 
 users_blueprint = Blueprint("users", __name__, url_prefix="/users")
+
 
 def parse_from_params(form):
     """
@@ -34,15 +36,17 @@ def parse_from_params(form):
 
     return update_args
 
+
 def current_page(request):
     return int(request.args.get("page", 1))
+
 
 def parse_filters(request):
     filters = {}
     params = request.args
-    if params.get("active",'').lower() == "true":
+    if params.get("active", "").lower() == "true":
         filters["active"] = True
-    if params.get("active",'').lower() == "false":
+    if params.get("active", "").lower() == "false":
         filters["active"] = False
     if params.get("active") == "any":
         filters["active"] = None
@@ -50,6 +54,7 @@ def parse_filters(request):
     filters["email"] = params.get("email")
 
     return filters
+
 
 def csv_ready_user(user):
     """Format Sql alchemy user record into a
@@ -59,17 +64,18 @@ def csv_ready_user(user):
 
     Returns:
         dict: csv-ready dict
-    """    """Convers a user into a"""
+    """ """Convers a user into a"""
     return {
-        'id': user.id,
-        'Nombre': user.firstname,
-        'Apellido': user.lastname,
-        'Nombre de usuario': user.username,
-        'email': user.email,
-        'Activo': "Si" if user.active else "No",
-        'Roles': ', '.join(list(map(lambda x: x.name, user.roles))),
-        'Fecha de alta': user.created_at
+        "id": user.id,
+        "Nombre": user.firstname,
+        "Apellido": user.lastname,
+        "Nombre de usuario": user.username,
+        "email": user.email,
+        "Activo": "Si" if user.active else "No",
+        "Roles": ", ".join(list(map(lambda x: x.name, user.roles))),
+        "Fecha de alta": user.created_at,
     }
+
 
 @login_required()
 @users_blueprint.get("/")
@@ -85,15 +91,12 @@ def index():
         pages=pagination_data["pages"],
     )
 
+
 @login_required()
 @users_blueprint.get("/csv_export")
 def csv_export():
-    users_list = list(
-            map(
-                lambda user: csv_ready_user(user),
-                list_user(parse_filters(request))
-            )
-        )
+    users_list = list(map(lambda user: csv_ready_user(user),
+                          list_user(parse_filters(request))))
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -114,7 +117,10 @@ def csv_export():
 @login_required()
 @users_blueprint.get("/nuevo")
 def new():
-    return render_template("users/new.html", form=UserForm(), roles=list_roles())
+    return render_template(
+        "users/new.html",
+        form=UserForm(),
+        roles=list_roles())
 
 
 @login_required()
@@ -151,8 +157,8 @@ def edit(id):
         password=user.password,
         active=user.active,
     )
-    return render_template("users/edit.html",
-        form=form, id=id, roles=list_roles(), user=user
+    return render_template(
+        "users/edit.html", form=form, id=id, roles=list_roles(), user=user
     )
 
 
@@ -167,7 +173,9 @@ def update():
     try:
         if form.validate():
             update_user(user_id, parse_from_params(request.form))
-            update_user_roles(find_user(user_id), request.form.getlist("roles"))
+            update_user_roles(
+                find_user(user_id),
+                request.form.getlist("roles"))
 
             flash("usuario modificado con éxito", "success")
             return redirect(url_for("users.index"))

@@ -21,7 +21,9 @@ def login_required(argument=None):
             """Checks if user is logged in and has the required permissions"""
 
             if session.get("user") is None:
-                flash("Usted debe estar loggeado para acceder a esta página", "error")
+                flash(
+                    "Usted debe estar loggeado para acceder a esta página",
+                    "error")
                 return redirect(url_for("auth.login"))
             if argument and not can_perform(session.get("user"), argument):
                 flash("Usted no tiene permisos necesarios", "error")

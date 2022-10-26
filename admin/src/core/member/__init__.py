@@ -5,18 +5,24 @@ from src.core.database import db
 from src.core.utils import paginated
 from sqlalchemy.exc import IntegrityError
 
+
 class IntegrytyException(Exception):
     pass
+
 
 def list_members(filter={}):
     """Get a list of all Members"""
     query = Member.query
     if filter.get('last_name'):
-        query = query.where(Member.last_name.ilike("%" + filter['last_name'] + '%'))
+        query = query.where(
+            Member.last_name.ilike(
+                "%" + filter['last_name'] + '%'))
     if filter.get('membership_state') is not None:
-        query = query.where(Member.membership_state == filter['membership_state'])
+        query = query.where(Member.membership_state ==
+                            filter['membership_state'])
     if filter.get('personal_id'):
-        query = query.where(Member.personal_id.ilike(f"%{ filter.get('personal_id') }%"))
+        query = query.where(Member.personal_id.ilike(
+            f"%{ filter.get('personal_id') }%"))
     return query
 
 
@@ -24,7 +30,7 @@ def create_member(**kwargs):
     """Create a new Member
 
     Args:
-        kwargs: all fields of object Member 
+        kwargs: all fields of object Member
 
     Raises:
         IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
@@ -36,7 +42,7 @@ def create_member(**kwargs):
         return member
     except IntegrityError:
         db.session.rollback()
-        raise IntegrytyException  
+        raise IntegrytyException
 
 
 def update_member(id, **kwargs):
@@ -44,7 +50,7 @@ def update_member(id, **kwargs):
 
     Args:
         id: identifier of Member
-        args: fields to update 
+        args: fields to update
 
     Raises:
         IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
@@ -57,7 +63,7 @@ def update_member(id, **kwargs):
         return member
     except IntegrityError:
         db.session.rollback()
-        raise IntegrytyException    
+        raise IntegrytyException
 
 
 def delete_member(id):
@@ -71,7 +77,6 @@ def delete_member(id):
 def find_member(id):
     """Find a Member by id"""
     return Member.query.get(id)
-
 
 
 def delete_member_by_member_number(mem_number):
@@ -106,7 +111,7 @@ def paginated_members(filter={}, current_page=1):
             items: Members of the current page
             pages: # of pages based on the page size
     """
-    return paginated(list_members(filter), current_page)    
+    return paginated(list_members(filter), current_page)
 
 
 def get_member_disciplines(member_id):

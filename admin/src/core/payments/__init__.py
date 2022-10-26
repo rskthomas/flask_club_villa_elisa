@@ -33,12 +33,13 @@ def last_invoice(user_id: int):
     )
 
 
-def unpaid_invoices(user_id:int):
+def unpaid_invoices(user_id: int):
     """Returns a list of all unpaid invoices for a given user_id"""
 
     return (
-        Invoice.query.filter_by(paid=False).filter(Invoice.member_id == user_id).all()
-    )
+        Invoice.query.filter_by(
+            paid=False).filter(
+            Invoice.member_id == user_id).all())
 
 
 def get_invoice(invoice_id: int):
@@ -56,9 +57,13 @@ def _check_recharge(invoice):
         invoice.expired = True
         amount = invoice.total_price * float(get_recharge_percentage())
         description = f"Recargo de {amount} por vencimiento de factura {invoice.month}/{invoice.year}"
-        create_extraItem(invoice_id=invoice.id, amount=amount, description=description)
+        create_extraItem(
+            invoice_id=invoice.id,
+            amount=amount,
+            description=description)
         invoice.total_price = invoice.total_price + amount
         db.session.commit()
+
 
 def create_invoice(member):
     """Creates a new invoice in the database, adding all disciplines of the member as extra_items
@@ -69,7 +74,10 @@ def create_invoice(member):
     Returns: new_invoice(Invoice)
     """
     base_price = get_monthly_fee()
-    invoice = Invoice(base_price=base_price, member_id=member.id, total_price=0)
+    invoice = Invoice(
+        base_price=base_price,
+        member_id=member.id,
+        total_price=0)
     db.session.add(invoice)
 
     total_price = base_price + _calculate_extra_items(member, invoice)
@@ -85,7 +93,11 @@ def _calculate_extra_items(member, invoice):
         if discipline.active:
             amount = discipline.monthly_price
             description = f"Cuota de {discipline.name} por el monto de {amount}"
-            create_extraItem(discipline_id=discipline.id , invoice_id=invoice.id, amount=amount, description=description)
+            create_extraItem(
+                discipline_id=discipline.id,
+                invoice_id=invoice.id,
+                amount=amount,
+                description=description)
             sum += int(amount)
     return sum
 
@@ -107,10 +119,9 @@ def create_extraItem(**kwargs):
     return extra_item
 
 
-
 def pay_invoice(invoice_id):
     """Creates a new payment for an invoice
-    
+
     Args:
         invoice(int): id of the invoice
 
@@ -120,7 +131,10 @@ def pay_invoice(invoice_id):
     if invoice.paid:
         return False
     invoice.paid = True
-    payment = Payment(amount = invoice.total_price, invoice_id = invoice.id, member_id = invoice.member_id)
+    payment = Payment(
+        amount=invoice.total_price,
+        invoice_id=invoice.id,
+        member_id=invoice.member_id)
     invoice = update_invoice(invoice, paid=True, payment=payment.id)
     db.session.add(payment)
     db.session.commit()
@@ -151,6 +165,7 @@ def update_invoice(invoice, **kwargs):
         setattr(invoice, key, value)
     db.session.commit()
     return invoice
+
 
 def member_payments(member_id):
     """Returns a list of payments for a given member_id"""

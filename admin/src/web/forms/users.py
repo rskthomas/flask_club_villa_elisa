@@ -9,8 +9,9 @@ class UserForm(Form):
         "Nombre", [validators.Length(min=4, max=50), validators.DataRequired()]
     )
     lastname = StringField(
-        "Apellido", [validators.Length(min=4, max=50), validators.DataRequired()]
-    )
+        "Apellido", [
+            validators.Length(
+                min=4, max=50), validators.DataRequired()])
     username = StringField(
         "Usuario",
         [validators.Length(min=4, max=50), validators.DataRequired()],
@@ -24,6 +25,7 @@ class UserForm(Form):
         ],
     )
     password = PasswordField(
-        "Password", [validators.Length(min=1, max=50), validators.DataRequired()]
-    )
+        "Password", [
+            validators.Length(
+                min=1, max=50), validators.DataRequired()])
     active = BooleanField("Activo")

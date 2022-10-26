@@ -11,9 +11,15 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True)
     active = db.Column(db.Boolean(), default=True)
-    roles = db.relationship("Role", secondary="user_role", passive_deletes=True)
+    roles = db.relationship(
+        "Role",
+        secondary="user_role",
+        passive_deletes=True)
     password = db.Column(db.String(50))
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.now(),
+        onupdate=datetime.now())
     created_at = db.Column(db.DateTime, default=datetime.now())
 
     def has_role(self, role_id):
@@ -22,4 +28,4 @@ class User(db.Model):
             if role.id == role_id:
                 matched = role
 
-        return matched != None
+        return matched is not None

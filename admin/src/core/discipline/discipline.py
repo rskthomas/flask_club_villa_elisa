@@ -1,6 +1,7 @@
 from unicodedata import category
 from src.core.database import db
 
+
 class Discipline(db.Model):
     """Discipline model"""
     id = db.Column(db.Integer, primary_key=True, unique=True)
@@ -11,4 +12,7 @@ class Discipline(db.Model):
     monthly_price = db.Column(db.String(50), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=True)
     created_at = db.Column(db.DateTime(), default=db.func.now())
-    members = db.relationship("Member", secondary='member_discipline',passive_deletes=True)
+    members = db.relationship(
+        "Member",
+        secondary='member_discipline',
+        passive_deletes=True)

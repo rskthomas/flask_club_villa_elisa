@@ -12,6 +12,8 @@ seedsbp = Blueprint("seeds", __name__)
 databasebp = Blueprint("database", __name__)
 
 # Users ------------
+
+
 @usersbp.cli.command("create")
 @click.argument("name")
 @click.argument("email")
