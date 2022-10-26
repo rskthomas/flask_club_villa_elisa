@@ -1,9 +1,12 @@
+"""Module dedicated to Member handling such as CRUDs
+
+"""
 from os import abort
 from sqlite3 import InternalError
+from sqlalchemy.exc import IntegrityError
 from src.core.member.member import Member
 from src.core.database import db
 from src.core.utils import paginated
-from sqlalchemy.exc import IntegrityError
 
 
 class IntegrytyException(Exception):
@@ -11,7 +14,18 @@ class IntegrytyException(Exception):
 
 
 def list_members(filter={}):
-    """Get a list of all Members"""
+    """Get current list of members based on the receive filter
+
+    Args:
+        filter (dict, optional): querying criteria. Possible keys:
+        -last_name
+        -membership)state
+        -personal_id
+        Defaults to {}.
+
+    Returns:
+        list: list of Member
+    """
     query = Member.query
     if filter.get('last_name'):
         query = query.where(
@@ -49,7 +63,7 @@ def update_member(id, **kwargs):
     """Update a Member
 
     Args:
-        id: identifier of Member
+        id(int): identifier of Member
         args: fields to update
 
     Raises:
@@ -67,7 +81,14 @@ def update_member(id, **kwargs):
 
 
 def delete_member(id):
-    """Delete a Member by id"""
+    """Deletes a member by its id
+
+    Args:
+        id (int): id of the member to be deleted
+
+    Returns:
+        Member: member recently deleted
+    """
     member = find_member(id)
     db.session.delete(member)
     db.session.commit()
@@ -75,23 +96,48 @@ def delete_member(id):
 
 
 def find_member(id):
-    """Find a Member by id"""
+    """Looks up for a member on the DB based on the received id
+
+    Args:
+        id (int): id of the member
+
+    Returns:
+        Member: member from the DB
+    """
     return Member.query.get(id)
 
 
 def delete_member_by_member_number(mem_number):
-    """Delete a Member by id"""
+    """deletes a member by its number
+
+    Args:
+        mem_number (int): number of the member
+    """
     Member.query.filter(Member.member_number == mem_number).delete()
     db.session.commit()
 
 
 def find_member_by_lastname(lastname):
-    """Find a Member by last_name"""
+    """looks up for a member on the db based on received last name
+
+    Args:
+        lastname (str): last name of the member
+
+    Returns:
+        list: list of Member matching received lastname
+    """
     return Member.query.filter_by(last_name=lastname)
 
 
 def find_member_by_state(state):
-    """Find a Member by membership_state"""
+    """looks up a member by its current state
+
+    Args:
+        state (string): state of the member membership
+
+    Returns:
+        list: Members matching
+    """
     return Member.query.filter_by(membership_state=state)
 
 
@@ -115,6 +161,13 @@ def paginated_members(filter={}, current_page=1):
 
 
 def get_member_disciplines(member_id):
-    """Get a list of all disciplines of a member"""
+    """Get a list of the disciplines of the meber
+
+    Args:
+        member_id (int): id of the member
+
+    Returns:
+        list: Disciplines associated to the member
+    """
     member = find_member(member_id)
     return member.disciplines

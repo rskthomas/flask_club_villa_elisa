@@ -1,5 +1,5 @@
-from src.core.database import db
 from datetime import date
+from src.core.database import db
 
 
 class Invoice(db.Model):

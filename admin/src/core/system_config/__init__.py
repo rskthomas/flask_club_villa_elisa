@@ -1,12 +1,9 @@
+""" Module that handles overal system configuration
+
+"""
 from sqlalchemy import update
 from src.core.system_config.system_config import SystemConfig
 from src.core.database import db
-
-
-def update_system_config(args):
-    # DONT WANNA BREAK ANYTHING, BUT THIS FUNCTION HAS SAME NAME AS THE ONE
-    # BELOW
-    return SystemConfig.first()
 
 
 def get_system_config():
@@ -29,10 +26,18 @@ def update_system_config(args):
 
 
 def get_monthly_fee():
-    """Returns the base monthly fee"""
+    """Returns the base monthly fee
+
+    Returns:
+        float: monthly fee set up on DB
+    """
     return SystemConfig.query.first().base_monthly_fee
 
 
 def get_recharge_percentage():
-    """Returns the recharge percentage, for a user that is late on payment"""
+    """Returns the recharge percentage, for a user that is late on payment
+
+    Returns:
+        float: _description_
+    """
     return SystemConfig.query.first().delayed_payment_interests_rate

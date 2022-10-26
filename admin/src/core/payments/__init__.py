@@ -1,4 +1,5 @@
 import decimal
+from datetime import date
 from operator import inv
 from re import A, M
 from webbrowser import get
@@ -6,7 +7,6 @@ from src.core.payments.invoice import Invoice
 from src.core.payments.invoice import InvoiceExtraItem
 from src.core.payments.payment import Payment
 from src.core.database import db
-from datetime import date
 from src.core.system_config import get_recharge_percentage
 from src.core.system_config import get_monthly_fee
 
@@ -14,8 +14,14 @@ EXPIRATION_DAY = 10
 
 
 def member_invoices(member_id: int):
-    """Returns a list of invoices for a given member_id"""
+    """Returns a list of invoices for a given member_id
 
+    Args:
+        member_id (int): id of the member
+
+    Returns:
+        list: Invoices associated to the member
+    """
     return (
         Invoice.query.filter(Invoice.member_id == member_id)
         .order_by(Invoice.year.desc(), Invoice.month.desc())
@@ -24,8 +30,14 @@ def member_invoices(member_id: int):
 
 
 def last_invoice(user_id: int):
-    """Returns most recent invoice for a given user_id"""
+    """Returns most recent invoice for a given user_id
 
+    Args:
+        user_id (int): if of the user
+
+    Returns:
+        Invoice: last invoice created for the user
+    """
     return (
         Invoice.query.filter(Invoice.member_id == user_id)
         .order_by(Invoice.year.asc(), Invoice.month.asc())
@@ -34,7 +46,14 @@ def last_invoice(user_id: int):
 
 
 def unpaid_invoices(user_id: int):
-    """Returns a list of all unpaid invoices for a given user_id"""
+    """Returns a list of all unpaid invoices for a given user_id
+
+    Args:
+        user_id (int): id of the user
+
+    Returns:
+        list: list of Invoices that are not paid yet
+    """
 
     return (
         Invoice.query.filter_by(
@@ -43,7 +62,14 @@ def unpaid_invoices(user_id: int):
 
 
 def get_invoice(invoice_id: int):
-    """Returns invoice given an id"""
+    """looks up for an invoice based on received id
+
+    Args:
+        invoice_id (int): if of the invoice
+
+    Returns:
+        Invoice: Invoice from the DB
+    """
 
     inv = Invoice.query.get(invoice_id)
     _check_recharge(inv)
@@ -51,8 +77,11 @@ def get_invoice(invoice_id: int):
 
 
 def _check_recharge(invoice):
-    """" Checks if the invoice needs to be recharged and updates it if needed"""
+    """Checks if the invoice needs to be recharged and updates it if needed
 
+    Args:
+        invoice (Invoice): Invoice to be evaluated
+    """
     if date.today().day > EXPIRATION_DAY and not invoice.expired:
         invoice.expired = True
         amount = invoice.total_price * float(get_recharge_percentage())
@@ -87,7 +116,15 @@ def create_invoice(member):
 
 
 def _calculate_extra_items(member, invoice):
-    """Adds extra items for a given invoice, and returns the total price of the invoice"""
+    """Adds extra items for a given invoice, and returns the total price of the invoice
+
+    Args:
+        member (Member): member owner of the invoice
+        invoice (Invoice): invoice to be evaluated
+
+    Returns:
+       float: amount representing extra fees of the invoice
+    """
     sum = 0
     for discipline in member.disciplines:
         if discipline.active:
@@ -142,8 +179,14 @@ def pay_invoice(invoice_id):
 
 
 def amount_paid(invoice_id):
-    """Returns the sum of all payments of an invoice for a given invoice_id"""
+    """Returns the sum of all payments of an invoice for a given invoice_id
 
+    Args:
+        invoice_id (int): if of the invoice
+
+    Returns:
+        float: amount paid for the given invoice
+    """
     return (
         db.session.query(db.func.sum(Payment.amount))
         .filter(Payment.invoice_id == invoice_id)
@@ -168,7 +211,14 @@ def update_invoice(invoice, **kwargs):
 
 
 def member_payments(member_id):
-    """Returns a list of payments for a given member_id"""
+    """Returns a list of payments for a given member_id
+
+    Args:
+        member_id (int): if of the member
+
+    Returns:
+        list: payments of the received member
+    """
 
     return (
         Payment.query.filter(Payment.member_id == member_id)

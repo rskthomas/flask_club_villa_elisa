@@ -1,6 +1,6 @@
+from datetime import datetime
 from email.policy import default
 from src.core.database import db
-from datetime import datetime
 
 
 class SystemConfig(db.Model):
