@@ -76,7 +76,6 @@ def get_invoice(invoice_id: int):
     return inv
 
 
-
 def _check_recharge(invoice):
     """Checks if the invoice needs to be recharged and updates it if needed
 

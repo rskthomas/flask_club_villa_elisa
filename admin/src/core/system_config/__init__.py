@@ -5,6 +5,7 @@ from sqlalchemy import update
 from src.core.system_config.system_config import SystemConfig
 from src.core.database import db
 
+
 def get_system_config():
     """Get system config"""
     return SystemConfig.query.first()
