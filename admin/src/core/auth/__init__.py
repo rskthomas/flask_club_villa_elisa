@@ -1,3 +1,6 @@
+""" Module dedicated to user-related opperations such as
+    users, permissions, and roles CRUDs """
+
 from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError
 from src.core.auth.users import User
@@ -53,6 +56,15 @@ def paginated_users(filter={}, current_page=1):
 
 
 def list_user(filter={}):
+    """list users form DB based on optional filter
+
+    Args:
+        filter (dict, optional): filters to be applied to the query.
+         Defaults to {}.
+
+    Returns:
+        list: list of matched records
+    """
     return base_user_query(filter).all()
 
 
@@ -63,7 +75,8 @@ def create_user(**kwargs):
         kwargs: all fields of object Member
 
     Raises:
-        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+        IntegrytyException: raised if ocurrs IntegrityError.
+        For ex: "unique fields violation"
     """
     try:
         user = User(**kwargs)
@@ -76,7 +89,11 @@ def create_user(**kwargs):
 
 
 def delete_user_by_name(firstname):
-    """Delete a User given its firstname"""
+    """Delete a User given its firstname
+
+    Args:
+        firstname (str): firstname of the user as recorded on the DB
+    """
 
     User.query.filter(User.firstname == firstname).delete()
     db.session.commit()
@@ -86,11 +103,12 @@ def update_user(id, args):
     """Update a User
 
     Args:
-        id: identifier of user
-        args: fields to update
+        id(int): identifier of user
+        args(dict): fields to update
 
     Raises:
-        IntegrytyException: raised if ocurrs IntegrityError for ex: "unique fields violation"
+        IntegrytyException: raised if ocurrs IntegrityError.
+        For ex: "unique fields violation"
     """
     try:
         db.session.execute(
@@ -105,14 +123,26 @@ def update_user(id, args):
 
 
 def delete_user(user_id):
-    """Delete a User given its id"""
+    """Delete a User given its id
+
+    Args:
+        user_id (int): id of the user as recorded on the DB
+    """
     db.session.query(User).filter(User.id == user_id).delete()
     db.session.commit()
     return
 
 
 def find_user(id):
-    """ " find user by id"""
+    """Look up a user on the DB based on received id
+
+    Args:
+        id (int): user's id
+
+    Returns:
+        User: User found in the DB
+    """
+
     return User.query.filter_by(id=id).first()
 
 
@@ -131,7 +161,11 @@ def find_user_by_mail_and_pass(email, password):
 
 
 def list_roles():
-    """returns a list of all roles"""
+    """returns list of all roles in the DB
+
+    Returns:
+        list: Role records in the DB
+    """
     return Role.query.all()
 
 

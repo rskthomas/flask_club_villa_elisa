@@ -1,5 +1,5 @@
-from src.core.database import db
 from datetime import datetime
+from src.core.database import db
 
 
 class User(db.Model):
@@ -23,6 +23,14 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
 
     def has_role(self, role_id):
+        """Checks if the user instance as received role already associated
+
+        Args:
+            role_id (int): if of the role to check
+
+        Returns:
+            bool: determines if user has the role associated
+        """
         matched = None
         for role in self.roles:
             if role.id == role_id:

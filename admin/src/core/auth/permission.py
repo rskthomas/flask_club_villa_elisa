@@ -1,9 +1,9 @@
-from src.core.database import db
 from datetime import datetime
+from src.core.database import db
 
 
 class Permission(db.Model):
-    """Permission Model representing a permission in the system"""
+    """Permission Model representing a permission in the system """
 
     __tablename__ = "permissions"
     id = db.Column(db.Integer, primary_key=True, unique=True)
