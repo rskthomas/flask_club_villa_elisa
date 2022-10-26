@@ -60,7 +60,7 @@ def csv_ready_user(user):
     """Format Sql alchemy user record into a
         csv-ready dictionaty
     Args:
-        SqlAlchemy.record: record mappend from DB
+        User: record mapped from DB
 
     Returns:
         dict: csv-ready dict

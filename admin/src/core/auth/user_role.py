@@ -1,6 +1,6 @@
-from src.core.database import db
-from sqlalchemy import ForeignKey
 from datetime import datetime
+from sqlalchemy import ForeignKey
+from src.core.database import db
 
 
 class UserRole(db.Model):

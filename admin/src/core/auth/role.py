@@ -1,5 +1,5 @@
-from src.core.database import db
 from datetime import datetime
+from src.core.database import db
 
 
 class Role(db.Model):
