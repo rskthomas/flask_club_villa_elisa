@@ -1,65 +1,71 @@
 {% extends "layout.html" %}
-  {% block title %} Disciplinas {% endblock %}
-  {% block head %} {{ super() }} {% endblock %}
-  {% block content %}
-  <h1>Disciplina: {{ discipline.name}}</h1>
 
-  <div class="object-property-container">
-    <label class="object-property-label">Categoría : </label> 
-    <div class="object-property-value">{{ discipline.category }}</div>
-  </div>
-  <div class="object-property-container">
-    <label class="object-property-label">Schedule : </label> 
-    <div class="object-property-value">{{ discipline.schedule }}</div>
-  </div>
-  <div class="object-property-container">
-    <label class="object-property-label">Instructor/es: </label> 
-    <div class="object-property-value">{{ discipline.coach }}</div>
-  </div>
+{% block title_section_name %}{{ discipline.name }} - Disciplinas{% endblock %}
 
-  <div class="object-property-container">
-    <label class="object-property-label">Costo mensual: </label> 
-    <div class="object-property-value">{{ discipline.monthly_price }}</div>
-  </div>
-  <h2>Lista de Inscriptos</h2>
-  <div>
-        <table class="index-table box">
-            <thead>
-                <tr>
-                    <th>Miembro</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Tipo Doc.</th>
-                    <th>Nro.Doc.</th>
-                    <th>Género</th>
-                    <th>Direcc.</th>
-                    <th>Estado</th>
-                    <th>Teléf.</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mem in discipline.members %}
-                <tr>
-                    <th><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></th>
-                    <th>{{mem.first_name}}</th>
-                    <th>{{mem.last_name}}</th>
-                    <th>{{mem.personal_id_type}}</th>
-                    <th>{{mem.personal_id}}</th>
-                    <th>{{mem.gender}}</th>    
-                    <th>{{mem.address}}</th>
-                    <th>{{mem.phone_number}}</th>
-                    <th>{{mem.email}}</th>
-                    <th>
-                        <a href="{{url_for('disciplines.destroy_enrollment', id=discipline.id, member_id=mem.id)}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                    </th>
-                </tr>
-                {% endfor %}
-            </tbody>
+{% block header_section_name %}Detalle de disciplina{% endblock %}
 
-            <a href="{{url_for('disciplines.enrollment_form', id=discipline.id)}}">Inscribir nuevo socio</a>
-        </table>
-        <a class="edit-link" href="{{url_for('disciplines.index')}}"><button type="button">Volver</button></a>
-  </div>
+{% block head %} {{ super() }} {% endblock %}
 
-  {% endblock %}
+{% block content %}
+<h1>{{ discipline.name}}</h1>
+
+<div class="object-property-container">
+  <label class="object-property-label">Categoría : </label>
+  <div class="object-property-value">{{ discipline.category }}</div>
+</div>
+<div class="object-property-container">
+  <label class="object-property-label">Schedule : </label>
+  <div class="object-property-value">{{ discipline.schedule }}</div>
+</div>
+<div class="object-property-container">
+  <label class="object-property-label">Instructor/es: </label>
+  <div class="object-property-value">{{ discipline.coach }}</div>
+</div>
+
+<div class="object-property-container">
+  <label class="object-property-label">Costo mensual: </label>
+  <div class="object-property-value">{{ discipline.monthly_price }}</div>
+</div>
+<h2>Lista de Inscriptos</h2>
+<div>
+  <table class="index-table box">
+    <thead>
+      <tr>
+        <th>Miembro</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Tipo Doc.</th>
+        <th>Nro.Doc.</th>
+        <th>Género</th>
+        <th>Direcc.</th>
+        <th>Estado</th>
+        <th>Teléf.</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mem in discipline.members %}
+      <tr>
+        <th><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></th>
+        <th>{{mem.first_name}}</th>
+        <th>{{mem.last_name}}</th>
+        <th>{{mem.personal_id_type}}</th>
+        <th>{{mem.personal_id}}</th>
+        <th>{{mem.gender}}</th>
+        <th>{{mem.address}}</th>
+        <th>{{mem.phone_number}}</th>
+        <th>{{mem.email}}</th>
+        <th>
+          <a href="{{url_for('disciplines.destroy_enrollment', id=discipline.id, member_id=mem.id)}}"><i
+              class="fa fa-trash" aria-hidden="true"></i></a>
+        </th>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+    <a href="{{url_for('disciplines.enrollment_form', id=discipline.id)}}">Inscribir nuevo socio</a>
+  </table>
+  <a class="edit-link" href="{{url_for('disciplines.index')}}"><button type="button">Volver</button></a>
+</div>
+
+{% endblock %}

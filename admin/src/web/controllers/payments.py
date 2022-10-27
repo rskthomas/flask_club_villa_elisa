@@ -1,25 +1,32 @@
-from src.web.helpers.handlers import bad_request
+from datetime import date
+import pdfkit
 from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for, make_response
 from flask import session
+from src.web.helpers.handlers import bad_request
 from src.core import member as Member
 from src.web.forms.payments import UserSearchForm
 from src.web.controllers.auth import login_required
 from src.core import payments as Payments
-from datetime import date
-import pdfkit
+from src.web.helpers.get_header_info import get_header_info
 
 
 payments_blueprint = Blueprint("payments", __name__, url_prefix="/payments")
 
 
 @payments_blueprint.get("/")
+@login_required('payment_index')
 def index():
-    return render_template("payments/user_search.html", form=UserSearchForm())
+    return render_template(
+        "payments/user_search.html",
+        form=UserSearchForm(),
+        header_info=get_header_info(),
+    )
 
 
 @payments_blueprint.post("/search")
+@login_required('payment_index')
 def search():
     form = UserSearchForm(request.form)
     if not form.validate():
@@ -43,15 +50,20 @@ def search():
 
 
 @payments_blueprint.get("/search/results/<string:id>")
+@login_required('payment_index')
 def results(id):
     last_name = id
     members = Member.find_member_by_lastname(last_name)
     return render_template(
-        "payments/results.html", members=members, last_name=last_name
+        "payments/results.html",
+        members=members,
+        last_name=last_name,
+        header_info=get_header_info(),
     )
 
 
 @payments_blueprint.get("/member/<int:id>/invoices")
+@login_required('payment_show')
 def invoices(id):
     member = Member.find_member(id)
 
@@ -65,16 +77,24 @@ def invoices(id):
         Payments.create_invoice(member=member)
 
     invoices = Payments.member_invoices(id)
-    return render_template("payments/list.html", member=member, invoices=invoices)
+    return render_template(
+        "payments/list.html",
+        member=member,
+        invoices=invoices,
+        header_info=get_header_info())
 
 
 @payments_blueprint.get("/invoice/<int:invoice_id>")
+@login_required('payment_show')
 def show_invoice(invoice_id):
     invoice = Payments.get_invoice(invoice_id)
-    return render_template("payments/show.html", invoice=invoice)
+    return render_template(
+        "payments/show.html", invoice=invoice, header_info=get_header_info()
+    )
 
 
 @payments_blueprint.post("/invoice/<int:invoice_id>/pay")
+@login_required('payment_update')
 def pay_invoice(invoice_id):
     payment = Payments.pay_invoice(invoice_id)
     flash("El pago se ha realizado con éxito", "success")
@@ -83,11 +103,14 @@ def pay_invoice(invoice_id):
 
 
 @payments_blueprint.route("/download/<int:invoice_id>")
+@login_required('payment_show')
 def download(invoice_id):
     invoice = Payments.get_invoice(invoice_id)
 
     # Get the HTML output
-    out = render_template("payments/show.html", invoice=invoice)
+    out = render_template(
+        "payments/show.html", invoice=invoice, header_info=get_header_info()
+    )
 
     # PDF options
     options = {

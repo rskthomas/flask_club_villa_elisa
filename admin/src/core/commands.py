@@ -1,17 +1,21 @@
+"""module to create CLI commands for flask
+"""
 import click
 from flask import Blueprint
 from src.core.auth import users, role, user_role, permission, role_permission
 from src.core.discipline import discipline, member_discipline
 from src.core.system_config import system_config
 from src.core import database, seeds
+from src.core.auth import create_user, delete_user_by_name
 
-from src.core.auth import *
 
 usersbp = Blueprint("user", __name__)
 seedsbp = Blueprint("seeds", __name__)
 databasebp = Blueprint("database", __name__)
 
 # Users ------------
+
+
 @usersbp.cli.command("create")
 @click.argument("name")
 @click.argument("email")

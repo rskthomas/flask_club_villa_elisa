@@ -1,18 +1,19 @@
-from src.web.helpers.handlers import bad_request
+import pdfkit
 from flask import Blueprint
 from flask import render_template
 from flask import request, flash, redirect, url_for, make_response
+from src.web.helpers.handlers import bad_request
 from src.core.member import IntegrytyException
 from src.web.controllers.auth import login_required
 from src.web.forms.member import MemberForm
 from src.core import member
-import pdfkit
+from src.web.helpers.get_header_info import get_header_info
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
 
 
-@login_required()
+@login_required('member_index')
 @member_blueprint.get("/")
 def index():
     params = request.args
@@ -30,22 +31,24 @@ def index():
 
     pagination_data = member.paginated_members(filters, current_page)
 
-    return render_template(
-        "members/index.html",
-        members=pagination_data["items"],
-        filters=filters,
-        current_page=current_page,
-        pages=pagination_data["pages"],
-    )
+    return render_template('members/index.html',
+                           members=pagination_data['items'],
+                           filters=filters,
+                           current_page=current_page,
+                           pages=pagination_data['pages'],
+                           header_info=get_header_info())
 
 
-@login_required()
+@login_required('member_create')
 @member_blueprint.get("/create")
 def create_view():
-    return render_template("members/create.html", form=MemberForm())
+    return render_template(
+        "members/create.html",
+        form=MemberForm(),
+        header_info=get_header_info())
 
 
-@login_required()
+@login_required('member_create')
 @member_blueprint.post("/create")
 def create_confirm():
     form = MemberForm(request.form)
@@ -67,12 +70,18 @@ def create_confirm():
             return redirect(url_for("member.index"))
 
     except IntegrytyException:
-        flash("Ya existe el email ingresado", "error")
-        return render_template("members/create.html", form=form)
-    return render_template("members/create.html", form=form)
+        flash('Ya existe el email ingresado', 'error')
+        return render_template(
+            "members/create.html",
+            form=form,
+            header_info=get_header_info())
+    return render_template(
+        "members/create.html",
+        form=form,
+        header_info=get_header_info())
 
 
-@login_required()
+@login_required('member_update')
 @member_blueprint.get("/<int:id>/update")
 def update_view(id):
     item = member.find_member(id)
@@ -91,10 +100,14 @@ def update_view(id):
         phone_number=item.phone_number,
         email=item.email,
     )
-    return render_template("members/update.html", form=form, id=id)
+    return render_template(
+        "members/update.html",
+        form=form,
+        id=id,
+        header_info=get_header_info())
 
 
-@login_required()
+@login_required('member_update')
 @member_blueprint.post("/update")
 def update_confirm():
     member_id = request.form["id"]
@@ -124,7 +137,7 @@ def update_confirm():
     return redirect(url_for("member.update_view", id=member_id))
 
 
-@login_required()
+@login_required('member_destroy')
 @member_blueprint.get("/<int:id>/delete")
 def delete(id):
     if not member.delete_member(id):
@@ -134,14 +147,17 @@ def delete(id):
     return redirect(url_for("member.index"))
 
 
-@login_required()
+@login_required('member_show')
 @member_blueprint.get("/<int:id>")
 def show(id):
     item = member.find_member(id)
-    return render_template("members/show.html", member=item)
+    return render_template(
+        "members/show.html",
+        member=item,
+        header_info=get_header_info())
 
 
-@login_required()
+@login_required('member_index')
 @member_blueprint.route("/download")
 def route_download():
     params = request.args
@@ -164,6 +180,7 @@ def route_download():
         filters=filters,
         current_page=current_page,
         pages=pagination_data["pages"],
+        header_info=get_header_info()
     )
 
     # PDF options

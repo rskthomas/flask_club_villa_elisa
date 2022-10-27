@@ -1,6 +1,6 @@
-from src.core.database import db
-from sqlalchemy import ForeignKey
 from datetime import datetime
+from sqlalchemy import ForeignKey
+from src.core.database import db
 
 
 class RolePermission(db.Model):
@@ -8,10 +8,16 @@ class RolePermission(db.Model):
 
     __tablename__ = "role_permissions"
     permission_id = db.Column(
-        db.Integer, ForeignKey("permissions.id", ondelete="CASCADE"), primary_key=True
-    )
+        db.Integer,
+        ForeignKey(
+            "permissions.id",
+            ondelete="CASCADE"),
+        primary_key=True)
     role_id = db.Column(
         db.Integer, ForeignKey("role.id", ondelete="CASCADE"), primary_key=True
     )
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.now(),
+        onupdate=datetime.now())
     created_at = db.Column(db.DateTime, default=datetime.now())

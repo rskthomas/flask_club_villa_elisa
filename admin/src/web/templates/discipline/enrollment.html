@@ -1,16 +1,20 @@
 {% extends "layout.html" %}
-  {% block title %} Disciplinas {% endblock %}
-  {% block head %} {{ super() }} {% endblock %}
-  {% block content %}
-    <h1>Disciplina: {{ discipline.name}} - Inscripción</h1>
 
-    <h1>Agregue nuevo socio</h1>
-    <form autocomplete="off" target="{{url_for('disciplines.create_enrollment', id = discipline.id)}}" method="post">
-        <label>N de documento: </label>
-        <input id="member_input" name = "dni" onkeyup="showResults(this.value)"/>
-        <input id="chosen_member_id" type="hidden" name="chosen_member_id"/>
-        <div id="result"></div>
-        <input name = "Enviar" type="submit"/>
-    </form>
+{% block title_section_name %}Inscripción - Disciplinas{% endblock %}
 
-  {% endblock %}
+{% block header_section_name %}Inscripción a disciplina{% endblock %}
+
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<h2>Ingrese el socio que desea inscribir en la disciplina {{discipline.name}}:</h2>
+<form autocomplete="off" target="{{url_for('disciplines.create_enrollment', id = discipline.id)}}" method="post">
+  <label>Número de documento</label>
+  <input id="member_input" name="dni" onkeyup="showResults(this.value)" />
+  <input id="chosen_member_id" type="hidden" name="chosen_member_id" />
+  <div id="result"></div>
+  <input name="Enviar" type="submit" />
+  <a href="{{url_for('disciplines.show', id=discipline.id)}}">Cancelar</a>
+</form>
+
+{% endblock %}

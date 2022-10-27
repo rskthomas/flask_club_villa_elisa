@@ -1,37 +1,45 @@
 {% extends "layout.html" %}
-  {% block title %} Disciplinas {% endblock %}
-  {% block head %} {{ super() }} {% endblock %}
-  {% block content %}
-  <h1>Lista de Disciplinas</h1>
 
- 
- <table class="index-table box">
-  <tr>
-    <th>Nombre</th>
-    <th>Categoría</th>
-    <th>Horario</th>
-    <th>instructor/es</th>
-    <th>costo</th>
-    <th>Acciones</th>
-  </tr>
- {% for discipline in disciplines %}
-  <tr>
-    <td> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
-    <td>{{ discipline.category }}</td>
-    <td>{{ discipline.schedule }}</td>
-    <td>{{ discipline.coach }}</td>
-    <td>{{ discipline.monthly_price }}</td>
-    <td>
-        <a href="{{url_for('disciplines.show', id=discipline.id)}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-        <a href="{{url_for('disciplines.update', id=discipline.id)}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-        <a href="{{url_for('disciplines.delete', id=discipline.id)}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
-    </td>
-  </tr>
+{% block title_section_name %}Disciplinas{% endblock %}
+
+{% block header_section_name %}Lista de disciplinas{% endblock %}
+
+{% block head %}{{ super() }}{% endblock %}
+
+{% block content %}
+  <h1>Lista de disciplinas</h1>
+  <table class="index-table box">
+    <tr>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Horario</th>
+      <th>Instructor/es</th>
+      <th>Costo</th>
+      <th>Acciones</th>
+    </tr>
+    {% for discipline in disciplines %}
+      <tr>
+        <td> <a href="/disciplines/{{ discipline.id }}">{{ discipline.name }}</a></td>
+        <td>{{ discipline.category }}</td>
+        <td>{{ discipline.schedule }}</td>
+        <td>{{ discipline.coach }}</td>
+        <td>{{ discipline.monthly_price }}</td>
+        <td>
+          <a href="{{url_for('disciplines.show', id=discipline.id)}}" title="Ver detalles">
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </a>
+          <a href="{{url_for('disciplines.update', id=discipline.id)}}" title="Actualizar">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </a>
+          <a href="{{url_for('disciplines.delete', id=discipline.id)}}" title="Eliminar">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </a>
+        </td>
+      </tr>
     {% endfor %}
-</table> 
+  </table>
 
-<a href="{{url_for('disciplines.create')}}"><button>Agregar nueva disciplina +</button></a>
-&nbsp;
-<a href="{{url_for('disciplines.download')}}"><button>Exportar</button></a>
-
-  {% endblock %}
+  <a href="{{url_for('disciplines.create')}}"><button>Crear disciplina</button></a>
+  &nbsp;
+  <a href="{{url_for('disciplines.download')}}"><button>Exportar</button></a>
+{% endblock %}

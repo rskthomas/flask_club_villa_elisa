@@ -1,35 +1,56 @@
-{% extends "layout.html" %}
-{% block title%} Disciplinas{% endblock %}
-{% block navbar%} {{super()}} {% endblock %}
-{% block head %} 
-{{ super() }} 
 <meta charset="utf-8">
-{% endblock %}
-{% block content%} 
-<h1>Lista de Disciplinas</h1>
-<div>
-    <table class="index-table box">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Categoria</th>
-                <th>Horario</th>
-                <th>instructor/es</th>
-                <th>costo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for discipline in disciplines %}
-            <tr>
-                <td>{{ discipline.name }}</a></td>
-                <td>{{ discipline.category }}</td>
-                <td>{{ discipline.schedule }}</td>
-                <td>{{ discipline.coach }}</td>
-                <td>{{ discipline.monthly_price }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
 
-{% endblock %}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    table {
+        table-layout: auto;
+    }
+    table thead {
+        font-size: 1.1rem;
+    }
+    table thead tr th {
+        padding: 0.25rem 1rem;
+        background-color: whitesmoke;
+    }
+    table tbody {
+        font-size: 1rem;
+    }
+    table tbody tr:nth-child(odd) {
+        background-color: white;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: whitesmoke;
+    }
+    table tbody tr td {
+        padding: 0.25rem 1rem;
+    }
+</style>
+
+<h1>Disciplinas</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Horario</th>
+            <th>Instructor/es</th>
+            <th>Costo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for discipline in disciplines %}
+        <tr>
+            <td>{{ discipline.name }}</a></td>
+            <td>{{ discipline.category }}</td>
+            <td>{{ discipline.schedule }}</td>
+            <td>{{ discipline.coach }}</td>
+            <td>{{ discipline.monthly_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

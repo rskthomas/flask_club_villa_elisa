@@ -1,8 +1,12 @@
-from src.core import member
+"""Module to create automatic database seeding
+"""
 from datetime import datetime
+from src.core import member
 
 
 def run():
+    """Inserts 3 members and default system congi
+    """
     # Add data by default
 
     member1 = member.create_member(

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from sqlalchemy import update
 from src.core.system_config import get_system_config, update_system_config
 from src.web.controllers.auth import login_required
+from src.web.helpers.get_header_info import get_header_info
 
 system_config_blueprint = Blueprint(
     "system_config", __name__, url_prefix="/configuracion"
@@ -11,17 +12,25 @@ system_config_blueprint = Blueprint(
 @system_config_blueprint.get("/")
 @login_required("system_config_show")
 def show():
-    return render_template("system_config/show.html", system_config=get_system_config())
+    return render_template(
+        "system_config/show.html",
+        system_config=get_system_config(),
+        header_info=get_header_info(),
+    )
 
 
 @system_config_blueprint.get("/editar")
-@login_required()
+@login_required('system_config_update')
 def edit():
-    return render_template("system_config/edit.html", system_config=get_system_config())
+    return render_template(
+        "system_config/edit.html",
+        system_config=get_system_config(),
+        header_info=get_header_info(),
+    )
 
 
 @system_config_blueprint.post("/update")
-@login_required()
+@login_required('system_config_update')
 def update():
     params = request.form
     update_args = {}

@@ -1,10 +1,11 @@
 from os import environ
-from flask import redirect
 from flask import Flask
 from flask import render_template
+
 from src.web.config import config
 from src.core import database
 from src.web.helpers import handlers
+from src.web.helpers.get_header_info import get_header_info
 
 from src.core.commands import usersbp
 from src.core.commands import databasebp
@@ -29,7 +30,7 @@ def create_app(static_folder="static", env="development"):
 
     @app.get("/")
     def home():
-        return render_template("home.html")
+        return render_template("home.html", header_info=get_header_info())
 
     app.register_blueprint(usersbp)
     app.register_blueprint(databasebp)
