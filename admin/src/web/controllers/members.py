@@ -13,8 +13,8 @@ member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
 
 
-@login_required('member_index')
 @member_blueprint.get("/")
+@login_required('member_index')
 def index():
     params = request.args
 
@@ -39,8 +39,8 @@ def index():
                            header_info=get_header_info())
 
 
-@login_required('member_create')
 @member_blueprint.get("/create")
+@login_required('member_create')
 def create_view():
     return render_template(
         "members/create.html",
@@ -48,8 +48,8 @@ def create_view():
         header_info=get_header_info())
 
 
-@login_required('member_create')
 @member_blueprint.post("/create")
+@login_required('member_create')
 def create_confirm():
     form = MemberForm(request.form)
     try:
@@ -81,8 +81,8 @@ def create_confirm():
         header_info=get_header_info())
 
 
-@login_required('member_update')
 @member_blueprint.get("/<int:id>/update")
+@login_required('member_update')
 def update_view(id):
     item = member.find_member(id)
     if not item:
@@ -107,8 +107,8 @@ def update_view(id):
         header_info=get_header_info())
 
 
-@login_required('member_update')
 @member_blueprint.post("/update")
+@login_required('member_update')
 def update_confirm():
     member_id = request.form["id"]
     if not request.form:
@@ -137,8 +137,8 @@ def update_confirm():
     return redirect(url_for("member.update_view", id=member_id))
 
 
-@login_required('member_destroy')
 @member_blueprint.get("/<int:id>/delete")
+@login_required('member_destroy')
 def delete(id):
     if not member.delete_member(id):
         return bad_request("Member not found")
@@ -147,8 +147,8 @@ def delete(id):
     return redirect(url_for("member.index"))
 
 
-@login_required('member_show')
 @member_blueprint.get("/<int:id>")
+@login_required('member_show')
 def show(id):
     item = member.find_member(id)
     return render_template(
@@ -157,8 +157,8 @@ def show(id):
         header_info=get_header_info())
 
 
-@login_required('member_index')
 @member_blueprint.route("/download")
+@login_required('member_index')
 def route_download():
     params = request.args
 

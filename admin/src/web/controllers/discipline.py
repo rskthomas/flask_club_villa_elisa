@@ -177,7 +177,7 @@ def discipline_members(id):
 
 
 @discipline_blueprint.get("<int:id>/members/<int:member_id>/cancel")
-@login_required()
+@login_required('discipline_update')
 def destroy_enrollment(id, member_id):
     try:
         cancel_enrollment(id, member_id)
