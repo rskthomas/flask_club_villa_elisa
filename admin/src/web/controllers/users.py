@@ -78,8 +78,9 @@ def csv_ready_user(user):
     }
 
 
-@login_required()
+
 @users_blueprint.get("/")
+@login_required('users_index')
 def index():
     filters = parse_filters(request)
     pagination_data = paginated_users(filters, current_page(request))
@@ -94,8 +95,8 @@ def index():
     )
 
 
-@login_required()
 @users_blueprint.get("/csv_export")
+@login_required('users_index')
 def csv_export():
     users_list = list(map(lambda user: csv_ready_user(user),
                           list_user(parse_filters(request))))
@@ -116,8 +117,8 @@ def csv_export():
     return response
 
 
-@login_required('users_create')
 @users_blueprint.get("/nuevo")
+@login_required('users_create')
 def new():
     return render_template(
         "users/new.html",
@@ -127,8 +128,9 @@ def new():
     )
 
 
-@login_required('users_create')
+
 @users_blueprint.post("/crear")
+@login_required('users_create')
 def create():
     try:
         form = UserForm(request.form)
@@ -145,8 +147,8 @@ def create():
     return new()
 
 
-@login_required('users_create')
 @users_blueprint.get("/<int:id>/editar")
+@login_required('users_create')
 def edit(id):
     user = find_user(id)
     if not user:
@@ -171,8 +173,8 @@ def edit(id):
     )
 
 
-@login_required('users_update')
 @users_blueprint.post("/update")
+@login_required('users_update')
 def update():
     user_id = request.form["id"]
     if not request.form:
@@ -194,8 +196,8 @@ def update():
     return edit(user_id)
 
 
-@login_required('users_destroy')
 @users_blueprint.get("/<int:user_id>/destroy")
+@login_required('users_destroy')
 def destroy(user_id):
     delete_user(user_id)
     flash("El usuario se eliminó correctamente", "success")
