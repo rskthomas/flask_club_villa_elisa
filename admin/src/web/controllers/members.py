@@ -17,17 +17,17 @@ filters = {}
 @member_blueprint.get("/")
 def index():
     params = request.args
-     
-    if params.get('membership_state') == 'true':
-        filters['membership_state'] = True
-    if params.get('membership_state') == 'false':
-        filters['membership_state'] = False
-    if params.get('membership_state') == 'any':
-        filters['membership_state'] = None    
 
-    filters['last_name'] = params.get('last_name')
+    if params.get("membership_state") == "true":
+        filters["membership_state"] = True
+    if params.get("membership_state") == "false":
+        filters["membership_state"] = False
+    if params.get("membership_state") == "any":
+        filters["membership_state"] = None
 
-    current_page = int(params.get('page', 1))
+    filters["last_name"] = params.get("last_name")
+
+    current_page = int(params.get("page", 1))
 
     pagination_data = member.paginated_members(filters, current_page)
 
@@ -53,19 +53,19 @@ def create_confirm():
         if form.validate():
             print("form validated")
             member.create_member(
-                first_name          = form.first_name.data,
-                last_name           = form.last_name.data,
-                personal_id_type    = form.personal_id_type.data,
-                personal_id         = form.personal_id.data,
-                gender              = form.gender.data,
-                address             = form.address.data,
-                membership_state    = form.membership_state.data,
-                phone_number        = form.phone_number.data,
-                email               = form.email.data
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                personal_id_type=form.personal_id_type.data,
+                personal_id=form.personal_id.data,
+                gender=form.gender.data,
+                address=form.address.data,
+                membership_state=form.membership_state.data,
+                phone_number=form.phone_number.data,
+                email=form.email.data,
             )
             flash("Miembro creado correctamente", "success")
             return redirect(url_for("member.index"))
-        
+
     except IntegrytyException:
         flash('Ya existe el email ingresado', 'error')
         return render_template("members/create.html", form=form, header_info=get_header_info())
@@ -81,23 +81,23 @@ def update_view(id):
         return bad_request("Member not found")
 
     form = MemberForm(
-        first_name          = item.first_name,
-        last_name           = item.last_name,
-        personal_id_type    = item.personal_id_type,
-        personal_id         = item.personal_id,
-        gender              = item.gender,
-        address             = item.address,
-        membership_state    = item.membership_state,
-        phone_number        = item.phone_number,
-        email               = item.email
-    )    
+        first_name=item.first_name,
+        last_name=item.last_name,
+        personal_id_type=item.personal_id_type,
+        personal_id=item.personal_id,
+        gender=item.gender,
+        address=item.address,
+        membership_state=item.membership_state,
+        phone_number=item.phone_number,
+        email=item.email,
+    )
     return render_template("members/update.html", form=form, id=id, header_info=get_header_info())
 
 
 @login_required()
 @member_blueprint.post("/update")
 def update_confirm():
-    member_id = request.form['id']
+    member_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
     form = MemberForm(request.form)
@@ -105,23 +105,23 @@ def update_confirm():
     try:
         if form.validate():
             member.update_member(
-                id                  = member_id,
-                first_name          = form.first_name.data,
-                last_name           = form.last_name.data,
-                personal_id_type    = form.personal_id_type.data,
-                personal_id         = form.personal_id.data,
-                gender              = form.gender.data,
-                address             = form.address.data,
-                membership_state    = form.membership_state.data,
-                phone_number        = form.phone_number.data,
-                email               = form.email.data
+                id=member_id,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                personal_id_type=form.personal_id_type.data,
+                personal_id=form.personal_id.data,
+                gender=form.gender.data,
+                address=form.address.data,
+                membership_state=form.membership_state.data,
+                phone_number=form.phone_number.data,
+                email=form.email.data,
             )
             flash("Miembro actualizado correctamente", "success")
             return redirect(url_for("member.index"))
     except IntegrytyException:
-        flash('Ya existe el email ingresado', 'error')
-        return redirect(url_for("member.update_view", id=member_id))    
-    return redirect(url_for("member.update_view", id=member_id))      
+        flash("Ya existe el email ingresado", "error")
+        return redirect(url_for("member.update_view", id=member_id))
+    return redirect(url_for("member.update_view", id=member_id))
 
 
 @login_required()
@@ -145,25 +145,27 @@ def show(id):
 @member_blueprint.route("/download")
 def route_download():
     params = request.args
-     
-    if params.get('membership_state') == 'true':
-        filters['membership_state'] = True
-    if params.get('membership_state') == 'false':
-        filters['membership_state'] = False
 
-    filters['last_name'] = params.get('last_name')
+    if params.get("membership_state") == "true":
+        filters["membership_state"] = True
+    if params.get("membership_state") == "false":
+        filters["membership_state"] = False
 
-    current_page = int(params.get('page', 1))
+    filters["last_name"] = params.get("last_name")
+
+    current_page = int(params.get("page", 1))
 
     pagination_data = member.paginated_members(filters, current_page)
 
     # Get the HTML output
-    out = render_template('members/export.html', 
-                            members=pagination_data['items'],
-                            filters=filters,
-                            current_page=current_page,
-                            pages=pagination_data['pages'],
-                            header_info=get_header_info())
+    out = render_template(
+        "members/export.html",
+        members=pagination_data["items"],
+        filters=filters,
+        current_page=current_page,
+        pages=pagination_data["pages"],
+        header_info=get_header_info()
+    )
 
     # PDF options
     options = {
@@ -175,14 +177,12 @@ def route_download():
         "margin-left": "1.0cm",
         "encoding": "UTF-8",
     }
-    
-    # Build PDF from HTML 
+
+    # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options)
-    
+
     # Download the PDF
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
-    return (response)  
-
-
+    return response

@@ -8,7 +8,6 @@ system_config_blueprint = Blueprint(
     "system_config", __name__, url_prefix="/configuracion"
 )
 
-
 @system_config_blueprint.get("/")
 @login_required("system_config_show")
 def show():

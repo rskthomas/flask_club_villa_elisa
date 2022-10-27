@@ -1,5 +1,6 @@
-from src.core.database import db
 from datetime import date
+from src.core.database import db
+
 
 class Invoice(db.Model):
     """Invoice model"""
@@ -9,11 +10,18 @@ class Invoice(db.Model):
     base_price = db.Column(db.String(50), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     paid = db.Column(db.Boolean(), default=False)
-    member_id = db.Column(db.Integer, db.ForeignKey('member.id'), nullable=False)
+    member_id = db.Column(
+        db.Integer,
+        db.ForeignKey('member.id'),
+        nullable=False)
     member = db.relationship("Member", back_populates="invoices")
     expired = db.Column(db.Boolean(), default=False)
-    payment = db.relationship("Payment", back_populates="invoice", uselist=False)
+    payment = db.relationship(
+        "Payment",
+        back_populates="invoice",
+        uselist=False)
     extra_items = db.relationship("InvoiceExtraItem")
+
 
 class InvoiceExtraItem(db.Model):
     """Invoice extra item model"""
@@ -21,6 +29,11 @@ class InvoiceExtraItem(db.Model):
     description = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     payment_date = db.Column(db.DateTime(), default=db.func.now())
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=True)
-    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'), nullable=False)
-    
+    discipline_id = db.Column(
+        db.Integer,
+        db.ForeignKey('discipline.id'),
+        nullable=True)
+    invoice_id = db.Column(
+        db.Integer,
+        db.ForeignKey('invoice.id'),
+        nullable=False)

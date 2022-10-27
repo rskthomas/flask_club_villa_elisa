@@ -14,7 +14,10 @@ from src.web.helpers.get_header_info import get_header_info
 import pdfkit
 
 
-discipline_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
+discipline_blueprint = Blueprint(
+    "disciplines",
+    __name__,
+    url_prefix="/disciplines")
 
 
 @discipline_blueprint.get("/")

@@ -1,3 +1,7 @@
+"""
+Module to handle CRUD of disciplines
+
+"""
 from src.core.member.member import Member
 from src.core.discipline.discipline import Discipline
 from src.core.database import db
@@ -21,12 +25,21 @@ class DisciplineNotFound(Exception):
 
 
 def get_disciplines():
-    """Get a list of all disciplines"""
+    """Get the list of all disciplines
+
+    Returns:
+        list: list of Discipline records on DB
+    """
     return Discipline.query.all()
 
 
 def create_discipline(**kwargs):
-    """Create a new discipline"""
+    """ Creates a new discipline on the DB based on received params
+        Allowed params can be checked at discipline.py
+
+    Returns:
+        Discipline: recently created discipline
+    """
     discipline = Discipline(**kwargs)
     db.session.add(discipline)
     db.session.commit()
@@ -34,7 +47,14 @@ def create_discipline(**kwargs):
 
 
 def delete_discipline(id):
-    """Delete a discipline by id"""
+    """Deletes a discipline by received id
+
+    Args:
+        id (int): id of the Discipline to be removed
+
+    Returns:
+        Discipline: recently removed discipline
+    """
     discipline = find_discipline(id)
     db.session.delete(discipline)
     db.session.commit()
@@ -42,12 +62,26 @@ def delete_discipline(id):
 
 
 def find_discipline(id):
-    """Find a discipline by id"""
+    """looks up Discipline by id on the DB
+
+    Args:
+        id (int): id of the discipline to be looked up
+
+    Returns:
+        Discipline: Discipline record from DB
+    """
     return Discipline.query.get(id)
 
 
 def update_discipline(id, **kwargs):
-    """Update a discipline"""
+    """Updates dicipline attributes
+
+    Args:
+        id (int): id of the discipline to be updated
+
+    Returns:
+        Discipline: updated discipline
+    """
     discipline = find_discipline(id)
     for key, value in kwargs.items():
         setattr(discipline, key, value)
@@ -59,8 +93,8 @@ def enroll_member(discipline_id, member_id):
     """Enrolls a user to a discipline if both are active
 
     Args:
-        discipline_id (_type_): id of the discipline
-        member_id (_type_): id of the discipline
+        discipline_id (int): id of the discipline
+        member_id (int): id of the discipline
 
     Raises:
         InactiveDiscipline: raised if the discipline is not active
@@ -77,6 +111,16 @@ def enroll_member(discipline_id, member_id):
 
 
 def cancel_enrollment(discipline_id, member_id):
+    """Cancel a member enrollment to a discipline
+
+    Args:
+        discipline_id (int): id of the discipline
+        member_id (int): id of the member
+
+    Raises:
+        DisciplineNotFound: raised if the discipline is not found
+        MemberNotFound: raised if the member is not found
+    """
     discipline = find_discipline(discipline_id)
     if not discipline:
         raise DisciplineNotFound
@@ -86,7 +130,15 @@ def cancel_enrollment(discipline_id, member_id):
     discipline.members.remove(member)
     db.session.commit()
 
+
 def get_members(discipline_id):
-    """Get a list of all members of a discipline"""
+    """returns a list of Member enrolled to the received discipline
+
+    Args:
+        discipline_id (int): Dicipline id
+
+    Returns:
+        list: list of Member enrolled to the discipline
+    """
     discipline = find_discipline(discipline_id)
     return discipline.members

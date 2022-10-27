@@ -77,8 +77,7 @@ def invoices(id):
         "payments/list.html",
         member=member,
         invoices=invoices,
-        header_info=get_header_info(),
-    )
+        header_info=get_header_info())
 
 
 @payments_blueprint.get("/invoice/<int:invoice_id>")

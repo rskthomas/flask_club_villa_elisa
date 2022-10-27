@@ -13,12 +13,18 @@ auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 def login_required(argument=None):
+    """Decorator to check if user is logged in"""
+
     @wraps(argument)
     def argument_wrapper(function):
         @wraps(function)
         def login_decorator(*args, **kwargs):
+            """Checks if user is logged in and has the required permissions"""
+
             if session.get("user") is None:
-                flash("Usted debe estar loggeado para acceder a esta página", "error")
+                flash(
+                    "Usted debe estar loggeado para acceder a esta página",
+                    "error")
                 return redirect(url_for("auth.login"))
             if argument and not can_perform(session.get("user"), argument):
                 flash("Usted no tiene permisos necesarios", "error")

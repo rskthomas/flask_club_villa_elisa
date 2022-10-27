@@ -4,29 +4,42 @@
   {% block content %}
   <h1>Usuarios con apellido {{last_name}}</h1>
 
- 
-   <table>
-  <tr>
-    <th>Nombre</th>
-    <th>Apellido</th>
-    <th>Numero de socio</th>
-    <th>Situación</th>
-    <th>Numero de documento</th>
-    <th>Ver Facturas</th>
+<div>
+    <table class="index-table box">
+        <thead>
+            <tr>
+                <th>Id Miembro</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Tipo Doc.</th>
+                <th>Nro.Doc.</th>
+                <th>Género</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mem in members %}
+            <tr>
+                <td><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></td>
+                <td>{{mem.first_name}}</td>
+                <td>{{mem.last_name}}</td>
+                <td>{{mem.personal_id_type}}</td>
+                <td>{{mem.personal_id}}</td>
+                <td>{{mem.gender}}</td>    
+                <td>{{'Activo' if mem.membership_state else 'Moroso'}}</td>
+                <td>
+                    <a href="/payments/member/{{ mem.id }}/invoices"><button>Ver Facturas</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
 
-    
-  </tr>
- {% for member in members %}
-  <tr>
-    <td>{{ member.first_name }}</td>
-    <td>{{ member.last_name  }}</td>
-    <td>{{ member.id  }}</td>
-    <td>{%if member.membership_state%}Sin deudas{%else%}Moroso{%endif%}</td>
-    <td>{{ member.personal_id }}</td>
-    <td>> <a href="/payments/member/{{ member.id }}/invoices">{{ member.id }}</a></td>
-  </tr>
-    {% endfor %}
+      
+    </table>
+</div>
+  <a href="/payments"><button>Volver </button></a>
 
-</table> 
+
 
   {% endblock %}
