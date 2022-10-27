@@ -30,7 +30,7 @@ def index():
 def search():
     form = UserSearchForm(request.form)
     if not form.validate():
-        flash("Hubo un error con el formulario", "danger")
+        flash("Hubo un error con el formulario", "error")
         return redirect(url_for("payments.index"))
 
     input = form.search.data
@@ -43,7 +43,7 @@ def search():
         member = Member.find_member_by_lastname(input)
 
     if not member:
-        flash("No se encontró ningún miembro con ese criterio", "danger")
+        flash("No se encontró ningún miembro con ese criterio", "error")
         return redirect(url_for("payments.index"))
 
     return redirect(url_for(route, id=input))

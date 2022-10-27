@@ -38,7 +38,12 @@ def login_required(argument=None):
 
 @auth_blueprint.get("/")
 def login():
-    return render_template("auth/login.html", header_info=get_header_info())
+    """If the user is unauthenticated, renders the authentication page. Otherwise redirects to the home page."""
+
+    if session.get("user") is None:
+        return render_template("auth/login.html", header_info=get_header_info())
+    else:
+        return redirect(url_for("home"))
 
 
 @auth_blueprint.post("/authenticate")

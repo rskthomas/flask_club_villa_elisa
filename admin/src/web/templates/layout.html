@@ -22,7 +22,7 @@
   <body>
     <header class="navigation-bar">
       <div class="navigation-bar__current-location">
-        <a class="navigation-bar__logo-button" href="{{ url_for("home") }}">
+        <a class="button button--large navigation-bar__logo-button" href="{{ url_for('home') }}">
           <h1 class="navigation-bar__website-name">Club Barrial</h1>
         </a>
         <h2 class="navigation-bar__section-name">{% block header_section_name %}{% endblock %}</h2>
@@ -38,25 +38,32 @@
           {{ ", ".join(header_info.roles) }}
         </span>
       </div>
-      <a class="navigation-bar__authenticate-button" href="{{ url_for("auth.logout") }}">Salir</a>
+      <a class="button navigation-bar__authenticate-button" href="{{ url_for('auth.logout') }}">Salir</a>
       {% else %}
-      <a class="navigation-bar__authenticate-button" href="{{ url_for("auth.login") }}">Ingresar</a>
+      <a class="button navigation-bar__authenticate-button" href="{{ url_for('auth.login') }}">Ingresar</a>
       {% endif %}
     </header>
 
-    <div id="main">
-      {% with messages = get_flashed_messages(with_categories=true) %}
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>{% block footer %}{% endblock %}</footer>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-      <ul class=flashes>
+      <ul class="flash-message-list">
         {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
+        <li class="flash-message {{ category }}">
+          {{ message }}
+          <button class="button" onclick="event.target.closest('.flash-message')?.remove()">
+            Entendido
+          </button>
+        </li>
         {% endfor %}
       </ul>
       {% endif %}
-      {% endwith %}
-      {%block content %}{% endblock %}
-    </div>
-    <div id="footer">{%block footer %}{% endblock %}</div>
+    {% endwith %}
   </body>
 
 </html>
