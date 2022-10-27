@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
+
 {% from "_render_field.html" import render_field %}
 
-{% block title %} Cargar Disciplina {% endblock %}
+{% block title_section_name %}Actualizar {{discipline.name}} - Disciplinas{% endblock %}
+
+{% block header_section_name %}Actualizar disciplina{% endblock %}
+
 {% block head %} {{ super() }} {% endblock %}
+
 {% block content %}
-<h1>Modificar disciplina</h1>
+<h1>Actualizar disciplina</h1>
 
 <section>
 

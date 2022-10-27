@@ -7,6 +7,7 @@ from src.web.controllers.auth import login_required
 from src.web.forms.member import MemberForm
 from src.core import member
 import pdfkit
+from src.web.helpers.get_header_info import get_header_info
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
@@ -34,13 +35,14 @@ def index():
                             members=pagination_data['items'],
                             filters=filters,
                             current_page=current_page,
-                            pages=pagination_data['pages'])
+                            pages=pagination_data['pages'],
+                            header_info=get_header_info())
 
 
 @login_required()
 @member_blueprint.get("/create")
 def create_view():
-    return render_template("members/create.html", form=MemberForm())
+    return render_template("members/create.html", form=MemberForm(), header_info=get_header_info())
 
 
 @login_required()
@@ -66,8 +68,8 @@ def create_confirm():
         
     except IntegrytyException:
         flash('Ya existe el email ingresado', 'error')
-        return render_template("members/create.html", form=form)
-    return render_template("members/create.html", form=form)
+        return render_template("members/create.html", form=form, header_info=get_header_info())
+    return render_template("members/create.html", form=form, header_info=get_header_info())
 
 
 @login_required()
@@ -89,7 +91,7 @@ def update_view(id):
         phone_number        = item.phone_number,
         email               = item.email
     )    
-    return render_template("members/update.html", form=form, id=id)
+    return render_template("members/update.html", form=form, id=id, header_info=get_header_info())
 
 
 @login_required()
@@ -136,7 +138,7 @@ def delete(id):
 @member_blueprint.get("/<int:id>")
 def show(id):
     item = member.find_member(id)
-    return render_template("members/show.html", member=item)
+    return render_template("members/show.html", member=item, header_info=get_header_info())
 
 
 @login_required()
@@ -160,7 +162,8 @@ def route_download():
                             members=pagination_data['items'],
                             filters=filters,
                             current_page=current_page,
-                            pages=pagination_data['pages'])
+                            pages=pagination_data['pages'],
+                            header_info=get_header_info())
 
     # PDF options
     options = {

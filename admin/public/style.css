@@ -1,8 +1,113 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
+
+:root {
+  --font-family--base: 'Saira', sans-serif;
+
+  --color--primary: #008040;
+  --color--secondary: #6C8993;
+  --color--success: var(--color--primary);
+  --color--danger: #DF2020;
+
+  --background-color--background-surface: #E6E6E6;
+  --foreground-color--background-surface: #000000;
+
+  --background-color--primary-surface: var(--color--primary);
+  --foreground-color--primary-surface: #FFFFFF;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-family--base);
+}
+
+a:any-link {
+  color: unset;
+  text-decoration: none;
+}
+
+html {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #4B7399;
-  font-family: 'Montserrat', Helvetica, sans-serif;
-  font-size: 14px;
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.navigation-bar {
+  flex: 0 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 16px;
+  position: relative;
+  height: 64px;
+  padding: 8px 16px;
+  background-color: var(--background-color--primary-surface);
+  color: var(--foreground-color--primary-surface);
+}
+
+.navigation-bar__current-location {
+  grid-column: 1 / span 1;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  column-gap: 12px;
+}
+
+.navigation-bar__logo-button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 250ms ease-out;
+}
+
+.navigation-bar__logo-button:hover {
+  background-color: #FFFFFF20;
+}
+
+.navigation-bar__website-name {
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 500;
+}
+
+.navigation-bar__section-name {
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 200;
+}
+
+.navigation-bar__authenticated-user {
+  grid-column: 2 / span 1;
+}
+
+.navigation-bar__authenticated-user-name {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 200;
+}
+
+.navigation-bar__authenticated-user-role {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 200;
+}
+
+.navigation-bar__authenticate-button {
+  grid-column: 3 / span 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 250ms ease-out;
+}
+
+.navigation-bar__authenticate-button:hover {
+  background-color: #FFFFFF20;
 }
 
 .clear {
