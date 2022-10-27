@@ -1,8 +1,9 @@
-from src.core.discipline import DisciplineNotFound, MemberNotFound
+import pdfkit
 from flask import Blueprint
 from flask import render_template, abort
 from flask import request, flash, redirect, url_for, make_response
 from flask import session
+from src.core.discipline import DisciplineNotFound, MemberNotFound
 from src.web.forms.discipline import DisciplineForm
 from src.core.discipline import enroll_member, cancel_enrollment
 from src.core.discipline import find_discipline, delete_discipline
@@ -11,7 +12,6 @@ from src.web.helpers.handlers import bad_request
 from src.core import discipline as Discipline
 from src.web.controllers.auth import login_required
 from src.web.helpers.get_header_info import get_header_info
-import pdfkit
 
 
 discipline_blueprint = Blueprint(
@@ -21,7 +21,7 @@ discipline_blueprint = Blueprint(
 
 
 @discipline_blueprint.get("/")
-@login_required("discipline_rw")
+@login_required("discipline_index")
 def index():
     disciplines = Discipline.get_disciplines()
 
@@ -33,15 +33,16 @@ def index():
 
 
 @discipline_blueprint.get("/create")
-@login_required("discipline_rw")
+@login_required("discipline_create")
 def create():
     return render_template(
-        "discipline/create.html", form=DisciplineForm(), header_info=get_header_info()
-    )
+        "discipline/create.html",
+        form=DisciplineForm(),
+        header_info=get_header_info())
 
 
 @discipline_blueprint.post("/create")
-@login_required("discipline_rw")
+@login_required("discipline_create")
 def create_post():
     form = DisciplineForm(request.form)
     if form.validate():
@@ -63,7 +64,7 @@ def create_post():
 
 
 @discipline_blueprint.get("/<int:id>/update")
-@login_required("discipline_rw")
+@login_required("discipline_update")
 def update(id):
     discipline = load_discipline(id)
 
@@ -85,7 +86,7 @@ def update(id):
 
 
 @discipline_blueprint.post("/update")
-@login_required("discipline_rw")
+@login_required("discipline_update")
 def update_discipline():
     discipline_id = request.form["id"]
     if not request.form:
@@ -106,7 +107,7 @@ def update_discipline():
 
 
 @discipline_blueprint.get("/<int:id>/delete")
-@login_required("discipline_rwd")
+@login_required("discipline_destroy")
 def delete(id):
     if not delete_discipline(id):
         return bad_request("Discipline not found")
@@ -121,23 +122,27 @@ def delete_error(id):
 
 
 @discipline_blueprint.get("/<int:id>")
-@login_required("discipline_rw")
+@login_required("discipline_show")
 def show(id):
     discipline = load_discipline(id)
     return render_template(
-        "discipline/show.html", discipline=discipline, header_info=get_header_info()
-    )
+        "discipline/show.html",
+        discipline=discipline,
+        header_info=get_header_info())
 
 
 @discipline_blueprint.get("<int:id>/enrollment")
-@login_required()
+@login_required('discipline_update')
 def enrollment_form(id):
     discipline = load_discipline(id)
-    return render_template("discipline/enrollment.html", discipline=discipline, header_info=get_header_info())
+    return render_template(
+        "discipline/enrollment.html",
+        discipline=discipline,
+        header_info=get_header_info())
 
 
 @discipline_blueprint.post("<int:id>/enrollment")
-@login_required()
+@login_required('discipline_update')
 def create_enrollment(id):
     try:
         enroll_member(id, request.form.get("chosen_member_id"))
@@ -165,7 +170,7 @@ def create_enrollment(id):
 
 
 @discipline_blueprint.get("<int:id>/members")
-@login_required()
+@login_required('members_show')
 def discipline_members(id):
     discipline = load_discipline(id)
     return discipline.members
@@ -204,14 +209,15 @@ def load_discipline(id):
 
 
 @discipline_blueprint.route("/download")
-@login_required()
+@login_required('discipline_show')
 def download():
     disciplines = Discipline.get_disciplines()
 
     # Get the HTML output
     out = render_template(
-        "discipline/export.html", disciplines=disciplines, header_info=get_header_info()
-    )
+        "discipline/export.html",
+        disciplines=disciplines,
+        header_info=get_header_info())
 
     # PDF options
     options = {

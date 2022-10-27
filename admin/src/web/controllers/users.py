@@ -97,9 +97,8 @@ def index():
 @login_required()
 @users_blueprint.get("/csv_export")
 def csv_export():
-    users_list = list(
-        map(lambda user: csv_ready_user(user), list_user(parse_filters(request)))
-    )
+    users_list = list(map(lambda user: csv_ready_user(user),
+                          list_user(parse_filters(request))))
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -117,7 +116,7 @@ def csv_export():
     return response
 
 
-@login_required()
+@login_required('users_create')
 @users_blueprint.get("/nuevo")
 def new():
     return render_template(
@@ -128,7 +127,7 @@ def new():
     )
 
 
-@login_required()
+@login_required('users_create')
 @users_blueprint.post("/crear")
 def create():
     try:
@@ -146,7 +145,7 @@ def create():
     return new()
 
 
-@login_required()
+@login_required('users_create')
 @users_blueprint.get("/<int:id>/editar")
 def edit(id):
     user = find_user(id)
@@ -172,7 +171,7 @@ def edit(id):
     )
 
 
-@login_required()
+@login_required('users_update')
 @users_blueprint.post("/update")
 def update():
     user_id = request.form["id"]
@@ -183,7 +182,9 @@ def update():
     try:
         if form.validate():
             update_user(user_id, parse_from_params(request.form))
-            update_user_roles(find_user(user_id), request.form.getlist("roles"))
+            update_user_roles(
+                find_user(user_id),
+                request.form.getlist("roles"))
 
             flash("usuario modificado con éxito", "success")
             return redirect(url_for("users.index"))
@@ -193,7 +194,7 @@ def update():
     return edit(user_id)
 
 
-@login_required()
+@login_required('users_destroy')
 @users_blueprint.get("/<int:user_id>/destroy")
 def destroy(user_id):
     delete_user(user_id)
