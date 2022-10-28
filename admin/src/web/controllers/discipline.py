@@ -146,7 +146,7 @@ def enrollment_form(id):
 def create_enrollment(id):
     try:
         enroll_member(id, request.form.get("chosen_member_id"))
-        flash("el alta se realizó con éxito", "success")
+        flash("El alta se realizó con éxito.", "success")
     except InactiveDiscipline:
         flash("la disciplina está inactiva", "error")
         return render_template(

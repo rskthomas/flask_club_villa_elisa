@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title_section_name %}Perfil{% endblock %}
+
+{% block header_section_name %}Perfil{% endblock %}
+
+{% block head %}
+<style>
+    .profile {
+        flex: 1 0 auto;
+        align-self: stretch;
+        display: flex;
+        flex-flow: column nowrap;
+        padding: 16px 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="profile">
+    <h3 class="text-display1">{{ user.lastname }}, {{user.firstname}}</h3>
+    
+    <ul>
+        <li><strong>Roles:</strong> {{ ", ".join(roles) }}</li>
+        <li><strong>Correo electrónico:</strong> {{ user.email }}</li>
+    </ul>
+</section>
+{% endblock %}

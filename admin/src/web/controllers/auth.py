@@ -22,13 +22,11 @@ def login_required(argument=None):
             """Checks if user is logged in and has the required permissions"""
 
             if session.get("user") is None:
-                flash(
-                    "Usted debe estar loggeado para acceder a esta página",
-                    "error")
+                flash("Primero ingresá para visitar esa página.", "error")
                 return redirect(url_for("auth.login"))
             if argument and not can_perform(session.get("user"), argument):
-                flash("Usted no tiene permisos necesarios", "error")
-                return redirect(url_for("auth.login"))
+                flash("No tenés permisos suficientes para realizar esa acción.", "error")
+                return redirect(url_for("home"))
             return function(*args, **kwargs)
 
         return login_decorator
@@ -38,7 +36,13 @@ def login_required(argument=None):
 
 @auth_blueprint.get("/")
 def login():
-    return render_template("auth/login.html", header_info=get_header_info())
+    """If the user is unauthenticated, renders the authentication page. Otherwise redirects to the home page."""
+
+    if session.get("user") is None:
+        return render_template("auth/login.html", header_info=get_header_info())
+    else:
+        flash("Ya ingresaste al sistema.", "success")
+        return redirect(url_for("home"))
 
 
 @auth_blueprint.post("/authenticate")
@@ -47,11 +51,11 @@ def authenticate():
     user = auth.find_user_by_mail_and_pass(params["email"], params["password"])
 
     if not user:
-        flash("Email o clave incorrecta", "error")
+        flash("El correo electrónico o la clave son incorrectos.", "error")
         return redirect(url_for("auth.login"))
 
     session["user"] = user.id
-    flash("La sesión se inició correctamente", "success")
+    flash("Ingresaste al sistema.", "success")
     return redirect(url_for("home"))
 
 
@@ -59,6 +63,6 @@ def authenticate():
 def logout():
     del session["user"]
     session.clear()
-    flash("La sesión se cerró correctamente", "success")
+    flash("Saliste del sistema.", "success")
 
     return redirect(url_for("auth.login"))

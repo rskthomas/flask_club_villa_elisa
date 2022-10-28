@@ -8,11 +8,26 @@
   --color--success: var(--color--primary);
   --color--danger: #DF2020;
 
+  --color--bright-hover: #FFFFFF20;
+
   --background-color--background-surface: #E6E6E6;
   --foreground-color--background-surface: #000000;
 
   --background-color--primary-surface: var(--color--primary);
+  --background-color--primary-surface--hover: #1C8E55;
   --foreground-color--primary-surface: #FFFFFF;
+
+  --background-color--secondary-surface: var(--color--secondary);
+  --background-color--secondary-surface--hover: #7C969F;
+  --foreground-color--secondary-surface: #FFFFFF;
+
+  --background-color--success-surface: var(--color--success);
+  --background-color--success-surface--hover: #1C8E55;
+  --foreground-color--success-surface: #FFFFFF;
+
+  --background-color--danger-surface: var(--color--danger);
+  --background-color--danger-surface--hover: #E33939;
+  --foreground-color--danger-surface: #FFFFFF;
 }
 
 *, *::before, *::after {
@@ -38,11 +53,73 @@ body {
   min-height: 100vh;
 }
 
-.navigation-bar {
+.text-display1 {
+  font-size: 48px;
+  line-height: 72px;
+  font-weight: 300;
+}
+
+.button {
+  padding: 4px 8px;
+  background-color: transparent;
+  background: transparent;
+	border: none;
+	border-radius: 4px;
+  color: unset;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 24px;
+	transition: all 250ms ease-out;
+}
+
+.button:hover {
+  background-color: var(--color--bright-hover);
+}
+
+.button.button--primary {
+	background-color: var(--background-color--primary-surface);
+	color: var(--foreground-color--primary-surface);
+}
+
+.button.button--primary:hover {
+  background-color: var(--background-color--primary-surface--hover);
+}
+
+.button.button--success {
+	background-color: var(--background-color--success-surface);
+	color: var(--foreground-color--success-surface);
+}
+
+.button.button--success:hover {
+  background-color: var(--background-color--success-surface--hover);
+}
+
+.button.button--danger {
+	background-color: var(--background-color--danger-surface);
+	color: var(--foreground-color--danger-surface);
+}
+
+.button.button--danger:hover {
+  background-color: var(--background-color--danger-surface--hover);
+}
+
+.button.button--large {
+	padding: 8px 16px;
+	font-size: 24px;
+	line-height: 32px;
+}
+
+.table-wrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow-x: auto;
+}
+
+.application-bar {
   flex: 0 0 auto;
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   align-items: center;
   justify-content: space-between;
   column-gap: 16px;
@@ -53,7 +130,7 @@ body {
   color: var(--foreground-color--primary-surface);
 }
 
-.navigation-bar__current-location {
+.application-bar .application-bar__current-location {
   grid-column: 1 / span 1;
   display: flex;
   flex-flow: row nowrap;
@@ -61,53 +138,70 @@ body {
   column-gap: 12px;
 }
 
-.navigation-bar__logo-button {
+.application-bar .application-bar__logo-button {
   padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 250ms ease-out;
 }
 
-.navigation-bar__logo-button:hover {
-  background-color: #FFFFFF20;
-}
-
-.navigation-bar__website-name {
+.application-bar .application-bar__website-name {
   font-size: 22px;
   line-height: 32px;
   font-weight: 500;
 }
 
-.navigation-bar__section-name {
+.application-bar .application-bar__section-name {
   font-size: 22px;
   line-height: 32px;
   font-weight: 200;
 }
 
-.navigation-bar__authenticated-user {
+.application-bar .application-bar__authenticated-user {
   grid-column: 2 / span 1;
 }
 
-.navigation-bar__authenticated-user-name {
+.application-bar .application-bar__authenticated-user-name {
   font-size: 16px;
-  line-height: 1;
+  line-height: 24px;
   font-weight: 200;
 }
 
-.navigation-bar__authenticated-user-role {
+.application-bar .application-bar__authenticated-user-role {
   font-size: 16px;
-  line-height: 1;
+  line-height: 24px;
   font-weight: 200;
 }
 
-.navigation-bar__authenticate-button {
+.application-bar .application-bar__profile-button {
   grid-column: 3 / span 1;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 250ms ease-out;
 }
 
-.navigation-bar__authenticate-button:hover {
-  background-color: #FFFFFF20;
+.application-bar .application-bar__authenticate-button {
+  grid-column: 4 / span 1;
+}
+
+.navigation-bar {
+	display: flex;
+	padding: 4px 16px;
+  background-color: var(--background-color--secondary-surface);
+  color: var(--foreground-color--secondary-surface);
+}
+
+.navigation-bar .section-links-list {
+	display: flex;
+	column-gap: 8px;
+}
+
+.navigation-bar .section-link-item {
+  display: flex;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  position: relative;
+  background-color: var(--background-color--background-surface);
+  color: var(--foreground-color--background-surface);
 }
 
 .clear {
@@ -209,7 +303,6 @@ tr.disabled {
 .object-property-label{
   font-weight: bold;
   display: inline-block;
-  width: 25%;
   vertical-align: top;
 }
 
@@ -227,8 +320,44 @@ tr.disabled {
   float: left;
 }
 
-.success {
-    background-color: greenyellow;
+.flash-message-list {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-end;
+  row-gap: 0.25rem;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 25rem;
+}
+
+.flash-message-list .flash-message {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.flash-message-list .flash-message.closed {
+  animation-name: fade-out;
+	animation-duration: 500ms;
+	animation-direction: normal;
+	animation-fill-mode: forwards
+}
+
+.flash-message-list .flash-message.error {
+  background-color: var(--background-color--danger-surface);
+  color: var(--foreground-color--danger-surface);
+}
+
+.flash-message-list .flash-message.success {
+  background-color: var(--background-color--success-surface);
+  color: var(--foreground-color--success-surface);
 }
 
 i {
@@ -262,8 +391,9 @@ i {
 
   /*https://github.com/sparksuite/simple-html-invoice-template */
   .invoice-box {
+    margin-block: 32px;
     max-width: 800px;
-    margin: auto;
+    margin-inline: auto;
     padding: 30px;
     border: 1px solid #eee;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
@@ -324,3 +454,13 @@ i {
     border-top: 2px solid #eee;
     font-weight: bold;
   }
+  
+
+@keyframes fade-out {
+  from {
+    opacity: 100%;
+  }
+  to {
+    opacity: 0%;
+  }
+}

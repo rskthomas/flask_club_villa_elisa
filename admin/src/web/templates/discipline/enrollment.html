@@ -4,17 +4,18 @@
 
 {% block header_section_name %}Inscripción a disciplina{% endblock %}
 
-{% block head %} {{ super() }} {% endblock %}
-
 {% block content %}
-<h2>Ingrese el socio que desea inscribir en la disciplina {{discipline.name}}:</h2>
+<h3>Ingrese el socio que desea inscribir en la disciplina {{discipline.name}}:</h3>
 <form autocomplete="off" target="{{url_for('disciplines.create_enrollment', id = discipline.id)}}" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <label>Número de documento</label>
   <input id="member_input" name="dni" onkeyup="showResults(this.value)" />
   <input id="chosen_member_id" type="hidden" name="chosen_member_id" />
   <div id="result"></div>
-  <input name="Enviar" type="submit" />
-  <a href="{{url_for('disciplines.show', id=discipline.id)}}">Cancelar</a>
+  <input class="button button--primary" name="Confirmar" type="submit" />
+  <a href="{{url_for('disciplines.show', id=discipline.id)}}" class="button">
+    Cancelar
+  </a>
 </form>
 
 {% endblock %}

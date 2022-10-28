@@ -1,66 +1,88 @@
 {% extends "layout.html" %}
-{% block title%} Usuarios{% endblock %}
-{% block navbar%} {{super()}} {% endblock %}
+
+{% block title_section_name %}Usuarios{% endblock %}
+
+{% block header_section_name %}Lista de usuarios{% endblock %}
+
+{% block head %}
+<style>
+    .filters-box {
+        flex: 0 0 auto;
+        display: flex;
+        column-gap: 32px;
+        margin-block-end: 32px;
+    }
+</style>
+{% endblock %}
+
 {% block content%}
-<div class="filter-section">
-    <form url="{{ url_for('users.index') }}" method="GET">
-        <h2> Filtros </h2>
+<section class="filters-box">
+    <h3 class="filters-box__heading">Filtros</h3>
+    <form class="filters-box__form" url="{{ url_for('users.index') }}" method="GET">
         <div class="object-property-container">
             <label class="object-property-label"> Email:</label>
-            <input class="object-property-value" type="search" name="email" value="{{ filters.get('email', '') or '' }}"/>
+            <input class="object-property-value" type="search" name="email"
+                value="{{ filters.get('email', '') or '' }}" />
         </div>
         <div class="object-property-container">
             <label class="object-property-label"> Activo:</label>
-            <input type="radio" name="active" value="any" {{ 'checked' if filters.get('active') == None }} />
+            <input type="radio" name="active" value="any" {{ 'checked' if filters.get('active')==None }} />
             <label> Todos </label>
-            <input type="radio" name="active" value="true" {{ 'checked' if filters.get('active') }}/>
+            <input type="radio" name="active" value="true" {{ 'checked' if filters.get('active') }} />
             <label> Si </label>
-            <input type="radio" name="active" value="false" {{ 'checked' if filters.get('active') == False }}/>
+            <input type="radio" name="active" value="false" {{ 'checked' if filters.get('active')==False }} />
             <label> No </label>
         </div>
-        <input type="submit" name="Filtrar" value="Filtrar"/>
+        <input class="button button--primary" type="submit" name="Filtrar" value="Filtrar" />
     </form>
-</div>
+</section>
+
 <table class="index-table box">
-  <thead>
-      <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Email</th>
-          <th>Username</th>
-          <th>Activo</th>
-          <th>Roles</th>
-          <th>Acciones</th>
-      </tr>
-  </thead>
-  <tbody>
-      <a href="{{url_for('users.csv_export', **filters) }}"><button>Exportar a csv</button></a>
-      {% for user in users %}
-      <tr>
-          <th>{{user.id}}</th>
-          <th>{{user.firstname}}</th>
-          <th>{{user.lastname}}</th>
-          <th>{{user.email}}</th>
-          <th>{{user.username}}</th>
-          <th>{{'Si' if user.active else 'No'}}</th>
-          <th> {{ user.roles | map(attribute='name') | join(', ')}}</th>
-          <th>
-            <a href="{{url_for('users.edit', id=user.id)}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-            <a href="{{url_for('users.destroy', user_id=user.id)}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
-          </th>
-      </tr>
-      {% endfor %}
-  </tbody>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Activo</th>
+            <th>Roles</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.firstname}}</td>
+            <td>{{user.lastname}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.username}}</td>
+            <td>{{'Si' if user.active else 'No'}}</td>
+            <td> {{ user.roles | map(attribute='name') | join(', ')}}</td>
+            <td style="display: flex; column-gap: 8px">
+                <a class="button button--primary" href="{{url_for('users.edit', id=user.id)}}" title="Actualizar">
+                    Actualizar
+                </a>
+                <a class="button button--danger" href="{{url_for('users.destroy', user_id=user.id)}}" title="Eliminar">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 <div class="paginator-container">
     {% for i in range(1, pages + 1) %}
     {% if i == current_page %}
         <div class="paginator-number current-page">{{ i }}</div>
-        {% else %}
-            <a class="paginator-number", href="{{ url_for('users.index', page=i, **filters) }}">{{i}}</a>
-        {%endif%}
+    {% else %}
+        <a class="paginator-number" , href="{{ url_for('users.index', page=i, **filters) }}">{{i}}</a>
+    {%endif%}
     {% endfor %}
 </div>
-<a href="{{ url_for('users.new') }}"><button>Crear nuevo usuario + </button></a>
+<nav style="display: flex; column-gap: 16px; padding: 16px; align-self: flex-end;">
+    <a class="button button--primary" href="{{url_for('users.csv_export', **filters) }}">Exportar a csv</a>
+    <a class="button button--primary" href="{{ url_for('users.new') }}">Crear nuevo usuario</a>
+</nav>
 {% endblock%}

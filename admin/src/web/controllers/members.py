@@ -104,6 +104,7 @@ def update_view(id):
         "members/update.html",
         form=form,
         id=id,
+        member=item,
         header_info=get_header_info())
 
 

@@ -4,4 +4,28 @@
 
 {% block header_section_name %}Inicio{% endblock %}
 
-{% block content %}<h1>Inicio</h1>{% endblock %}
+{% block head %}
+<style>
+    .home {
+        flex: 1 0 auto;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .greeting {
+        font-size: 32px;
+        font-weight: 200;
+        line-height: 48px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="home">
+    <p class="greeting">
+        Seleccioná una opción en la barra de navegación<br>superior para comenzar a operar.
+    </p>
+</div>
+{% endblock %}
