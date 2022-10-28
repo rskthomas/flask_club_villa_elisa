@@ -21,12 +21,12 @@ def login_required(argument=None):
         def login_decorator(*args, **kwargs):
             """Checks if user is logged in and has the required permissions"""
 
-            # if session.get("user") is None:
-            #     flash("Primero ingresá para visitar esa página.", "error")
-            #     return redirect(url_for("auth.login"))
-            # if argument and not can_perform(session.get("user"), argument):
-            #     flash("No tenés permisos suficientes para realizar esa acción.", "error")
-            #     return redirect(url_for("auth.login"))
+            if session.get("user") is None:
+                flash("Primero ingresá para visitar esa página.", "error")
+                return redirect(url_for("auth.login"))
+            if argument and not can_perform(session.get("user"), argument):
+                flash("No tenés permisos suficientes para realizar esa acción.", "error")
+                return redirect(url_for("auth.login"))
             return function(*args, **kwargs)
 
         return login_decorator
