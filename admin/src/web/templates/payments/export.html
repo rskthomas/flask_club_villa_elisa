@@ -1,10 +1,37 @@
-{% extends "layout.html" %}
+<meta charset="utf-8">
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    table {
+        table-layout: auto;
+    }
+    table thead {
+        font-size: 1.1rem;
+    }
+    table thead tr th {
+        padding: 0.25rem 1rem;
+        background-color: whitesmoke;
+    }
+    table tbody {
+        font-size: 1rem;
+    }
+    table tbody tr:nth-child(odd) {
+        background-color: white;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: whitesmoke;
+    }
+    table tbody tr td {
+        padding: 0.25rem 1rem;
+    }
+</style>
 
 {% block title_section_name %}Detalle de factura - Pagos{% endblock %}
 
-{% block header_section_name %}Detalle de factura{% endblock %}
-
-{% block content %}
 <body>
 	<div class="invoice-box">
 		<table cellpadding="0" cellspacing="0">
@@ -91,15 +118,3 @@
 	</div>
 </body>
 
-
-
-{% if not invoice.paid%}
-
-<form style="flex: 0 0 auto; display: flex; justify-content: center; padding-block-end: 16px;"
-action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-	<input class="button button--primary button--large" type="submit" value="Pagar">
-</form>
-
-{% endif%}
-{% endblock %}

@@ -7,6 +7,7 @@
 {% block content %}
 <section>
   <form action="/configuracion/update" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="object-property-container">
       <label class="object-property-label">Cantidad de items para listados: </label>
       <input class="object-property-value" type="number" value={{ system_config.items_qty_for_grids}}

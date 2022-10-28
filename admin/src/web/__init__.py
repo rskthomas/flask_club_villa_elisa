@@ -20,6 +20,8 @@ from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 from src.web.controllers.profile import profile_blueprint
 
+from flask_wtf.csrf import CSRFProtect
+
 
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
@@ -28,6 +30,8 @@ def create_app(static_folder="static", env="development"):
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
     database.init_app(app)
+    app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
+    csrf = CSRFProtect(app)
 
     @app.get("/")
     def home():

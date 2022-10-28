@@ -8,6 +8,7 @@
 
 {% block content %}
 <form action="{{ url_for('member.create_view') }}" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="object-property-container">
         <label class="object-property-label"> {{ form.first_name.label }}: </label>
         {{ form.first_name(class="css_class") }}

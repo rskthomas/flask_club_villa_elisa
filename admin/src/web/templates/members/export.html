@@ -1,11 +1,35 @@
-{% extends "layout.html" %}
-{% block title%} Miembros{% endblock %}
-{% block navbar%} {{super()}} {% endblock %}
-{% block head %} 
-{{ super() }} 
 <meta charset="utf-8">
-{% endblock %}
-{% block content%} 
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    table {
+        table-layout: auto;
+    }
+    table thead {
+        font-size: 1.1rem;
+    }
+    table thead tr th {
+        padding: 0.25rem 1rem;
+        background-color: whitesmoke;
+    }
+    table tbody {
+        font-size: 1rem;
+    }
+    table tbody tr:nth-child(odd) {
+        background-color: white;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: whitesmoke;
+    }
+    table tbody tr td {
+        padding: 0.25rem 1rem;
+    }
+</style>
+
 <h1>Lista de Miembros</h1>
 <div>
     <table class="index-table box">
@@ -43,5 +67,3 @@
         </tbody>
     </table>
 </div>
-
-{% endblock %}

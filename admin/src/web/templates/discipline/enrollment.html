@@ -7,6 +7,7 @@
 {% block content %}
 <h3>Ingrese el socio que desea inscribir en la disciplina {{discipline.name}}:</h3>
 <form autocomplete="off" target="{{url_for('disciplines.create_enrollment', id = discipline.id)}}" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <label>Número de documento</label>
   <input id="member_input" name="dni" onkeyup="showResults(this.value)" />
   <input id="chosen_member_id" type="hidden" name="chosen_member_id" />
