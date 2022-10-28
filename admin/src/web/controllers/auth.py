@@ -26,7 +26,7 @@ def login_required(argument=None):
                 return redirect(url_for("auth.login"))
             if argument and not can_perform(session.get("user"), argument):
                 flash("No tenés permisos suficientes para realizar esa acción.", "error")
-                return redirect(url_for("auth.login"))
+                return redirect(url_for("home"))
             return function(*args, **kwargs)
 
         return login_decorator
