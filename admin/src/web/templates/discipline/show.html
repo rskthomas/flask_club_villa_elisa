@@ -46,19 +46,20 @@
     <tbody>
       {% for mem in discipline.members %}
       <tr>
-        <th><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></th>
-        <th>{{mem.first_name}}</th>
-        <th>{{mem.last_name}}</th>
-        <th>{{mem.personal_id_type}}</th>
-        <th>{{mem.personal_id}}</th>
-        <th>{{mem.gender}}</th>
-        <th>{{mem.address}}</th>
-        <th>{{mem.phone_number}}</th>
-        <th>{{mem.email}}</th>
-        <th>
-          <a href="{{url_for('disciplines.destroy_enrollment', id=discipline.id, member_id=mem.id)}}"><i
-              class="fa fa-trash" aria-hidden="true"></i></a>
-        </th>
+        <td><a href="/miembros/{{ mem.id }}">{{mem.id}}</a></td>
+        <td>{{mem.first_name}}</td>
+        <td>{{mem.last_name}}</td>
+        <td>{{mem.personal_id_type}}</td>
+        <td>{{mem.personal_id}}</td>
+        <td>{{mem.gender}}</td>
+        <td>{{mem.address}}</td>
+        <td>{{mem.phone_number}}</td>
+        <td>{{mem.email}}</td>
+        <td style="display: flex; column-gap: 8px">
+          <a class="button button--danger" href="{{url_for('disciplines.destroy_enrollment', id=discipline.id, member_id=mem.id)}}" title="Eliminar">
+            Eliminar
+          </a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
