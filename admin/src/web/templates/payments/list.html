@@ -34,8 +34,6 @@
 
 {% block content %}
 <div class="page">
-  <h1>Facturas del usuario {{member.last_name}}</h1>
-
   {% if not invoices %}
     <p>No hay facturas</p>
   {% else %}
