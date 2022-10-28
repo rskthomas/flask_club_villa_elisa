@@ -38,6 +38,7 @@
           {{ ", ".join(header_info.roles) }}
         </span>
       </div>
+      <a class="button application-bar__profile-button" href="{{ url_for('profile.index') }}">Ver perfil</a>
       <a class="button application-bar__authenticate-button" href="{{ url_for('auth.logout') }}">Salir</a>
       {% else %}
       <a class="button application-bar__authenticate-button" href="{{ url_for('auth.login') }}">Ingresar</a>

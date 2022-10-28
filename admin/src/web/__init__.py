@@ -18,6 +18,7 @@ from src.web.controllers.system_config import system_config_blueprint
 from src.web.controllers.members import member_blueprint
 from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
+from src.web.controllers.profile import profile_blueprint
 
 
 def create_app(static_folder="static", env="development"):
@@ -44,6 +45,7 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(member_blueprint)
     app.register_blueprint(api_blueprint)
     app.register_blueprint(payments_blueprint)
+    app.register_blueprint(profile_blueprint)
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)

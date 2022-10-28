@@ -113,7 +113,7 @@ body {
   flex: 0 0 auto;
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   align-items: center;
   justify-content: space-between;
   column-gap: 16px;
@@ -164,8 +164,12 @@ body {
   font-weight: 200;
 }
 
-.application-bar .application-bar__authenticate-button {
+.application-bar .application-bar__profile-button {
   grid-column: 3 / span 1;
+}
+
+.application-bar .application-bar__authenticate-button {
+  grid-column: 4 / span 1;
 }
 
 .navigation-bar {
