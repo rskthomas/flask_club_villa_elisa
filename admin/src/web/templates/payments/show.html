@@ -95,12 +95,10 @@
 
 {% if not invoice.paid%}
 
-<form action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
-	<input type="submit" value="Pagar">
+<form style="flex: 0 0 auto; display: flex; justify-content: center; padding-block-end: 16px;"
+action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
+	<input class="button button--primary button--large" type="submit" value="Pagar">
 </form>
 
 {% endif%}
-<form>
- <input style="justify-content: center" type="button" value="Volver" onclick="history.back()">
-</form>
 {% endblock %}

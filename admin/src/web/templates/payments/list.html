@@ -12,7 +12,20 @@
     flex-flow: column nowrap;
     padding: 16px;
   }
-  .actions {
+  .page .invoice-card {
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+  }
+  .page .invoice-actions {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 8px;
+  }
+  .page .actions {
     margin-block-start: 32px;
     align-self: flex-start;
   }
@@ -27,18 +40,21 @@
     <p>No hay facturas</p>
   {% else %}
     {% for invoice in invoices %}
-      <div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s;">
-        <div style=" padding: 2px 16px;">
-          <a class="button" href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">
-            Factura del mes: {{invoice.month}}
-          </a>
+      <div class="invoice-card">
+        <div>
+          Factura del mes: {{invoice.month}}
           <p>Estado: {% if invoice.paid %}Pagada{% else %}No pagada{% endif %}</p>
         </div>
-        {% if invoice.paid %}
-          <a class="button button--primary" href="{{url_for('payments.download',invoice_id=invoice.id)}}">
-            Descargar comprobante
+        <nav class="invoice-actions">
+          <a class="button button--primary" href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">
+            Ver
           </a>
-        {% endif %}
+          {% if invoice.paid %}
+            <a class="button button--primary" href="{{url_for('payments.download',invoice_id=invoice.id)}}">
+              Descargar comprobante
+            </a>
+          {% endif %}
+        </nav>
       </div>
     {% endfor %}
   {% endif %}
