@@ -109,7 +109,7 @@ def download(invoice_id):
 
     # Get the HTML output
     out = render_template(
-        "payments/show.html", invoice=invoice, header_info=get_header_info()
+        "payments/export.html", invoice=invoice, header_info=get_header_info()
     )
 
     # PDF options
