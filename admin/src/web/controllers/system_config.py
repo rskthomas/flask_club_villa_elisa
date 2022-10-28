@@ -12,6 +12,7 @@ system_config_blueprint = Blueprint(
 @system_config_blueprint.get("/")
 @login_required("system_config_show")
 def show():
+    
     return render_template(
         "system_config/show.html",
         system_config=get_system_config(),
