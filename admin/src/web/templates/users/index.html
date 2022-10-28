@@ -53,13 +53,13 @@
     <tbody>
         {% for user in users %}
         <tr>
-            <th>{{user.id}}</th>
-            <th>{{user.firstname}}</th>
-            <th>{{user.lastname}}</th>
-            <th>{{user.email}}</th>
-            <th>{{user.username}}</th>
-            <th>{{'Si' if user.active else 'No'}}</th>
-            <th> {{ user.roles | map(attribute='name') | join(', ')}}</th>
+            <td>{{user.id}}</td>
+            <td>{{user.firstname}}</td>
+            <td>{{user.lastname}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.username}}</td>
+            <td>{{'Si' if user.active else 'No'}}</td>
+            <td> {{ user.roles | map(attribute='name') | join(', ')}}</td>
             <td style="display: flex; column-gap: 8px">
                 <a class="button button--primary" href="{{url_for('users.edit', id=user.id)}}" title="Actualizar">
                     Actualizar
@@ -67,7 +67,7 @@
                 <a class="button button--danger" href="{{url_for('users.destroy', user_id=user.id)}}" title="Eliminar">
                     Eliminar
                 </a>
-            </th>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
