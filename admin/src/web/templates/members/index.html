@@ -39,8 +39,7 @@
         <input type="submit" value="Filtrar" class="button button--primary"/>
     </form>
 </section>
-<br></br>
-<div>
+<div class="table-wrapper">
     <table class="index-table box">
         <thead>
             <tr>
@@ -72,18 +71,14 @@
                 <td>{{mem.phone_number}}</td>
                 <td>{{mem.email}}</td>
                 <td>{{mem.activation_date.strftime('%d-%m-%Y') }}</td>
-                <td>
-                    <a href="/miembros/{{ mem.id }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                    <a href="/miembros/{{ mem.id }}/update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href="/miembros/{{ mem.id }}/delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <td style="display: flex; column-gap: 8px">
+                    <a class="button button--primary" href="/miembros/{{ mem.id }}">Detalle</a>
+                    <a class="button button--primary" href="/miembros/{{ mem.id }}/update">Actualizar</a>
+                    <a class="button button--danger" href="/miembros/{{ mem.id }}/delete">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
-
-        <a href="/miembros/create"><button>Crear nuevo miembro + </button></a>
-        &nbsp;
-        <a href="/miembros/download"><button>Exportar</button></a>
     </table>
 </div>
 
@@ -96,5 +91,10 @@
     {%endif%}
     {% endfor %}
 </div>
+
+<nav style="display: flex; column-gap: 16px; padding: 16px; align-self: flex-end;">
+    <a class="button button--primary" href="/miembros/create">Crear miembro</a>
+    <a class="button button--primary" href="/miembros/download">Exportar</a>
+</nav>
 
 {% endblock %}

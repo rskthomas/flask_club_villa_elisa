@@ -1,29 +1,49 @@
 {% extends "layout.html" %}
-{% block title %} Disciplinas {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+
+{% block title_section_name %}Facturas de {{member.last_name}}, {{member.first_name}} - Pagos{% endblock %}
+
+{% block header_section_name %}Facturas de usuario{% endblock %}
+
+{% block head %}
+<style>
+  .page {
+    flex: 1 0 auto;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 16px;
+  }
+  .actions {
+    margin-block-start: 32px;
+    align-self: flex-start;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>Facturas del usuario {{member.last_name}}</h1>
+<div class="page">
+  <h1>Facturas del usuario {{member.last_name}}</h1>
 
-
-{% if not invoices %}
-<p>No hay facturas</p>
-{%else%}
-{% for invoice in invoices %}
-
-<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s;">
-    <div style=" padding: 2px 16px;">
-        <a href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">Factura del mes: {{invoice.month}}</a>
-        <p>Estado: {%if invoice.paid%}Pagada{%else%}No pagada{%endif%}</p>
-    </div>
-    {%if invoice.paid%}
-    <a href="{{url_for('payments.download',invoice_id=invoice.id)}}"><button>Descargar comprobante</button></a>
- 
-    
-    {%endif%}
-
+  {% if not invoices %}
+    <p>No hay facturas</p>
+  {% else %}
+    {% for invoice in invoices %}
+      <div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s;">
+        <div style=" padding: 2px 16px;">
+          <a class="button" href="{{url_for('payments.show_invoice',invoice_id=invoice.id)}}">
+            Factura del mes: {{invoice.month}}
+          </a>
+          <p>Estado: {% if invoice.paid %}Pagada{% else %}No pagada{% endif %}</p>
+        </div>
+        {% if invoice.paid %}
+          <a class="button button--primary" href="{{url_for('payments.download',invoice_id=invoice.id)}}">
+            Descargar comprobante
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <nav class="actions">
+    <a class="button button--primary" href="/payments">Volver</a>
+  </nav>
 </div>
-{% endfor %}
-{%endif%}
-
-  <a href="/payments"><button>Volver </button></a>
 {% endblock %}

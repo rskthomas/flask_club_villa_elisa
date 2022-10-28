@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
+
 {% from "_render_field.html" import render_field %}
 
-{% block title %} Cargar Miembro {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+{% block title_section_name %}Actualizar {{member.last_name}}, {{member.first_name}} - Miembros{% endblock %}
+
+{% block header_section_name %}Actualizar miembro{% endblock %}
+
 {% block content %}
-<h1>Edición Miembro # {{id}}</h1>
-
 <section>
-
     <form action="/miembros/update" method="post">
         <input type="hidden" name="id" value="{{id}}">
 
@@ -64,12 +64,8 @@
             {{ form.email(class="css_class") }}
         </div>
     
-        <input class="edit-link" type="submit" name="Guardar" value="Guardar" />
-        <a class="edit-link" href="{{url_for('member.index')}}"><button type="button">Cancelar</button></a>
+        <input class="button button--primary" type="submit" name="Guardar" value="Confirmar" />
+        <a class="button" href="{{url_for('member.index')}}">Cancelar</a>
     </form>
-    
 </section>
-
-
-
 {% endblock %}
