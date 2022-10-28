@@ -11,6 +11,7 @@
     <h3>Actualizar usuario {{user.lastname}}, {{user.firstname}}</h3>
     <section>
         <form action="/users/update" method="post">
+           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="id" value="{{id}}">
 
             <div class="object-property-container">

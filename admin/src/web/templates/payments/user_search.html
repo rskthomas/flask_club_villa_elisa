@@ -26,6 +26,7 @@
 <div class="page">
     <p>Ingrese el ID o apellido del usuario que desea buscar</p>
     <form action="{{ url_for('payments.search') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <dl>
             {{ render_field(form.select) }}
             <p>

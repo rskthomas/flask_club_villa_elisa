@@ -19,6 +19,7 @@
 <section class="filters-box">
     <h3 class="filters-box__heading">Filtros</h3>
     <form class="filters-box__form" url="{{ url_for('member.index') }}" method="GET">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="object-property-container">
             <label class="object-property-label"> Apellido:</label>
             <input class="object-property-value" type="search" name="last_name"

@@ -97,6 +97,7 @@
 
 <form style="flex: 0 0 auto; display: flex; justify-content: center; padding-block-end: 16px;"
 action="{{url_for('payments.pay_invoice',invoice_id=invoice.id)}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 	<input class="button button--primary button--large" type="submit" value="Pagar">
 </form>
 
