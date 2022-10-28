@@ -6,10 +6,7 @@
 
 {% block header_section_name %}Crear disciplina{% endblock %}
 
-{% block head %} {{ super() }} {% endblock %}
-
 {% block content %}
-<h1>Crear disciplina</h1>
 <section>
 <form action="{{ url_for('disciplines.create') }}" method="POST">
 
@@ -38,8 +35,8 @@
         {{ form.active(class="css_class") }}
     </div>
 
-    <input class="edit-link" type="submit" name="Guardar" value="Guardar" />
-    <a class="edit-link" href="{{url_for('disciplines.index')}}"><button type="button">Cancelar</button></a>
+    <a class="button " href="{{url_for('disciplines.index')}}">Cancelar</a>
+    <input class="button button--primary" type="submit" name="Guardar" value="Guardar" />
 </form>
 </section>
 {% endblock %}

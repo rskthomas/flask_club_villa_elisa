@@ -8,12 +8,18 @@
   --color--success: var(--color--primary);
   --color--danger: #DF2020;
 
+  --color--bright-hover: #FFFFFF20;
+
   --background-color--background-surface: #E6E6E6;
   --foreground-color--background-surface: #000000;
 
   --background-color--primary-surface: var(--color--primary);
   --background-color--primary-surface--hover: #1C8E55;
   --foreground-color--primary-surface: #FFFFFF;
+
+  --background-color--secondary-surface: var(--color--secondary);
+  --background-color--secondary-surface--hover: #7C969F;
+  --foreground-color--secondary-surface: #FFFFFF;
 
   --background-color--success-surface: var(--color--success);
   --background-color--success-surface--hover: #1C8E55;
@@ -67,7 +73,7 @@ body {
 }
 
 .button:hover {
-  background-color: var(--background-color--primary-surface--hover);
+  background-color: var(--color--bright-hover);
 }
 
 .button.button--primary {
@@ -79,13 +85,31 @@ body {
   background-color: var(--background-color--primary-surface--hover);
 }
 
+.button.button--success {
+	background-color: var(--background-color--success-surface);
+	color: var(--foreground-color--success-surface);
+}
+
+.button.button--success:hover {
+  background-color: var(--background-color--success-surface--hover);
+}
+
+.button.button--danger {
+	background-color: var(--background-color--danger-surface);
+	color: var(--foreground-color--danger-surface);
+}
+
+.button.button--danger:hover {
+  background-color: var(--background-color--danger-surface--hover);
+}
+
 .button.button--large {
 	padding: 8px 16px;
 	font-size: 24px;
 	line-height: 32px;
 }
 
-.navigation-bar {
+.application-bar {
   flex: 0 0 auto;
   display: grid;
   grid-auto-flow: column;
@@ -100,7 +124,7 @@ body {
   color: var(--foreground-color--primary-surface);
 }
 
-.navigation-bar .navigation-bar__current-location {
+.application-bar .application-bar__current-location {
   grid-column: 1 / span 1;
   display: flex;
   flex-flow: row nowrap;
@@ -108,46 +132,63 @@ body {
   column-gap: 12px;
 }
 
-.navigation-bar .navigation-bar__logo-button {
+.application-bar .application-bar__logo-button {
   padding: 4px 8px;
 }
 
-.navigation-bar .navigation-bar__website-name {
+.application-bar .application-bar__website-name {
   font-size: 22px;
   line-height: 32px;
   font-weight: 500;
 }
 
-.navigation-bar .navigation-bar__section-name {
+.application-bar .application-bar__section-name {
   font-size: 22px;
   line-height: 32px;
   font-weight: 200;
 }
 
-.navigation-bar .navigation-bar__authenticated-user {
+.application-bar .application-bar__authenticated-user {
   grid-column: 2 / span 1;
 }
 
-.navigation-bar .navigation-bar__authenticated-user-name {
+.application-bar .application-bar__authenticated-user-name {
   font-size: 16px;
   line-height: 24px;
   font-weight: 200;
 }
 
-.navigation-bar .navigation-bar__authenticated-user-role {
+.application-bar .application-bar__authenticated-user-role {
   font-size: 16px;
   line-height: 24px;
   font-weight: 200;
 }
 
-.navigation-bar .navigation-bar__authenticate-button {
+.application-bar .application-bar__authenticate-button {
   grid-column: 3 / span 1;
+}
+
+.navigation-bar {
+	display: flex;
+	padding: 4px 16px;
+  background-color: var(--background-color--secondary-surface);
+  color: var(--foreground-color--secondary-surface);
+}
+
+.navigation-bar .section-links-list {
+	display: flex;
+	column-gap: 8px;
+}
+
+.navigation-bar .section-link-item {
+  display: flex;
 }
 
 main {
   flex: 1 0 auto;
   display: flex;
   flex-flow: column nowrap;
+  align-items: flex-start;
   position: relative;
   background-color: var(--background-color--background-surface);
   color: var(--foreground-color--background-surface);
@@ -252,7 +293,6 @@ tr.disabled {
 .object-property-label{
   font-weight: bold;
   display: inline-block;
-  width: 25%;
   vertical-align: top;
 }
 
@@ -274,7 +314,7 @@ tr.disabled {
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-end;
-  column-gap: 0.25rem;
+  row-gap: 0.25rem;
   position: fixed;
   bottom: 1rem;
   right: 1rem;

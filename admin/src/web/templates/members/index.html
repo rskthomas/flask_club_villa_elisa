@@ -1,27 +1,44 @@
 {% extends "layout.html" %}
-{% block title%} Miembros{% endblock %}
-{% block navbar%} {{super()}} {% endblock %}
-{% block content%} 
-<h1>Lista de Miembros</h1>
-<div class="filter-section">
-    <form url="{{ url_for('member.index') }}" method="GET">
-        <h2> Filtros </h2>
+
+{% block title_section_name %}Miembros{% endblock %}
+
+{% block header_section_name %}Lista de miembros{% endblock %}
+
+{% block head %}
+<style>
+    .filters-box {
+        flex: 0 0 auto;
+        display: flex;
+        column-gap: 32px;
+        margin-block-end: 32px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="filters-box">
+    <h3 class="filters-box__heading">Filtros</h3>
+    <form class="filters-box__form" url="{{ url_for('member.index') }}" method="GET">
         <div class="object-property-container">
             <label class="object-property-label"> Apellido:</label>
-            <input class="object-property-value" type="search" name="last_name" value="{{ filters.get('last_name', '') or '' }}"/>
+            <input class="object-property-value" type="search" name="last_name"
+                value="{{ filters.get('last_name', '') or '' }}" />
         </div>
         <div class="object-property-container">
             <label class="object-property-label"> Activo:</label>
-            <input type="radio" name="membership_state" value="any" {{ 'checked' if filters.get('membership_state') == None }} />
+            <input type="radio" name="membership_state" value="any" {{ 'checked' if
+                filters.get('membership_state')==None }} />
             <label> Todos </label>
-            <input type="radio" name="membership_state" value="true" {{ 'checked' if filters.get('membership_state') }}/>
+            <input type="radio" name="membership_state" value="true" {{ 'checked' if filters.get('membership_state')
+                }} />
             <label> Si </label>
-            <input type="radio" name="membership_state" value="false" {{ 'checked' if filters.get('membership_state') == False }}/>
+            <input type="radio" name="membership_state" value="false" {{ 'checked' if
+                filters.get('membership_state')==False }} />
             <label> No </label>
         </div>
-        <input type="submit"/>
+        <input type="submit" value="Filtrar" class="button button--primary"/>
     </form>
-</div>
+</section>
 <br></br>
 <div>
     <table class="index-table box">
@@ -49,7 +66,7 @@
                 <td>{{mem.last_name}}</td>
                 <td>{{mem.personal_id_type}}</td>
                 <td>{{mem.personal_id}}</td>
-                <td>{{mem.gender}}</td>    
+                <td>{{mem.gender}}</td>
                 <td>{{mem.address}}</td>
                 <td>{{'Si' if mem.membership_state else 'No'}}</td>
                 <td>{{mem.phone_number}}</td>
@@ -73,10 +90,10 @@
 <div class="paginator-container">
     {% for i in range(1, pages + 1) %}
     {% if i == current_page %}
-        <div class="paginator-number current-page">{{ i }}</div>
-        {% else %}
-            <a class="paginator-number", href="{{ url_for('member.index', page=i, **filters) }}">{{i}}</a>
-        {%endif%}
+    <div class="paginator-number current-page">{{ i }}</div>
+    {% else %}
+    <a class="paginator-number" , href="{{ url_for('member.index', page=i, **filters) }}">{{i}}</a>
+    {%endif%}
     {% endfor %}
 </div>
 

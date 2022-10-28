@@ -19,7 +19,7 @@ def show():
     )
 
 
-@system_config_blueprint.get("/editar")
+@system_config_blueprint.get("/actualizar")
 @login_required('system_config_update')
 def edit():
     return render_template(

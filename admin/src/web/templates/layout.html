@@ -20,29 +20,61 @@
   </head>
 
   <body>
-    <header class="navigation-bar">
-      <div class="navigation-bar__current-location">
-        <a class="button button--large navigation-bar__logo-button" href="{{ url_for('home') }}">
-          <h1 class="navigation-bar__website-name">Club Barrial</h1>
+    <header class="application-bar">
+      <div class="application-bar__current-location">
+        <a class="button button--large application-bar__logo-button" href="{{ url_for('home') }}">
+          <h1 class="application-bar__website-name">Club Barrial</h1>
         </a>
-        <h2 class="navigation-bar__section-name">{% block header_section_name %}{% endblock %}</h2>
+        <h2 class="application-bar__section-name">{% block header_section_name %}{% endblock %}</h2>
       </div>
 
       {% if header_info is not none %}
-      <div class="navigation-bar__authenticated-user">
-        <span class="navigation-bar__authenticated-user-name">
+      <div class="application-bar__authenticated-user">
+        <span class="application-bar__authenticated-user-name">
           {{ header_info.full_name }}
         </span>
         &nbsp;•&nbsp;
-        <span class="navigation-bar__authenticated-user-role">
+        <span class="application-bar__authenticated-user-role">
           {{ ", ".join(header_info.roles) }}
         </span>
       </div>
-      <a class="button navigation-bar__authenticate-button" href="{{ url_for('auth.logout') }}">Salir</a>
+      <a class="button application-bar__authenticate-button" href="{{ url_for('auth.logout') }}">Salir</a>
       {% else %}
-      <a class="button navigation-bar__authenticate-button" href="{{ url_for('auth.login') }}">Ingresar</a>
+      <a class="button application-bar__authenticate-button" href="{{ url_for('auth.login') }}">Ingresar</a>
       {% endif %}
     </header>
+    
+    {% if header_info is not none %}
+    <nav class="navigation-bar">
+      <ul class="section-links-list">
+        <li class="section-link-item">
+          <a href="{{ url_for('users.index') }}" class="section-link button">
+            Usuarios
+          </a>
+        </li>
+        <li class="section-link-item">
+          <a href="{{ url_for('member.index') }}" class="section-link button">
+            Miembros
+          </a>
+        </li>
+        <li class="section-link-item">
+          <a href="{{ url_for('payments.index') }}" class="section-link button">
+            Pagos
+          </a>
+        </li>
+        <li class="section-link-item">
+          <a href="{{ url_for('disciplines.index') }}" class="section-link button">
+            Disciplinas
+          </a>
+        </li>
+        <li class="section-link-item">
+          <a href="{{ url_for('system_config.show') }}" class="section-link button">
+            Configuración del sistema
+          </a>
+        </li>
+      </ul>
+    </nav>
+    {% endif %}
 
     <main>
       {% block content %}{% endblock %}

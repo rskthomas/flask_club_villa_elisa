@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
-{% block title %} Edición de usuario {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+
+{% block title_section_name %}Actualizar {{user.lastname}}, {{user.firstname}} - Usuarios{% endblock %}
+
+{% block header_section_name %}Actualizar ususario{% endblock %}
+
+{% block head %}
+{% endblock %}
+
 {% block content %}
-    <h1>Edición de usuario # {{id}}</h1>
+    <h3>Actualizar usuario {{user.lastname}}, {{user.firstname}}</h3>
     <section>
         <form action="/users/update" method="post">
             <input type="hidden" name="id" value="{{id}}">
@@ -40,8 +46,8 @@
                 </select>
             </div>
       
-            <input class="edit-link" type="submit" name="Editar" value="Guardar" />
-            <a class="edit-link" href="/users"><button type="button">Cancelar</button></a>
+            <input class="button button--primary" type="submit" name="Editar" value="Confirmar" />
+            <a class="button" href="/users">Cancelar</a>
 
         </form>
     </section>
