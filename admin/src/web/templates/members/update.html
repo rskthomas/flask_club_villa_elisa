@@ -9,6 +9,7 @@
 {% block content %}
 <section>
     <form action="/miembros/update" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="hidden" name="id" value="{{id}}">
 
         <div class="object-property-container">
