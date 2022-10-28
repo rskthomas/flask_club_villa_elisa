@@ -343,6 +343,13 @@ tr.disabled {
   line-height: 24px;
 }
 
+.flash-message-list .flash-message.closed {
+  animation-name: fade-out;
+	animation-duration: 500ms;
+	animation-direction: normal;
+	animation-fill-mode: forwards
+}
+
 .flash-message-list .flash-message.error {
   background-color: var(--background-color--danger-surface);
   color: var(--foreground-color--danger-surface);
@@ -446,3 +453,13 @@ i {
     border-top: 2px solid #eee;
     font-weight: bold;
   }
+  
+
+@keyframes fade-out {
+  from {
+    opacity: 100%;
+  }
+  to {
+    opacity: 0%;
+  }
+}

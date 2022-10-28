@@ -89,7 +89,16 @@
         {% for category, message in messages %}
         <li class="flash-message {{ category }}">
           {{ message }}
-          <button class="button" onclick="event.target.closest('.flash-message')?.remove()">
+          <button
+            class="button"
+            onclick="
+              const flashMessage = event.target.closest('.flash-message');
+              flashMessage?.classList.add('closed');
+              setTimeout(() => {
+                flashMessage?.remove()
+              }, 500);
+            "
+          >
             Entendido
           </button>
         </li>
