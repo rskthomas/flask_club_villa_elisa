@@ -101,6 +101,15 @@
           >
             Entendido
           </button>
+          <script async>
+            const flashMessage2 = document.currentScript.closest('.flash-message');
+            setTimeout(() => {
+              flashMessage2?.classList.add('closed');
+            }, 9500);
+            setTimeout(() => {
+              flashMessage2?.remove();
+            }, 10000);
+          </script>
         </li>
         {% endfor %}
       </ul>
