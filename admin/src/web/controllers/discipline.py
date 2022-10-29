@@ -24,13 +24,15 @@ discipline_blueprint = Blueprint(
 @login_required("discipline_index")
 def index():
     """Renders the discipline index page for the authenticated user."""
-    disciplines = Discipline.get_disciplines()
+    params = request.args
+    current_page = int(params.get("page", 1))
+    pagination_data = Discipline.paginated_disciplines(current_page)
 
-    return render_template(
-        "discipline/index.html",
-        header_info=get_header_info(),
-        disciplines=disciplines,
-    )
+    return render_template("discipline/index.html",
+                            disciplines=pagination_data['items'], 
+                            current_page=current_page,
+                            pages=pagination_data['pages'],
+                            header_info=get_header_info())
 
 
 @discipline_blueprint.get("/create")

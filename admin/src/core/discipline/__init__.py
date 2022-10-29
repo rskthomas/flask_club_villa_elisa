@@ -6,6 +6,7 @@ from src.core.member.member import Member
 from src.core.discipline.discipline import Discipline
 from src.core.database import db
 from src.core.member import find_member
+from src.core.utils import paginated
 
 
 class InactiveDiscipline(Exception):
@@ -31,6 +32,23 @@ def get_disciplines():
         list: list of Discipline records on DB
     """
     return Discipline.query.all()
+
+
+def paginated_disciplines(current_page=1):
+    """
+        Paginates Disciplines from the db and returns current page
+        received. Page size relies on system config
+
+    Args:
+        current_page (int, optional): pagination page to be returned.
+            Defaults to 1.
+
+    Returns:
+        dict: paginated results. Have 3 keys
+            items: Members of the current page
+            pages: # of pages based on the page size
+    """
+    return paginated(Discipline.query, current_page)    
 
 
 def create_discipline(**kwargs):
