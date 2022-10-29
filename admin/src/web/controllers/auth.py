@@ -47,6 +47,8 @@ def login():
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
+    """validates the user login data and informs if enter incorrect data, otherwise it informs that 
+    logged is correctly and redirects to the home view. """
     params = request.form
     user = auth.find_user_by_mail_and_pass(params["email"], params["password"])
 
@@ -61,6 +63,7 @@ def authenticate():
 
 @auth_blueprint.get("/logout")
 def logout():
+    """Logout the user authenticated with clean session and redirect to the login view."""
     del session["user"]
     session.clear()
     flash("Saliste del sistema.", "success")

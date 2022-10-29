@@ -16,6 +16,7 @@ filters = {}
 @member_blueprint.get("/")
 @login_required('member_index')
 def index():
+    """Renders the member index page for the authenticated user."""
     params = request.args
 
     if params.get("membership_state") == "true":
@@ -42,6 +43,7 @@ def index():
 @member_blueprint.get("/create")
 @login_required('member_create')
 def create_view():
+    """Renders the member create page for the authenticated user."""
     return render_template(
         "members/create.html",
         form=MemberForm(),
@@ -51,6 +53,7 @@ def create_view():
 @member_blueprint.post("/create")
 @login_required('member_create')
 def create_confirm():
+    """Confirm the creation member and redirect to member index page."""
     form = MemberForm(request.form)
     try:
         if form.validate():
@@ -84,6 +87,10 @@ def create_confirm():
 @member_blueprint.get("/<int:id>/update")
 @login_required('member_update')
 def update_view(id):
+    """Renders the member update page for the authenticated user.
+    Args:
+        id (int): id of the member
+    """
     item = member.find_member(id)
     if not item:
         print("item not found")
@@ -111,6 +118,7 @@ def update_view(id):
 @member_blueprint.post("/update")
 @login_required('member_update')
 def update_confirm():
+    """Confirm the update member and redirect to meber index page."""
     member_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
@@ -141,6 +149,10 @@ def update_confirm():
 @member_blueprint.get("/<int:id>/delete")
 @login_required('member_destroy')
 def delete(id):
+    """Delete the member with the id sent by parameter and redirect to member index page.
+    Args:
+        id (int): id of the member
+    """
     if not member.delete_member(id):
         return bad_request("Member not found")
 
@@ -151,6 +163,10 @@ def delete(id):
 @member_blueprint.get("/<int:id>")
 @login_required('member_show')
 def show(id):
+    """Renders the member show page for the authenticated user.
+    Args:
+        id (int): id of the member
+    """
     item = member.find_member(id)
     return render_template(
         "members/show.html",
@@ -161,6 +177,7 @@ def show(id):
 @member_blueprint.route("/download")
 @login_required('member_index')
 def route_download():
+    """Render a PDF view with all the members that fulfill the current filters selected in the index member grid."""
     params = request.args
 
     if params.get("membership_state") == "true":
