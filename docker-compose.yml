@@ -11,6 +11,12 @@ services:
       DB_HOST: db
     volumes:
     - ./admin:/var/www
+  fe:
+    build: ./portal
+    ports:
+      - 8080:5173
+    volumes:
+    - ./portal:/app
   db:
     image: postgres:14-alpine
     ports:
