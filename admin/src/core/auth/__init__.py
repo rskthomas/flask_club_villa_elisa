@@ -111,6 +111,9 @@ def update_user(id, args):
         For ex: "unique fields violation"
     """
     try:
+        print(args)
+        if args['password'] is None:
+            del args['password']
         db.session.execute(
             update(User).where(User.id == id).values(args).returning(User.id)
         )
