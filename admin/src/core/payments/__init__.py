@@ -3,6 +3,7 @@ from datetime import date
 from operator import inv
 from re import A, M
 from webbrowser import get
+from src.web.controllers.payments import invoices
 from src.core.payments.invoice import Invoice
 from src.core.payments.invoice import InvoiceExtraItem
 from src.core.payments.payment import Payment
@@ -54,12 +55,10 @@ def unpaid_invoices(user_id: int):
     Returns:
         list: list of Invoices that are not paid yet
     """
-
-    return (
-        Invoice.query.filter_by(
+    invoices =(Invoice.query.filter_by(
             paid=False).filter(
-            Invoice.member_id == user_id).all())
-
+            Invoice.member_id == user_id).order_by("year", "month").desc().all())
+    return invoices
 
 def get_invoice(invoice_id: int):
     """looks up for an invoice based on received id

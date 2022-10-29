@@ -47,9 +47,13 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(system_config_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(member_blueprint)
+    csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
+    
+    
     app.register_blueprint(payments_blueprint)
     app.register_blueprint(profile_blueprint)
+    
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)
