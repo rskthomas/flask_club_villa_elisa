@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash
 from flask import redirect, url_for, make_response
 from src.web.helpers.handlers import bad_request
 from src.web.controllers.auth import login_required
-from src.web.forms.users import UserForm
+from src.web.forms.users import UserForm, EditUserForm
 from src.core.auth import create_user, delete_user, update_user
 from src.core.auth import list_user, find_user, update_user, paginated_users
 from src.core.auth import list_roles, update_user_roles, IntegrytyException
@@ -32,7 +32,7 @@ def parse_from_params(form):
     update_args["lastname"] = form["lastname"]
     update_args["email"] = form["email"]
     update_args["username"] = form["username"]
-    update_args["password"] = form["password"]
+    update_args["password"] = form.get("password") or form.get("edit_password")
     update_args["active"] = form.get("active") == "y" or False
 
     return update_args
@@ -162,7 +162,7 @@ def edit(id):
         print("item not found")
         return bad_request("User not found")
 
-    form = UserForm(
+    form = EditUserForm(
         firstname=user.firstname,
         lastname=user.lastname,
         username=user.username,
@@ -187,7 +187,7 @@ def update():
     user_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
-    form = UserForm(request.form)
+    form = EditUserForm(request.form)
 
     try:
         if form.validate():
