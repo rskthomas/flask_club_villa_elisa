@@ -1,10 +1,12 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, make_response, jsonify
 from src.web.helpers.handlers import bad_request
 from src.core.discipline import get_disciplines
 
 
 club_api_blueprint = Blueprint("club_api", __name__, url_prefix="/club")
 
+email= "clubdeportivovillaelisa@gmail.com"
+phone= "0221 487-0193"
 
 def discipline_as_json(discipline):
     """Converts a discipline to json and returns it"""
@@ -20,6 +22,19 @@ def discipline_as_json(discipline):
 
 
 @club_api_blueprint.get("/disciplines")
-def index():
+def disciplines():
     disciplines = get_disciplines()
-    return {"disciplines": list(map(discipline_as_json, disciplines))}
+    response = make_response(jsonify({"disciplines": list(map(discipline_as_json, disciplines))}), 200)
+    response.headers['Content-Type'] = 'application/json'
+
+    return response
+
+@club_api_blueprint.get("/info")
+def info():
+    response = make_response(jsonify({"email": email, "phone": phone}), 200)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Schema'] = """asdasd"""
+
+
+    return response
+
