@@ -10,7 +10,7 @@ profile_blueprint = Blueprint("profile", __name__, url_prefix="/profile")
 @login_required()
 def index():
     """Renders the profile page for the authenticated user."""
-    
+
     user_id_from_session = session.get("user")
     user = find_user(user_id_from_session)
     print(user)

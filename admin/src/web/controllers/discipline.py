@@ -29,10 +29,10 @@ def index():
     pagination_data = Discipline.paginated_disciplines(current_page)
 
     return render_template("discipline/index.html",
-                            disciplines=pagination_data['items'], 
-                            current_page=current_page,
-                            pages=pagination_data['pages'],
-                            header_info=get_header_info())
+                           disciplines=pagination_data['items'],
+                           current_page=current_page,
+                           pages=pagination_data['pages'],
+                           header_info=get_header_info())
 
 
 @discipline_blueprint.get("/create")

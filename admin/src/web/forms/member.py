@@ -7,12 +7,12 @@ class MemberForm(Form):
 
     first_name = StringField(
         "Nombre", [
-            validators.Regexp('^[A-Za-z]+$', message="Firstname must contain only letters"),  
+            validators.Regexp('^[A-Za-z]+$', message="Firstname must contain only letters"),
             validators.Length(min=4, max=50), validators.DataRequired()]
     )
     last_name = StringField(
         "Apellido", [
-            validators.Regexp('^[A-Za-z]+$', message="Lastname must contain only letters"),  
+            validators.Regexp('^[A-Za-z]+$', message="Lastname must contain only letters"),
             validators.Length(min=4, max=50), validators.DataRequired()])
     personal_id_type = StringField(
         "Tipo Documento",
@@ -20,7 +20,7 @@ class MemberForm(Form):
     )
     personal_id = StringField(
         "Nro. Documento", [
-            validators.Regexp('^[0-9]+$', message="Document must contain only numbers"),  
+            validators.Regexp('^[0-9]+$', message="Document must contain only numbers"),
             validators.Length(min=1, max=25), validators.DataRequired()])
     gender = StringField(
         "Género", [validators.Length(min=1, max=25), validators.DataRequired()]
@@ -31,7 +31,7 @@ class MemberForm(Form):
                 min=1, max=255), validators.DataRequired()])
     phone_number = StringField(
         "Teléfono", [
-            validators.Regexp('^[0-9]+$', message="Phone number must contain only numbers"),  
+            validators.Regexp('^[0-9]+$', message="Phone number must contain only numbers"),
             validators.Length(min=1, max=25), validators.DataRequired()])
     email = EmailField(
         "Email",

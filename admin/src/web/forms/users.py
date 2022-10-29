@@ -56,6 +56,6 @@ class EditUserForm(Form):
     password = PasswordField(
         "Password", [
             validators.Length(
-                min=1, max=50),validators.Optional()])
+                min=1, max=50), validators.Optional()])
 
     active = BooleanField("Activo")

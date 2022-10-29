@@ -8,6 +8,7 @@ app = create_app(static_folder)
 app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
 csrf = CSRFProtect(app)
 
+
 def main():
     app.run()
 

@@ -48,7 +48,7 @@ def paginated_disciplines(current_page=1):
             items: Members of the current page
             pages: # of pages based on the page size
     """
-    return paginated(Discipline.query, current_page)    
+    return paginated(Discipline.query, current_page)
 
 
 def create_discipline(**kwargs):
