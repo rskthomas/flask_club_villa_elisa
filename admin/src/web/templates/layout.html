@@ -1,3 +1,4 @@
+{% from "_render_errors.html" import render_errors %}
 <!DOCTYPE html>
 <html lang="es-AR">
 
@@ -20,6 +21,8 @@
   </head>
 
   <body>
+      
+
     <header class="application-bar">
       <div class="application-bar__current-location">
         <a class="button button--large application-bar__logo-button" href="{{ url_for('home') }}">
@@ -83,6 +86,7 @@
 
     <footer>{% block footer %}{% endblock %}</footer>
 
+
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
       <ul class="flash-message-list">
@@ -101,11 +105,25 @@
           >
             Entendido
           </button>
+          <script async>
+            const flashMessage2 = document.currentScript.closest('.flash-message');
+            setTimeout(() => {
+              flashMessage2?.classList.add('closed');
+            }, 9500);
+            setTimeout(() => {
+              flashMessage2?.remove();
+            }, 10000);
+          </script>
         </li>
         {% endfor %}
       </ul>
       {% endif %}
     {% endwith %}
+
+    {% if form %}
+    {{render_errors(form)}}
+    {% endif %}
+    
   </body>
 
 </html>

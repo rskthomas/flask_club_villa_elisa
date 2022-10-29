@@ -23,18 +23,22 @@ discipline_blueprint = Blueprint(
 @discipline_blueprint.get("/")
 @login_required("discipline_index")
 def index():
-    disciplines = Discipline.get_disciplines()
+    """Renders the discipline index page for the authenticated user."""
+    params = request.args
+    current_page = int(params.get("page", 1))
+    pagination_data = Discipline.paginated_disciplines(current_page)
 
-    return render_template(
-        "discipline/index.html",
-        header_info=get_header_info(),
-        disciplines=disciplines,
-    )
+    return render_template("discipline/index.html",
+                           disciplines=pagination_data['items'],
+                           current_page=current_page,
+                           pages=pagination_data['pages'],
+                           header_info=get_header_info())
 
 
 @discipline_blueprint.get("/create")
 @login_required("discipline_create")
 def create():
+    """Renders the discipline create page for the authenticated user."""
     return render_template(
         "discipline/create.html",
         form=DisciplineForm(),
@@ -44,6 +48,7 @@ def create():
 @discipline_blueprint.post("/create")
 @login_required("discipline_create")
 def create_post():
+    """Confirm the creation discipline and redirect to discipline index page."""
     form = DisciplineForm(request.form)
     if form.validate():
         print("form validated")
@@ -66,6 +71,10 @@ def create_post():
 @discipline_blueprint.get("/<int:id>/update")
 @login_required("discipline_update")
 def update(id):
+    """Renders the discipline update page for the authenticated user.
+    Args:
+        id (int): id of the discipline
+    """
     discipline = load_discipline(id)
 
     form = DisciplineForm(
@@ -88,6 +97,7 @@ def update(id):
 @discipline_blueprint.post("/update")
 @login_required("discipline_update")
 def update_discipline():
+    """Confirm the update discipline and redirect to discipline index page."""
     discipline_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningun formulario")
@@ -109,6 +119,10 @@ def update_discipline():
 @discipline_blueprint.get("/<int:id>/delete")
 @login_required("discipline_destroy")
 def delete(id):
+    """Delete the discipline with the id sent by parameter and redirect to discipline index page.
+    Args:
+        id (int): id of the discipline
+    """
     if not delete_discipline(id):
         return bad_request("Discipline not found")
 
@@ -118,12 +132,17 @@ def delete(id):
 
 @discipline_blueprint.get("/<int:id>/delete")
 def delete_error(id):
+    """Render Bad Request message"""
     return bad_request("No se ha enviado ningun formulario")
 
 
 @discipline_blueprint.get("/<int:id>")
 @login_required("discipline_show")
 def show(id):
+    """Renders the discipline show page for the authenticated user.
+    Args:
+        id (int): id of the discipline
+    """
     discipline = load_discipline(id)
     return render_template(
         "discipline/show.html",
@@ -134,6 +153,10 @@ def show(id):
 @discipline_blueprint.get("<int:id>/enrollment")
 @login_required('discipline_update')
 def enrollment_form(id):
+    """Renders enrollments view, with all enrollments of the discipline id sent by parameter, for the authenticated user.
+    Args:
+        id (int): id of the discipline
+    """
     discipline = load_discipline(id)
     return render_template(
         "discipline/enrollment.html",
@@ -144,6 +167,10 @@ def enrollment_form(id):
 @discipline_blueprint.post("<int:id>/enrollment")
 @login_required('discipline_update')
 def create_enrollment(id):
+    """Creates a member's enrollment to the discipline specified by parameter, and redirect to enrollment view.
+    Args:
+        id (int): id of the discipline
+    """
     try:
         enroll_member(id, request.form.get("chosen_member_id"))
         flash("El alta se realizó con éxito.", "success")
@@ -172,6 +199,10 @@ def create_enrollment(id):
 @discipline_blueprint.get("<int:id>/members")
 @login_required('members_show')
 def discipline_members(id):
+    """Return all members from de discipline id specified by parameter.
+    Args:
+        id (int): id of the discipline
+    """
     discipline = load_discipline(id)
     return discipline.members
 
@@ -179,6 +210,11 @@ def discipline_members(id):
 @discipline_blueprint.get("<int:id>/members/<int:member_id>/cancel")
 @login_required('discipline_update')
 def destroy_enrollment(id, member_id):
+    """Remove a member enrollment to the discipline and member specified by parameter, and redirect to discipline view.
+    Args:
+        id (int): id of the discipline
+        member_id (int): id of the member
+    """
     try:
         cancel_enrollment(id, member_id)
         flash("La inscripcion del socio ha sido realizada con éxtio", "success")
@@ -211,6 +247,7 @@ def load_discipline(id):
 @discipline_blueprint.route("/download")
 @login_required('discipline_show')
 def download():
+    """Renders a pdf view of all disciplines"""
     disciplines = Discipline.get_disciplines()
 
     # Get the HTML output

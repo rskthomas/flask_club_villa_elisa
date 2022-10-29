@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash
 from flask import redirect, url_for, make_response
 from src.web.helpers.handlers import bad_request
 from src.web.controllers.auth import login_required
-from src.web.forms.users import UserForm
+from src.web.forms.users import UserForm, EditUserForm
 from src.core.auth import create_user, delete_user, update_user
 from src.core.auth import list_user, find_user, update_user, paginated_users
 from src.core.auth import list_roles, update_user_roles, IntegrytyException
@@ -32,7 +32,7 @@ def parse_from_params(form):
     update_args["lastname"] = form["lastname"]
     update_args["email"] = form["email"]
     update_args["username"] = form["username"]
-    update_args["password"] = form["password"]
+    update_args["password"] = form.get("password") or form.get("edit_password")
     update_args["active"] = form.get("active") == "y" or False
 
     return update_args
@@ -78,10 +78,10 @@ def csv_ready_user(user):
     }
 
 
-
 @users_blueprint.get("/")
 @login_required('users_index')
 def index():
+    """Renders the user index page for the authenticated user."""
     filters = parse_filters(request)
     pagination_data = paginated_users(filters, current_page(request))
 
@@ -98,6 +98,7 @@ def index():
 @users_blueprint.get("/csv_export")
 @login_required('users_index')
 def csv_export():
+    """Download a CSV file with all users that fulfill the current filters selected in the index member grid."""
     users_list = list(map(lambda user: csv_ready_user(user),
                           list_user(parse_filters(request))))
 
@@ -120,6 +121,7 @@ def csv_export():
 @users_blueprint.get("/nuevo")
 @login_required('users_create')
 def new():
+    """Renders the user create page for the authenticated user."""
     return render_template(
         "users/new.html",
         form=UserForm(),
@@ -128,10 +130,10 @@ def new():
     )
 
 
-
 @users_blueprint.post("/crear")
 @login_required('users_create')
 def create():
+    """Confirm the creation of user and redirect to users index page."""
     try:
         form = UserForm(request.form)
         if form.validate():
@@ -150,12 +152,16 @@ def create():
 @users_blueprint.get("/<int:id>/editar")
 @login_required('users_create')
 def edit(id):
+    """Renders the user edit page for the authenticated user.
+    Args:
+        id (int): id of the user
+    """
     user = find_user(id)
     if not user:
         print("item not found")
         return bad_request("User not found")
 
-    form = UserForm(
+    form = EditUserForm(
         firstname=user.firstname,
         lastname=user.lastname,
         username=user.username,
@@ -176,10 +182,11 @@ def edit(id):
 @users_blueprint.post("/update")
 @login_required('users_update')
 def update():
+    """Confirm the update of the user and redirect to users index page."""
     user_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
-    form = UserForm(request.form)
+    form = EditUserForm(request.form)
 
     try:
         if form.validate():
@@ -199,6 +206,10 @@ def update():
 @users_blueprint.get("/<int:user_id>/destroy")
 @login_required('users_destroy')
 def destroy(user_id):
+    """Delete the user with the id sent by parameter and redirect to users index page.
+    Args:
+        id (int): id of the user
+    """
     delete_user(user_id)
     flash("El usuario se eliminó correctamente", "success")
     return redirect(url_for("users.index"))

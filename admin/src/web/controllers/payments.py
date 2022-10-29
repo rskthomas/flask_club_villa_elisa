@@ -18,6 +18,7 @@ payments_blueprint = Blueprint("payments", __name__, url_prefix="/payments")
 @payments_blueprint.get("/")
 @login_required('payment_index')
 def index():
+    """Renders the payment search page for the authenticated user."""
     return render_template(
         "payments/user_search.html",
         form=UserSearchForm(),
@@ -28,6 +29,7 @@ def index():
 @payments_blueprint.post("/search")
 @login_required('payment_index')
 def search():
+    """Perform the search of member/s specified and return all data to payments index."""
     form = UserSearchForm(request.form)
     if not form.validate():
         flash("Hubo un error con el formulario", "error")
@@ -52,6 +54,7 @@ def search():
 @payments_blueprint.get("/search/results/<string:id>")
 @login_required('payment_index')
 def results(id):
+    """Return data of all members that fulfill with the lastname specified."""
     last_name = id
     members = Member.find_member_by_lastname(last_name)
     return render_template(
@@ -65,6 +68,10 @@ def results(id):
 @payments_blueprint.get("/member/<int:id>/invoices")
 @login_required('payment_show')
 def invoices(id):
+    """Renders the invoices of the member id specified and redirect to the payments list view.
+    Args:
+        id (int): id of the member
+    """
     member = Member.find_member(id)
 
     last_invoice = Payments.last_invoice(id)
@@ -87,6 +94,10 @@ def invoices(id):
 @payments_blueprint.get("/invoice/<int:invoice_id>")
 @login_required('payment_show')
 def show_invoice(invoice_id):
+    """Renders the invoice specified and redirect to the payment view.
+    Args:
+        invoice_id (int): id of invoice
+    """
     invoice = Payments.get_invoice(invoice_id)
     return render_template(
         "payments/show.html", invoice=invoice, header_info=get_header_info()
@@ -96,6 +107,10 @@ def show_invoice(invoice_id):
 @payments_blueprint.post("/invoice/<int:invoice_id>/pay")
 @login_required('payment_update')
 def pay_invoice(invoice_id):
+    """Make the payment of the invoice specified by parameter
+    Args:
+        invoice_id (int): id of invoice
+    """
     payment = Payments.pay_invoice(invoice_id)
     flash("El pago se ha realizado con éxito", "success")
 
@@ -105,6 +120,10 @@ def pay_invoice(invoice_id):
 @payments_blueprint.route("/download/<int:invoice_id>")
 @login_required('payment_show')
 def download(invoice_id):
+    """Render a PDF view of the invoice specified by parameter.
+    Args:
+        invoice_id (int): id of invoice
+    """
     invoice = Payments.get_invoice(invoice_id)
 
     # Get the HTML output

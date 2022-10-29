@@ -1,0 +1,27 @@
+{% macro render_errors(form) %}
+
+
+      {% if form.errors %}
+      <ul class="flash-message-list">
+        {% for field in form.errors %}
+        {% for error in form.errors[field] %}
+        <li class="flash-message error">
+          {{ error }}
+          <button
+            class="button"
+            onclick="
+              const flashMessage = event.target.closest('.flash-message');
+              flashMessage?.classList.add('closed');
+              setTimeout(() => {
+                flashMessage?.remove()
+              }, 500);
+            "
+          >
+            Entendido
+          </button>
+        </li>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+{% endmacro %}

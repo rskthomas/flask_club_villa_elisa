@@ -12,6 +12,7 @@ system_config_blueprint = Blueprint(
 @system_config_blueprint.get("/")
 @login_required("system_config_show")
 def show():
+    """Renders the system config index page for the authenticated user."""
     return render_template(
         "system_config/show.html",
         system_config=get_system_config(),
@@ -22,6 +23,7 @@ def show():
 @system_config_blueprint.get("/actualizar")
 @login_required('system_config_update')
 def edit():
+    """Renders the system config edit page for the authenticated user."""
     return render_template(
         "system_config/edit.html",
         system_config=get_system_config(),
@@ -32,6 +34,7 @@ def edit():
 @system_config_blueprint.post("/update")
 @login_required('system_config_update')
 def update():
+    """Confirm the update system config and redirect to show function."""
     params = request.form
     update_args = {}
     update_args["items_qty_for_grids"] = params.get("items_qty_for_grids")
