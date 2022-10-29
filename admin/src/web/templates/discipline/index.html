@@ -36,6 +36,16 @@
   {% endfor %}
 </table>
 
+<div class="paginator-container">
+  {% for i in range(1, pages + 1) %}
+  {% if i == current_page %}
+  <div class="paginator-number current-page">{{ i }}</div>
+  {% else %}
+  <a class="paginator-number" , href="{{ url_for('disciplines.index', page=i) }}">{{i}}</a>
+  {%endif%}
+  {% endfor %}
+</div>
+
 <nav style="display: flex; column-gap: 16px; align-self: flex-end; padding: 16px;">
   <a href="{{url_for('disciplines.create')}}" class="button button--primary">
     Crear disciplina
