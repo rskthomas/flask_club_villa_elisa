@@ -118,7 +118,7 @@ def update_view(id):
 @member_blueprint.post("/update")
 @login_required('member_update')
 def update_confirm():
-    """Confirm the update member and redirect to meber index page."""
+    """Confirm the update member and redirect to member index page."""
     member_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
