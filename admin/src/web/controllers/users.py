@@ -82,6 +82,7 @@ def csv_ready_user(user):
 @users_blueprint.get("/")
 @login_required('users_index')
 def index():
+    """Renders the user index page for the authenticated user."""
     filters = parse_filters(request)
     pagination_data = paginated_users(filters, current_page(request))
 
@@ -98,6 +99,7 @@ def index():
 @users_blueprint.get("/csv_export")
 @login_required('users_index')
 def csv_export():
+    """Download a CSV file with all users that fulfill the current filters selected in the index member grid."""
     users_list = list(map(lambda user: csv_ready_user(user),
                           list_user(parse_filters(request))))
 
@@ -120,6 +122,7 @@ def csv_export():
 @users_blueprint.get("/nuevo")
 @login_required('users_create')
 def new():
+    """Renders the user create page for the authenticated user."""
     return render_template(
         "users/new.html",
         form=UserForm(),
@@ -128,10 +131,10 @@ def new():
     )
 
 
-
 @users_blueprint.post("/crear")
 @login_required('users_create')
 def create():
+    """Confirm the creation of user and redirect to users index page."""
     try:
         form = UserForm(request.form)
         if form.validate():
@@ -150,6 +153,10 @@ def create():
 @users_blueprint.get("/<int:id>/editar")
 @login_required('users_create')
 def edit(id):
+    """Renders the user edit page for the authenticated user.
+    Args:
+        id (int): id of the user
+    """
     user = find_user(id)
     if not user:
         print("item not found")
@@ -176,6 +183,7 @@ def edit(id):
 @users_blueprint.post("/update")
 @login_required('users_update')
 def update():
+    """Confirm the update of the user and redirect to users index page."""
     user_id = request.form["id"]
     if not request.form:
         return bad_request("No se ha enviado ningún formulario")
@@ -199,6 +207,10 @@ def update():
 @users_blueprint.get("/<int:user_id>/destroy")
 @login_required('users_destroy')
 def destroy(user_id):
+    """Delete the user with the id sent by parameter and redirect to users index page.
+    Args:
+        id (int): id of the user
+    """
     delete_user(user_id)
     flash("El usuario se eliminó correctamente", "success")
     return redirect(url_for("users.index"))
