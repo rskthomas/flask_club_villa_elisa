@@ -25,7 +25,9 @@ def login_required(argument=None):
                 flash("Primero ingresá para visitar esa página.", "error")
                 return redirect(url_for("auth.login"))
             if argument and not can_perform(session.get("user"), argument):
-                flash("No tenés permisos suficientes para realizar esa acción.", "error")
+                flash(
+                    "No tenés permisos suficientes para realizar esa acción.",
+                    "error")
                 return redirect(url_for("home"))
             return function(*args, **kwargs)
 
@@ -39,7 +41,9 @@ def login():
     """If the user is unauthenticated, renders the authentication page. Otherwise redirects to the home page."""
 
     if session.get("user") is None:
-        return render_template("auth/login.html", header_info=get_header_info())
+        return render_template(
+            "auth/login.html",
+            header_info=get_header_info())
     else:
         flash("Ya ingresaste al sistema.", "success")
         return redirect(url_for("home"))
@@ -47,7 +51,7 @@ def login():
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
-    """validates the user login data and informs if enter incorrect data, otherwise it informs that 
+    """validates the user login data and informs if enter incorrect data, otherwise it informs that
     logged is correctly and redirects to the home view. """
     params = request.form
     user = auth.find_user_by_mail_and_pass(params["email"], params["password"])

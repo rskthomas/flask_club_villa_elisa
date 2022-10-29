@@ -120,7 +120,7 @@ def pay_invoice(invoice_id):
 @payments_blueprint.route("/download/<int:invoice_id>")
 @login_required('payment_show')
 def download(invoice_id):
-    """Render a PDF view of the invoice specified by parameter. 
+    """Render a PDF view of the invoice specified by parameter.
     Args:
         invoice_id (int): id of invoice
     """

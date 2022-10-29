@@ -78,7 +78,6 @@ def csv_ready_user(user):
     }
 
 
-
 @users_blueprint.get("/")
 @login_required('users_index')
 def index():
