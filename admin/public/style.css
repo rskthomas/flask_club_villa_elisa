@@ -464,3 +464,108 @@ i {
     opacity: 0%;
   }
 }
+
+.license-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.square {
+    position: relative;
+    width: 80vmin;
+    border: solid black 5px;
+    box-sizing: border-box;
+}
+
+.square:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.license-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.license-html, .license-body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+.license-header-container {
+    display: block;
+    height: 20%;
+    border-bottom: 4px solid #000000;
+}
+.license-header {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100%;
+}
+
+.license-left-col{
+    width: 50%;
+    height: 100%;
+}
+.license-body-container {
+    display: flex;
+}
+.license-right-col{
+    width: 50%;
+    height: 100%;
+}
+.license-avatar-container{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.license-avatar-img {
+    border-radius: 50%;
+}
+
+.license-user-state-container {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.license-user-state-container:after{
+    content: "";
+    display: block;
+    padding-bottom: 96%;
+}
+
+.license-full-name-container {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.license-full-name-container:after {
+    content: "";
+    display: block;
+    padding-bottom: 40%;
+}
+
+.license-personal-data:after {
+    content: "";
+    display: block;
+    padding-bottom: 40%;
+}
+
+.personal-data-item {
+    display: block;
+    margin-bottom: 2%;
+}

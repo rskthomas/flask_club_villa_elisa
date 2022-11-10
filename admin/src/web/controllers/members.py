@@ -220,3 +220,47 @@ def route_download():
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
     return response
+
+
+@member_blueprint.get("/<int:id>/license")
+@login_required('member_show')
+def show_license(id):
+    """Render a PDF view with all the members that fulfill the current filters selected in the index member grid."""
+    params = request.args
+
+    if params.get("membership_state") == "true":
+        filters["membership_state"] = True
+    if params.get("membership_state") == "false":
+        filters["membership_state"] = False
+
+    filters["last_name"] = params.get("last_name")
+
+    current_page = int(params.get("page", 1))
+
+    pagination_data = member.paginated_members(filters, current_page)
+
+    # Get the HTML output
+    return render_template(
+        "members/license.html",
+        members=member.find_member(id)
+    )
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        "page-size": "A4",
+        "margin-top": "1.0cm",
+        "margin-right": "1.0cm",
+        "margin-bottom": "1.0cm",
+        "margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+
+    # Build PDF from HTML
+    pdf = pdfkit.from_string(out, options=options)
+
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return response
