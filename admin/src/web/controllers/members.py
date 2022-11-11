@@ -242,7 +242,7 @@ def show_license(id):
     # Get the HTML output
     return render_template(
         "members/license.html",
-        members=member.find_member(id)
+        member=member.find_member(id)
     )
 
     # PDF options
