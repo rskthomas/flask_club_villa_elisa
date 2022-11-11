@@ -1,6 +1,6 @@
 import pdfkit
 from flask import Blueprint
-from flask import render_template
+from flask import render_template, current_app
 from flask import request, flash, redirect, url_for, make_response
 from src.web.helpers.handlers import bad_request
 from src.core.member import IntegrytyException
