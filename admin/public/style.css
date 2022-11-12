@@ -475,7 +475,7 @@ i {
 
 .square {
     position: relative;
-    width: 80vmin;
+    width: 60vmin;
     border: solid black 5px;
     box-sizing: border-box;
 }
