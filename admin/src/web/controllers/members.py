@@ -1,8 +1,9 @@
 import pdfkit
 import os.path
 import re
+from pathlib import Path
 from flask import Blueprint
-from flask import render_template, current_app
+from flask import render_template, current_app,send_from_directory
 from flask import request, flash, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
 from src.web.helpers.handlers import bad_request
@@ -152,6 +153,7 @@ def update_confirm():
                 membership_state=form.membership_state.data,
                 phone_number=form.phone_number.data,
                 email=form.email.data,
+                profile_photo_name=filename
             )
             flash("Miembro actualizado correctamente", "success")
             return redirect(url_for("member.index"))
@@ -247,23 +249,18 @@ def route_download():
 @login_required('member_show')
 def show_license(id):
     """Render a PDF view with all the members that fulfill the current filters selected in the index member grid."""
-    params = request.args
 
-    if params.get("membership_state") == "true":
-        filters["membership_state"] = True
-    if params.get("membership_state") == "false":
-        filters["membership_state"] = False
-
-    filters["last_name"] = params.get("last_name")
-
-    current_page = int(params.get("page", 1))
-
-    pagination_data = member.paginated_members(filters, current_page)
+    license_member = member.find_member(id)
+    if license_member.profile_photo_name:
+        profile_photo = license_member.profile_photo_name
+    else:
+        profile_photo = 'default-profile-photo.jpg'
 
     # Get the HTML output
     return render_template(
         "members/license.html",
-        member=member.find_member(id)
+        member=license_member,
+        profile_photo=profile_photo
     )
 
     # PDF options
@@ -285,3 +282,9 @@ def show_license(id):
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
     return response
+
+
+@member_blueprint.get('/cdn/<path:filename>')
+@login_required('member_show')
+def profile_photo(filename):
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)

@@ -14,7 +14,7 @@
                     <div class="license-body-container">
                         <div class="license-left-col">
                             <div class="license-avatar-container">
-                                <img class="license-avatar-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYLh73hbBd61hLDbmwtzypjX7sauNSwXmfBA&usqp=CAU"/>
+                                <img class="license-avatar-img" src={{ url_for('member.profile_photo', filename=profile_photo) }} />
                             </div>
                             <div class="license-user-state-container">
                                 <h1> Estado: {{member.readable_membership_state()}} </h1>

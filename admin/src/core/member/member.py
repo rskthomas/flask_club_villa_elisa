@@ -28,6 +28,7 @@ class Member(db.Model):
         secondary='member_discipline',
         passive_deletes=True,
         back_populates="members")
+    profile_photo_name = db.Column(db.String(50), unique=True)
 
     def fullname(self):
         return self.first_name + " " + self.last_name
