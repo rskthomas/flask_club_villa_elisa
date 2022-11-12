@@ -1,7 +1,10 @@
 import pdfkit
+import os.path
+import re
 from flask import Blueprint
 from flask import render_template, current_app
 from flask import request, flash, redirect, url_for, make_response
+from werkzeug.utils import secure_filename
 from src.web.helpers.handlers import bad_request
 from src.core.member import IntegrytyException
 from src.web.controllers.auth import login_required
@@ -125,7 +128,19 @@ def update_confirm():
     form = MemberForm(request.form)
 
     try:
+        current_app.logger.info('Validando formulario')
         if form.validate():
+            current_app.logger.info('Formulario válido')
+            if 'profile_photo' in request.files and request.files['profile_photo']:
+                current_app.logger.info('se recibe foto de perfil')
+                file = request.files['profile_photo']
+                file_extension_regex_match = re.search(
+                    '.*(\.jpg|\.png|\.jpeg)$',
+                     file.filename)
+                if file_extension_regex_match is None:
+                    raise Exception('formato de archivo inválido')
+                filename = secure_filename(f"profile-photo-{member_id}{file_extension_regex_match.group(1)}")
+                file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             member.update_member(
                 id=member_id,
                 first_name=form.first_name.data,
@@ -140,8 +155,14 @@ def update_confirm():
             )
             flash("Miembro actualizado correctamente", "success")
             return redirect(url_for("member.index"))
+        else:
+            flash(form.errors, "error")
     except IntegrytyException:
         flash("Ya existe el email ingresado", "error")
+        return redirect(url_for("member.update_view", id=member_id))
+    except Exception as err:
+        flash(f"Algo salió mal: {err}","error")
+        current_app.logger.info(err)
         return redirect(url_for("member.update_view", id=member_id))
     return redirect(url_for("member.update_view", id=member_id))
 
