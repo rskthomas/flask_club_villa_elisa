@@ -1,6 +1,8 @@
-from os import environ
+from os import environ, path
 from flask import Flask
 from flask import render_template
+from flask_wtf.csrf import CSRFProtect
+from werkzeug.utils import secure_filename
 
 from src.web.config import config
 from src.core import database
@@ -19,9 +21,11 @@ from src.web.controllers.members import member_blueprint
 from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 from src.web.controllers.profile import profile_blueprint
+from src.web.controllers.cdn import cdn_blueprint
 
-from flask_wtf.csrf import CSRFProtect
 
+UPLOAD_FOLDER = './private'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
@@ -29,6 +33,8 @@ def create_app(static_folder="static", env="development"):
 
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
+    app.config['UPLOAD_FOLDER'] = path.abspath(UPLOAD_FOLDER)
+    app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
     csrf = CSRFProtect(app)
@@ -49,11 +55,10 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(member_blueprint)
     csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
-    
-    
+    app.register_blueprint(cdn_blueprint)
+
     app.register_blueprint(payments_blueprint)
     app.register_blueprint(profile_blueprint)
-    
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)

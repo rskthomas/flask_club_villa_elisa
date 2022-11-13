@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="license-html" lang="es-AR">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    </head>
+    <body class="license-body">
+        <div class="license-container">
+            <div class="license-content">
+                <div class="license-header-container">
+                    <h1 class="license-header"> Club Deportivo Villa Elisa</h1>
+                </div>
+                <div class="license-body-container">
+                    <div class="license-left-col">
+                        <div class="license-avatar-container">
+                            <img class="license-avatar-img" src={{ url_for('cdn.file', filename=profile_photo) }} />
+                        </div>
+                        <div class="license-user-state-container">
+                            <h1> Estado: {{member.readable_membership_state()}} </h1>
+                        </div>
+                    </div>
+                    <div class="license-right-col">
+                        <div class="license-full-name-container">
+                            <h3> {{ member.fullname() }} </h3>
+                        </div>
+                        <div class="license-personal-data">
+                            <h3 class="personal-data-item">{{ member.readable_personal_id() }}</h3>
+                            <h3 class="personal-data-item">Socio #{{ member.id }} </h3>
+                            <h3 class="personal-data-item">Fecha Alta: {{member.activation_date.strftime("%d/%M/%Y")}}</h3>
+                        </div>
+                        <div class="license-qr-code-container">
+                            <img class="license-qr-code" src={{ url_for('cdn.qr_code', member_id=member.id) }} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

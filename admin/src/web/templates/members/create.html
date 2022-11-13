@@ -54,6 +54,10 @@
         <label class="object-property-label"> {{ form.email.label }}: </label>
         {{ form.email(class="css_class") }}
     </div>
+    <div class="object-property-container">
+        <label class="object-property-label"> {{ form.profile_photo.label }}: </label>
+        {{ form.profile_photo(class="css_class") }}
+    </div>
 
     <input class="button button--primary" type="submit" name="Guardar" value="Confirmar" />
     <a class="button" href="{{url_for('member.index')}}">Cancelar</a>

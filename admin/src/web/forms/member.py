@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, IntegerField, validators
+from wtforms import Form, BooleanField, StringField, IntegerField, validators, FileField
 from wtforms.fields import EmailField
 
 
@@ -41,5 +41,5 @@ class MemberForm(Form):
             validators.Email(),
         ],
     )
-
     membership_state = BooleanField("Activo")
+    profile_photo = FileField("Foto de Perfil")

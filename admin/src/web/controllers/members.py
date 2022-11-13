@@ -1,7 +1,11 @@
 import pdfkit
+import os.path
+import re
+from pathlib import Path
 from flask import Blueprint
-from flask import render_template
+from flask import render_template, current_app,send_from_directory
 from flask import request, flash, redirect, url_for, make_response
+from werkzeug.utils import secure_filename
 from src.web.helpers.handlers import bad_request
 from src.core.member import IntegrytyException
 from src.web.controllers.auth import login_required
@@ -125,7 +129,19 @@ def update_confirm():
     form = MemberForm(request.form)
 
     try:
+        current_app.logger.info('Validando formulario')
         if form.validate():
+            current_app.logger.info('Formulario válido')
+            if 'profile_photo' in request.files and request.files['profile_photo']:
+                current_app.logger.info('se recibe foto de perfil')
+                file = request.files['profile_photo']
+                file_extension_regex_match = re.search(
+                    '.*(\.jpg|\.png|\.jpeg)$',
+                     file.filename)
+                if file_extension_regex_match is None:
+                    raise Exception('formato de archivo inválido')
+                filename = secure_filename(f"profile-photo-{member_id}{file_extension_regex_match.group(1)}")
+                file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             member.update_member(
                 id=member_id,
                 first_name=form.first_name.data,
@@ -137,11 +153,18 @@ def update_confirm():
                 membership_state=form.membership_state.data,
                 phone_number=form.phone_number.data,
                 email=form.email.data,
+                profile_photo_name=filename
             )
             flash("Miembro actualizado correctamente", "success")
             return redirect(url_for("member.index"))
+        else:
+            flash(form.errors, "error")
     except IntegrytyException:
         flash("Ya existe el email ingresado", "error")
+        return redirect(url_for("member.update_view", id=member_id))
+    except Exception as err:
+        flash(f"Algo salió mal: {err}","error")
+        current_app.logger.info(err)
         return redirect(url_for("member.update_view", id=member_id))
     return redirect(url_for("member.update_view", id=member_id))
 
@@ -214,6 +237,45 @@ def route_download():
 
     # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options)
+
+    # Download the PDF
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "filename=output.pdf"
+    return response
+
+
+@member_blueprint.get("/<int:id>/carnet")
+@login_required('member_show')
+def show_license(id):
+    """Shows users' license based on the receiver id"""
+
+    license_member = member.find_member(id)
+    if license_member.profile_photo_name:
+        profile_photo = license_member.profile_photo_name
+    else:
+        profile_photo = 'default-profile-photo.jpg'
+
+    # Get the HTML output
+    return render_template(
+        "members/license.html",
+        member=license_member,
+        profile_photo=profile_photo
+    )
+
+    # PDF options
+    options = {
+        "orientation": "landscape",
+        #"page-size": "A4",
+        #"margin-top": "1.0cm",
+        #"margin-right": "1.0cm",
+        #"margin-bottom": "1.0cm",
+        #"margin-left": "1.0cm",
+        "encoding": "UTF-8",
+    }
+
+    # Build PDF from HTML
+    pdf = pdfkit.from_string(out, options=options, css = './public/style.css')
 
     # Download the PDF
     response = make_response(pdf)

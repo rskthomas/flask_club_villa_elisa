@@ -454,7 +454,7 @@ i {
     border-top: 2px solid #eee;
     font-weight: bold;
   }
-  
+
 
 @keyframes fade-out {
   from {
@@ -463,4 +463,109 @@ i {
   to {
     opacity: 0%;
   }
+}
+
+.license-body{
+    margin-top: 50%;
+    margin-left: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+.license-container {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid black 5px;
+}
+
+.license-content {
+    width: 500px;
+    height: 500px;
+}
+.license-html, .license-body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+.license-header-container {
+    display: block;
+    height: 20%;
+    border-bottom: 4px solid #000000;
+}
+.license-header {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100%;
+}
+
+.license-left-col{
+    width: 50%;
+    height: 100%;
+}
+.license-body-container {
+    display: flex;
+}
+.license-right-col{
+    width: 50%;
+    height: 100%;
+}
+.license-avatar-container{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:10%
+}
+
+.license-avatar-img {
+    border-radius: 50%;
+    width: 80%;
+    height: 100%;
+}
+
+.license-personal-data{
+    margin-top: 10%;
+}
+
+.license-full-name-container{
+    margin-top: 15%;
+}
+
+.license-user-state-container {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 40%;
+}
+
+.license-full-name-container {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.personal-data-item {
+    display: block;
+    margin-bottom: 2%;
+
+}
+
+.license-qr-code-container {
+    display: flex;
+    justify-content: center;
+    margin-top:20%
+}
+
+.license-qr-code {
+    width: 50%;
 }
