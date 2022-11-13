@@ -8,7 +8,7 @@
 
 {% block content %}
 <section>
-    <form action="/miembros/update" method="post">
+    <form action="/miembros/update" method="post" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="hidden" name="id" value="{{id}}">
 
@@ -59,12 +59,17 @@
             <label class="object-property-label"> {{ form.phone_number.label }}: </label>
             {{ form.phone_number(class="css_class") }}
         </div>
-        
+
         <div class="object-property-container">
             <label class="object-property-label"> {{ form.email.label }}: </label>
             {{ form.email(class="css_class") }}
         </div>
-    
+
+        <div class="object-property-container">
+            <label class="object-property-label"> {{ form.profile_photo.label }}: </label>
+            {{ form.profile_photo(class="css_class") }}
+        </div>
+
         <input class="button button--primary" type="submit" name="Guardar" value="Confirmar" />
         <a class="button" href="{{url_for('member.index')}}">Cancelar</a>
     </form>
