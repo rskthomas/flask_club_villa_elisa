@@ -556,13 +556,19 @@ i {
     padding-bottom: 40%;
 }
 
-.license-personal-data:after {
-    content: "";
-    display: block;
-    padding-bottom: 40%;
-}
 
 .personal-data-item {
     display: block;
     margin-bottom: 2%;
+
+}
+
+.license-qr-code-container {
+    display: flex;
+    justify-content: center;
+    margin-top:20%
+}
+
+.license-qr-code {
+    width: 50%;
 }

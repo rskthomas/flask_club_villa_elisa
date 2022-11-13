@@ -28,6 +28,9 @@
                             <h3 class="personal-data-item">Socio #{{ member.id }} </h3>
                             <h3 class="personal-data-item">Fecha Alta: {{member.activation_date.strftime("%d/%M/%Y")}}</h3>
                         </div>
+                        <div class="license-qr-code-container">
+                            <img class="license-qr-code" src={{ url_for('cdn.qr_code', member_id=member.id) }} />
+                        </div>
                     </div>
                 </div>
             </div>
