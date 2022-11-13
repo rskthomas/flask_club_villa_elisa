@@ -245,10 +245,10 @@ def route_download():
     return response
 
 
-@member_blueprint.get("/<int:id>/license")
+@member_blueprint.get("/<int:id>/carnet")
 @login_required('member_show')
 def show_license(id):
-    """Render a PDF view with all the members that fulfill the current filters selected in the index member grid."""
+    """Shows users' license based on the receiver id"""
 
     license_member = member.find_member(id)
     if license_member.profile_photo_name:
@@ -282,8 +282,3 @@ def show_license(id):
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
     return response
-
-@member_blueprint.get('/cdn/<path:filename>')
-@login_required('member_show')
-def profile_photo(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
