@@ -454,7 +454,7 @@ i {
     border-top: 2px solid #eee;
     font-weight: bold;
   }
-  
+
 
 @keyframes fade-out {
   from {
@@ -465,31 +465,25 @@ i {
   }
 }
 
-.license-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
+.license-body{
+    margin-top: 50%;
+    margin-left: 50%;
     align-items: center;
     justify-content: center;
 }
 
-.square {
-    position: relative;
-    width: 60vmin;
+.license-container {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: solid black 5px;
-    box-sizing: border-box;
-}
-
-.square:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
 }
 
 .license-content {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 500px;
+    height: 500px;
 }
 .license-html, .license-body {
     width: 100%;
@@ -527,6 +521,7 @@ i {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top:10%
 }
 
 .license-avatar-img {

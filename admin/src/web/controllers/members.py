@@ -266,23 +266,22 @@ def show_license(id):
     # PDF options
     options = {
         "orientation": "landscape",
-        "page-size": "A4",
-        "margin-top": "1.0cm",
-        "margin-right": "1.0cm",
-        "margin-bottom": "1.0cm",
-        "margin-left": "1.0cm",
+        #"page-size": "A4",
+        #"margin-top": "1.0cm",
+        #"margin-right": "1.0cm",
+        #"margin-bottom": "1.0cm",
+        #"margin-left": "1.0cm",
         "encoding": "UTF-8",
     }
 
     # Build PDF from HTML
-    pdf = pdfkit.from_string(out, options=options)
+    pdf = pdfkit.from_string(out, options=options, css = './public/style.css')
 
     # Download the PDF
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
     return response
-
 
 @member_blueprint.get('/cdn/<path:filename>')
 @login_required('member_show')
