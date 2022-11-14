@@ -37,7 +37,7 @@ def create_app(static_folder="static", env="development"):
     app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
-    csrf = CSRFProtect(app)
+    #csrf = CSRFProtect(app)
 
     @app.get("/")
     def home():
@@ -53,7 +53,7 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(system_config_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(member_blueprint)
-    csrf.exempt(api_blueprint)
+    #csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
     app.register_blueprint(cdn_blueprint)
 
