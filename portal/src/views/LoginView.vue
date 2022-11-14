@@ -4,12 +4,12 @@
     <h1 class="h3 mb-3 fw-normal">Login</h1>
 
     <div class="form-floating">
-          <input type="username" class="form-control" placeholder="username" required>
+          <input v-model="data.username" type="username" class="form-control" placeholder="username" required>
           <label for="floatingInput">Usuario</label>
         </div>
 
         <div class="form-floating">
-          <input type="password" class="form-control" placeholder="Password" required>
+          <input v-model="data.password" type="password" class="form-control" placeholder="Password" required>
           <label for="floatingPassword">Clave</label>
         </div>
 
@@ -35,10 +35,10 @@ export default {
     const submit = async () => {
       await fetch('http://localhost:5001/api/auth/login', {
         method: 'POST',
-        body:JSON.stringify(data),
-        mode:"no-cors",
-        headers: {"Content-type":"application/json", "Access-Control-Allow-Origin": "*"}
+        headers: {'Content-Type':'application/json; charset=UTF-8', 'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify(data)
       });
+
       await router.push('/');
     }
     
