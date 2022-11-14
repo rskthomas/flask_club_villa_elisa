@@ -1,5 +1,5 @@
 <template>
-    Home
+    Disciplinas
 </template>
   
   
