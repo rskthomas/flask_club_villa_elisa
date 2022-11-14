@@ -4,6 +4,7 @@ from src.web.helpers.handlers import bad_request
 from src.core import auth
 import datetime, jwt
 from flask_api.exceptions import AuthenticationFailed
+
 from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 cors = CORS(app)
@@ -40,22 +41,6 @@ def login():
     response = make_response() 
     response.set_cookie(key='jwt', value=token, httponly=True)
     response = jsonify({"jwt": token})
-
-    return response
-
-
-
-@auth_api_blueprint.post("/logout")
-@cross_origin()
-def validateLogin():
-    """Confirm the update member and redirect to member index page."""
-    content = request.json
-    username = content['username']
-    password = content['password']
-    if not username:
-        return bad_request("No se ha enviado ningún formulario")
-   
-    response = make_response({"jwt": "JOJO"}, 200)
 
     return response
 
