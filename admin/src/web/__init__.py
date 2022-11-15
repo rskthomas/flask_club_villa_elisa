@@ -3,6 +3,7 @@ from flask import Flask
 from flask import render_template
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 from src.web.config import config
 from src.core import database
@@ -27,6 +28,7 @@ from src.web.controllers.cdn import cdn_blueprint
 UPLOAD_FOLDER = './private'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+
 def create_app(static_folder="static", env="development"):
     app = Flask(__name__, static_folder=static_folder)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
@@ -38,6 +40,11 @@ def create_app(static_folder="static", env="development"):
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
     #csrf = CSRFProtect(app)
+
+    #enables Cross Origin Resource Sharing on all api endpoints
+    CORS(app)
+    cors = CORS(app, resources={"/api/*": {"origins": "*"}})
+
 
     @app.get("/")
     def home():
