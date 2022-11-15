@@ -51,8 +51,8 @@ onMounted(async () => {
 </script>
 
 
-<template class="center">
-  <h1>Lo que ofrecemos</h1>
+<template>
+  <h1>Disciplinas</h1>
 
   <div class="disciplines" style>
     <main>
@@ -67,6 +67,7 @@ onMounted(async () => {
           <template #category> - 2015</template>
           <template #schedule>{{ discipline.schedule }}</template>
           <template #monthly_price>$ {{ discipline.monthly_price }} mensuales</template>
+          <template #description>{{ discipline.description }}</template>
         </DisciplineItem>
       
       </div>
@@ -98,11 +99,10 @@ onMounted(async () => {
   100% { transform: rotate(360deg); }
 }
 h1 {
-
+  text-align: center;
   font-size: 60px;
   font-weight: 600;
-  background-image: linear-gradient(to left, #010a01, #6a6a6a);
-  color: transparent;
+  color: aliceblue;
   background-clip: text;
 }
 
