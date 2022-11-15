@@ -35,7 +35,7 @@ export default {
     const submit = async () => {
       await fetch('http://localhost:5001/api/auth/login', {
         method: 'POST',
-        headers: {'Content-Type':'application/json; charset=UTF-8', 'Access-Control-Allow-Origin': '*'},
+        headers: {'Content-Type':'application/json; charset=UTF-8'},
         body: JSON.stringify(data)
       });
 

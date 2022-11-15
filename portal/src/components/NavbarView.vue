@@ -10,6 +10,9 @@
               <li class="nav-item">
                 <router-link to="/disciplines" class="nav-link active">Disciplinas</router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/logout" class="nav-link active">Logout</router-link>
+              </li>
           </ul>
         </div>
     </div>
