@@ -23,6 +23,8 @@ from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 from src.web.controllers.profile import profile_blueprint
 from src.web.controllers.cdn import cdn_blueprint
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 
 UPLOAD_FOLDER = './private'
@@ -36,6 +38,20 @@ def create_app(static_folder="static", env="development"):
     print("Environment: {}".format(env))
     app.config.from_object(config[env])
     app.config['UPLOAD_FOLDER'] = path.abspath(UPLOAD_FOLDER)
+
+    # Here you can globally configure all the ways you want to allow JWTs to
+    # be sent to your web application. By default, this will be only headers.
+    app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies", "json", "query_string"]
+    # If true this will only allow the cookies that contain your JWTs to be sent
+    # over https. In production, this should always be set to True
+    app.config["JWT_COOKIE_SECURE"] = False
+    # Change this in your code!
+    app.config["JWT_SECRET_KEY"] = "super-secret"
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+
+    jwt = JWTManager(app)
+
     app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")

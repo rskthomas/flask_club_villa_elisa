@@ -1,11 +1,13 @@
 from flask import Flask
-from flask import Blueprint, request, make_response, jsonify, Response
-from src.web.helpers.handlers import bad_request
+from flask import Blueprint, request, make_response, jsonify
 from src.core import auth
 import datetime, jwt
-from flask_api.exceptions import AuthenticationFailed
-
 from flask_cors import CORS, cross_origin
+
+from flask_jwt_extended import create_access_token 
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -15,34 +17,43 @@ auth_api_blueprint = Blueprint("auth_api", __name__, url_prefix="/auth")
 
 @auth_api_blueprint.post("/login")
 @cross_origin()
-def login():
-    content = request.json
-    username = content['username']
-    password = content['password']
+def loginNew():
+   content = request.json
+   username = content['username']
+   password = content['password']
 
-    print(username)
-    print(password)
-
-    user = auth.find_user_by_mail_and_pass(username, password)
-
-    if user is None:
-        raise AuthenticationFailed('El usuario o la clave son incorrectos.')
-
-    expired = datetime.datetime.utcnow() + datetime.timedelta(minutes=60)
-    payload = {
-        'id': user.id,
-        'username': user.username,
-        'exp': expired,
-        'iat': datetime.datetime.utcnow()
-    }
-
-    token = jwt.encode(payload, "secret", algorithm="HS256")
-
-    response = make_response() 
-    response.set_cookie(key='jwt', value=token, httponly=True)
-    response = jsonify({"jwt": token})
-
-    return response
+   user = auth.find_user_by_mail_and_pass(username, password)
+    
+   if user:
+       access_token = create_access_token(identity=user.id)
+       response = jsonify({"msg": "login successful"})
+       set_access_cookies(response, access_token)
+       return response, 201
+   else:
+        return jsonify({"msg": "Bad username or password"}), 401
 
 
+'''
+El @jwt_required() valida si el jwt esta seteado en la request o si existe la cookie cargada
+luego con el metodo get_jwt_identity() obtiene el id de la entidad que se guardo en el JWT, si se guardaron mas campos se puede usar el get_jwt(), ejemplo:
+    claims = get_jwt()
+    return jsonify(foo=claims["foo"])
+'''
+@auth_api_blueprint.get('/user_jwt')
+@cross_origin()
+#@jwt_required()
+def user_jwt():
+    current_user = get_jwt_identity()
+    user = auth.find_user(current_user)
+    response = jsonify(user.id)
+    return response, 200       
+
+
+@auth_api_blueprint.get('/logout_jwt')
+@cross_origin()
+#@jwt_required()
+def logout_jwt():
+  response = jsonify({"msg": "logout successful"})
+  unset_jwt_cookies(response)
+  return response, 200
 
