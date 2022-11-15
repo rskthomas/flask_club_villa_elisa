@@ -10,8 +10,7 @@ const headers = new Headers({
 const fetchConfig = {
   method: "GET",
   headers: headers,
-  //TODO: Solve CORS issue on production?
-  mode: "no-cors",
+  mode: "cors",
   cache: "default"
 };
 
@@ -22,24 +21,26 @@ const apiURL = "http://127.0.0.1:5000/api";
 
 const getDisciplines = async () => {
   const response = await fetch(apiURL + "/club/disciplines", fetchConfig);
-  console.log(typeof response)
+  if (!response.ok) {
+          const message = `An error has occured: ${response.status} - ${response.statusText}`;
+          throw new Error(message);
+        }
+
   const data = await response.json();
-  console.log(data)
-  return data;
-  disciplines.value = await JSON.parse(response);
+  return data
 };
 
 /*empty disciplines map*/
 const disciplines = ref([]);
 
-/* reactive variables*/
+/* reactive fetch state variables*/
 const loading = ref(false);
 const error = ref(null);
 
 onMounted(async () => {
   try {
     loading.value = true;
-    await getDisciplines();
+    disciplines.value = await getDisciplines();
   } catch (err) {
     error.value = err.message;
   } finally {
@@ -50,44 +51,59 @@ onMounted(async () => {
 </script>
 
 
-<template>
-  <div class="disciplines">
-    <main>
-      <div v-if="loading">Loading...</div>
+<template class="center">
+  <h1>Lo que ofrecemos</h1>
 
+  <div class="disciplines" style>
+    <main>
+      <div v-if="loading" class="loader"></div> 
       <div v-if="error">{{ error }}</div>
 
       <div v-if="disciplines.length">
-        <DisciplineItem v-for="discipline in disciplines" />
+        <div v-for="discipline in disciplines" style="margin:15px;">
+
         <DisciplineItem>
-          <template #icon>
-            <ToolingIcon />
-          </template>
-
-          <template #name>{{ discipline.category }}</template>
-
-
-
+          <template #name>{{ discipline.name }}</template>
           <template #category> - 2015</template>
-          <template #schedule>Lunes a Jueves de 16 a 75 hs</template>
-          <template #monthly_price>20 euros</template>
-
+          <template #schedule>{{ discipline.schedule }}</template>
+          <template #monthly_price>$ {{ discipline.monthly_price }} mensuales</template>
         </DisciplineItem>
+      
       </div>
+    </div>
 
     </main>
   </div>
-
-
 
 </template>
 
 <style scoped>
 .disciplines {
-  margin-top: 2rem;
+  margin: 1rem;
   display: flex;
-  flex: 1;
-  
+  padding: 1rem;  
+}
+
+.loader {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+ 
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+h1 {
+
+  font-size: 60px;
+  font-weight: 600;
+  background-image: linear-gradient(to left, #010a01, #6a6a6a);
+  color: transparent;
+  background-clip: text;
 }
 
 </style>

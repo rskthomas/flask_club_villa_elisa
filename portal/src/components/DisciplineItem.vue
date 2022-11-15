@@ -1,40 +1,24 @@
 <template>
-  <div class="item">
-    <i>
-      <slot name="icon"></slot>
-    </i>
-    <div class="details">
-      <h3>
+  <div class="card">
+    <div class="container">
+      <h1>
         <slot name="name"> </slot>
         <slot name="category"> - </slot>
+      </h1>
+      <h3>
+        <slot name="schedule"> </slot>
       </h3>
-      <slot name="schedule"></slot>
-      <br />
       <slot name="monthly_price"></slot>
       <br />
-      <slot></slot>
+      <slot> </slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-.item {
-  margin-top: 2rem;
-  display: flex;
-}
-
 .details {
   flex: 1;
   margin-left: 1rem;
-}
-
-i {
-  display: flex;
-  place-items: center;
-  place-content: center;
-  width: 32px;
-  height: 32px;
-  color: var(--color-text);
 }
 
 h3 {
@@ -44,47 +28,29 @@ h3 {
   color: var(--color-heading);
 }
 
-@media (min-width: 1024px) {
-  .item {
-    margin-top: 0;
-    padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
-  }
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  background-image: linear-gradient(to left, #c4c4c4, #e8e8e8);
+}
 
-  i {
-    top: calc(50% - 25px);
-    left: -26px;
-    position: absolute;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    border-radius: 8px;
-    width: 50px;
-    height: 50px;
-  }
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
 
-  .item:before {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    bottom: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:after {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    top: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:first-of-type:before {
-    display: none;
-  }
-
-  .item:last-of-type:after {
-    display: none;
-  }
+/* Add some padding inside the card container */
+.container {
+  padding:15px;
+  margin: 5px;
+}
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  background-image: linear-gradient(to left, #2d9529, #025f3b);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 </style>

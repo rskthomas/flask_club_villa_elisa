@@ -2,7 +2,7 @@
 
   <NavbarView />
 
-  <main class="form-signin">
+  <main>
     <RouterView/>
   </main>
 
