@@ -102,7 +102,7 @@ h1 {
   text-align: center;
   font-size: 60px;
   font-weight: 600;
-  color: aliceblue;
+  color: grey;
   background-clip: text;
 }
 
