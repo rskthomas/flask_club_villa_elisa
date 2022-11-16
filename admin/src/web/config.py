@@ -1,5 +1,6 @@
 from os import environ
 
+JWT_SECRET = "super-secret-string"
 
 class Config(object):
     """Default configuration"""
