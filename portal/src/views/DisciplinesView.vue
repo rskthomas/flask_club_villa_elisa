@@ -16,7 +16,7 @@ const fetchConfig = {
 
 
 //Localhost path for dev usage. TODO: Change to production path
-const apiURL = "http://127.0.0.1:5000/api";
+const apiURL = "http://127.0.0.1:5001/api";
 
 
 const getDisciplines = async () => {
