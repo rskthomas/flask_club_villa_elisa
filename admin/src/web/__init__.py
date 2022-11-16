@@ -59,7 +59,7 @@ def create_app(static_folder="static", env="development"):
 
     #enables Cross Origin Resource Sharing on all api endpoints
     CORS(app)
-    cors = CORS(app, resources={"/api/*": {"origins": "*"}})
+    cors = CORS(app, supports_credentials=True, resources={"/api/*": {"origins": "*"}})
 
 
     @app.get("/")

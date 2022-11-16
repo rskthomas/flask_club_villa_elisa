@@ -13,15 +13,25 @@ export default {
   setup() {
     const router = useRouter();
 
+    const headers = new Headers({
+      "Access-Control-Allow-Origin": "http://localhost:5001",
+      "Access-Control-Allow-Credentials": "true",
+      "Content-Type": "application/json"
+    });
+
+
     const submit = async () => {
-      await fetch('http://localhost:5001/api/auth/logout_jwt', {
-        method: 'GET',
-        credentials: 'include',
-        mode: "no-cors",
-        headers: {
-            'Content-Type':'application/json; charset=UTF-8'
-        }     
+      const response = await fetch('http://localhost:5001/api/auth/logout_jwt', {
+          method: 'GET',
+          credentials: 'include',
+          mode: "cors",
+          headers: headers     
       });  
+
+      if (!response.ok) {
+          const message = `An error has occured: ${response.status} - ${response.statusText}`;
+          throw new Error(message);
+      }
 
       await router.push('/login');
     }

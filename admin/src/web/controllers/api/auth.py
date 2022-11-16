@@ -1,22 +1,15 @@
 from flask import Flask
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, jsonify
 from src.core import auth
-import datetime, jwt
-from flask_cors import CORS, cross_origin
 
 from flask_jwt_extended import create_access_token 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
 
-app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-
 auth_api_blueprint = Blueprint("auth_api", __name__, url_prefix="/auth")
 
 
 @auth_api_blueprint.post("/login")
-@cross_origin()
 def loginNew():
    content = request.json
    username = content['username']
@@ -40,8 +33,7 @@ luego con el metodo get_jwt_identity() obtiene el id de la entidad que se guardo
     return jsonify(foo=claims["foo"])
 '''
 @auth_api_blueprint.get('/user_jwt')
-@cross_origin()
-#@jwt_required()
+@jwt_required()
 def user_jwt():
     current_user = get_jwt_identity()
     user = auth.find_user(current_user)
@@ -50,8 +42,7 @@ def user_jwt():
 
 
 @auth_api_blueprint.get('/logout_jwt')
-@cross_origin()
-#@jwt_required()
+@jwt_required()
 def logout_jwt():
   response = jsonify({"msg": "logout successful"})
   unset_jwt_cookies(response)

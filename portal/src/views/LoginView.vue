@@ -35,6 +35,8 @@ export default {
     const submit = async () => {
       await fetch('http://localhost:5001/api/auth/login', {
         method: 'POST',
+        credentials: 'include',
+        mode: "cors",
         headers: {'Content-Type':'application/json; charset=UTF-8'},
         body: JSON.stringify(data)
       });
