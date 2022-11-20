@@ -3,10 +3,9 @@
     <button class="w-100 btn btn-lg btn-primary" type="submit">Logout</button>
   </form>
 </template>
-  
-  
+
 <script lang="ts">
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 
 export default {
   name: "Logout",
@@ -25,17 +24,16 @@ export default {
           method: 'GET',
           credentials: 'include',
           mode: "cors",
-          headers: headers     
-      });  
+          headers: headers
+      });
 
       if (!response.ok) {
           const message = `An error has occured: ${response.status} - ${response.statusText}`;
           throw new Error(message);
       }
-
       await router.push('/login');
     }
-    
+
     return {
       submit
     }
