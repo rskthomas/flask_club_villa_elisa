@@ -263,15 +263,29 @@ def show_license(id):
         profile_photo=profile_photo
     )
 
+@member_blueprint.get("/<int:id>/carnet/pdf")
+@login_required('member_show')
+def show_license_idf(id):
+    """Shows users' license based on the receiver id"""
+
+    license_member = member.find_member(id)
+    if license_member.profile_photo_name:
+        profile_photo = license_member.profile_photo_name
+    else:
+        profile_photo = 'default-profile-photo.jpg'
+
+    # Get the HTML output
+    out = render_template(
+        "members/license.html",
+        member=license_member,
+        profile_photo=profile_photo
+    )
+
     # PDF options
     options = {
         "orientation": "landscape",
-        #"page-size": "A4",
-        #"margin-top": "1.0cm",
-        #"margin-right": "1.0cm",
-        #"margin-bottom": "1.0cm",
-        #"margin-left": "1.0cm",
-        "encoding": "UTF-8",
+        "page-size": "A4",
+        "encoding": "UTF-8"
     }
 
     # Build PDF from HTML
