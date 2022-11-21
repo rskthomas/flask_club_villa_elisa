@@ -26,40 +26,33 @@
   </form>
 </template>
 
-<script lang="ts">
-import { reactive } from "vue";
+<script lang="ts" setup>
+import { reactive, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 
-export default {
-  name: "Login",
-  setup() {
-    const data = reactive({
-      username: "",
-      password: "",
-    });
+const emit = defineEmits(["login"]);
 
-    const router = useRouter();
+const data = reactive({
+  username: "",
+  password: "",
+});
 
-    const submit = async () => {
-      let response = await fetch('http://localhost:5001/api/auth/login', {
-        method: "POST",
-        credentials: "include",
-        mode: "cors",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok){
-        alert("Credenciales inválidas");
-      } else {
-        await router.push("/");
-      }
-    };
+const router = useRouter();
 
-    return {
-      data,
-      submit,
-    };
-  },
+const submit = async () => {
+  let response = await fetch("http://localhost:5001/api/auth/login", {
+    method: "POST",
+    credentials: "include",
+    mode: "cors",
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    alert("Credenciales inválidas");
+  } else {
+    emit("login");
+    await router.push("/");
+  }
 };
 </script>
 
