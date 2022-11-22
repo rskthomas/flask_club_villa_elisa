@@ -10,6 +10,7 @@ _PHONE = "0221 487-0193"
 
 @club_api_blueprint.get("/disciplines")
 def disciplines():
+    """Returns a list of all disciplines (JSON)"""
 
     response = make_response(
         jsonify([discipline.serialize() for discipline in get_disciplines()]), 200
@@ -21,6 +22,7 @@ def disciplines():
 
 @club_api_blueprint.get("/info")
 def info():
+    """Returns a JSON with the club's email and phone number."""
     response = make_response(jsonify({"email": _EMAIL, "phone": _PHONE}), 200)
 
     response.headers["Content-Type"] = "application/json"
