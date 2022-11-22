@@ -1,6 +1,4 @@
-from flask import Blueprint, request, make_response, jsonify, Flask 
-from flask_wtf.csrf import CSRFProtect
-from src.web.controllers.api.auth import csrf
+from flask import Blueprint, request, make_response, jsonify, Flask
 from src.core.member import get_member_disciplines, find_member
 from src.core.payments import unpaid_invoices, pay_invoice, member_payments
 
@@ -23,15 +21,10 @@ def disciplines():
     return response
 
 
-@csrf.exempt
 @me_api_blueprint.get("/payments")
 def payments():
-    # TODO: error if id is not found
     id = request.headers["Authorization"]
-
-    if id == "":
-        return
-
+    member = find_member(id)
     response = make_response(
         jsonify([payment.serialize() for payment in member_payments(id)]), 200
     )
@@ -51,7 +44,6 @@ def profile():
 
 
 @me_api_blueprint.post("/payments")
-@csrf.exempt
 def pay_invoice():
     id = request.headers["Authorization"]
     least_recent_unpaid_invoice = unpaid_invoices(id).first()
@@ -62,5 +54,16 @@ def pay_invoice():
 
     return response
 
-    def _bad_request(self, msg):
-        return jsonify({"msg": msg}), 400
+
+@me_api_blueprint.get("/license")
+def license():
+    id = request.headers["Authorization"]
+    member = find_member(id)
+    response = make_response(jsonify(
+        status= member.readable_membership_state(),
+        description = member.readable_membership_description(),
+        profile= member.serialize()
+        ), 200)
+            
+    response.headers["Content-Type"] = "application/json"
+    return response
