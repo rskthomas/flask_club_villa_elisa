@@ -38,3 +38,12 @@ class Member(db.Model):
 
     def readable_membership_state(self):
         return 'Activo' if self.membership_state else 'Inactivo'
+
+    def serialize(self): return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "personal_id_type": self.personal_id_type,
+            "personal_id": self.personal_id
+        }
+
