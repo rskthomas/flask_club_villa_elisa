@@ -7,11 +7,6 @@ me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
 
 @me_api_blueprint.get("/disciplines")
 def disciplines():
-
-    id = request.headers["Authorization"]
-    if not id:
-        return BAD_REQUEST
-
     response = make_response(
         jsonify([discipline.serialize() for discipline in get_member_disciplines(id)]),
         200,
