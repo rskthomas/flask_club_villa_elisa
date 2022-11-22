@@ -1,15 +1,27 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify, request, Flask
+
+
+from functools import wraps
 from src.web.controllers.api.members import member_api_blueprint
 from src.web.controllers.api.club import club_api_blueprint
 from src.web.controllers.api.me import me_api_blueprint
 from src.web.controllers.api.auth import auth_api_blueprint
 
-api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
-api_blueprint.register_blueprint(member_api_blueprint)
 
-api_blueprint.register_blueprint(club_api_blueprint)
+def id_required(argument=None):
+    """Decorator to check if id header exists"""
 
-api_blueprint.register_blueprint(me_api_blueprint)
+    @wraps(argument)
+    def argument_wrapper(function):
+        @wraps(function)
+        def id_checker(*args, **kwargs):
+            if not request.headers.get("id"):
+                return BAD_REQUEST
+            return function(*args, **kwargs)
 
-api_blueprint.register_blueprint(auth_api_blueprint)
+        return id_checker
+
+    return argument_wrapper
+
+

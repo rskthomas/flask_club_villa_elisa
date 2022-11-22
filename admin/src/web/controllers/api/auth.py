@@ -1,12 +1,11 @@
 from flask import Flask, make_response,current_app
 from flask import Blueprint, request, jsonify
 from src.core import auth
-
 from flask_jwt_extended import create_access_token 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
 
-auth_api_blueprint = Blueprint("auth_api", __name__, url_prefix="/auth")
+auth_api_blueprint = Blueprint("auth_api", __name__, url_prefix="/api/auth")
 
 
 @auth_api_blueprint.post("/login")
@@ -51,4 +50,3 @@ def logout_jwt():
   response = jsonify({"msg": "logout successful"})
   unset_jwt_cookies(response)
   return response, 200
-
