@@ -107,6 +107,17 @@ def find_member(id):
     return Member.query.get(id)
 
 
+def find_member_by_mail(email):
+    """Looks up for a member on the DB based on the received email
+
+    Args:
+        email (int): email of the member
+
+    Returns:
+        Member: member from the DB
+    """
+    return Member.query.filter_by(email=email).first()
+
 def delete_member_by_member_number(mem_number):
     """deletes a member by its number
 

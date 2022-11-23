@@ -31,7 +31,7 @@ export default {
           const message = `An error has occured: ${response.status} - ${response.statusText}`;
           throw new Error(message);
       }
-      await router.push('/login');
+      await router.push('/home');
     }
 
     return {
