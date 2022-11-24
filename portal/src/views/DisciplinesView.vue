@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
-
+import { BASE_API_URL } from "../main";
 const headers = new Headers({
   "Access-Control-Allow-Origin": "*",
   "Content-Type": "application/json"
@@ -14,20 +14,15 @@ const fetchConfig = {
   cache: "default"
 };
 
-
-//Localhost path for dev usage. TODO: Change to production path
-const apiURL = "http://127.0.0.1:5001/api";
-
-
 const getDisciplines = async () => {
-  const response = await fetch(apiURL + "/club/disciplines", fetchConfig);
+  const response = await fetch(BASE_API_URL + "/club/disciplines", fetchConfig);
   if (!response.ok) {
-          const message = `An error has occured: ${response.status} - ${response.statusText}`;
-          throw new Error(message);
-        }
+    const message = `An error has occured: ${response.status} - ${response.statusText}`;
+    throw new Error(message);
+  }
 
   const data = await response.json();
-  return data
+  return data;
 };
 
 /*empty disciplines map*/

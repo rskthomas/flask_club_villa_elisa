@@ -55,11 +55,10 @@ def create_app(static_folder="static", env="development"):
     app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
-    csrf = CSRFProtect(app)
+    #csrf = CSRFProtect(app)
 
     #enables Cross Origin Resource Sharing on all api endpoints
-    CORS(app)
-    cors = CORS(app, supports_credentials=True, resources={"/api/*": {"origins": "*"}})
+    cors = CORS(app, supports_credentials=True, resources={"/api*": {"origins": "*"}})
 
 
     @app.get("/")
