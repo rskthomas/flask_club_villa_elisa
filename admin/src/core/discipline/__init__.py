@@ -177,17 +177,13 @@ def enrollment_by_discipline():
     Returns:
         list: list of disciplines info
     """
-    db_rows = db.session.execute(select(Discipline.name, Member.gender, func.count())
+    db_rows = db.session.execute(select(Discipline.name, func.count())
         .join(Discipline.members)
-        .group_by(Discipline.name, Member.gender))
-    result = {}
+        .group_by(Discipline.name))
+    result = []
 
     for row in db_rows:
         discipline_name = row[0]
-        gender_name = row[1]
-        gender_count = row[2]
-        if result.get(discipline_name) == None:
-            result[discipline_name] = {}
-        result[discipline_name][gender_name] = gender_count
-
+        members_count = row[1]
+        result.append({'name': discipline_name, 'count': members_count})
     return result
