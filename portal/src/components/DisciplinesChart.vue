@@ -77,6 +77,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <h2>Cantidad de inscriptos por disciplina</h2>
   <Bar
     :chart-options="chartOptions"
     :chart-data="chartData"
