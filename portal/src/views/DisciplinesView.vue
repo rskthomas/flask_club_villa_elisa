@@ -2,26 +2,23 @@
 import { onMounted, ref } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
 
-const headers = new Headers({
-  "Access-Control-Allow-Origin": "*",
-  "Content-Type": "application/json"
-});
-
+/* simple GET request, no headers needed*/
 const fetchConfig = {
   method: "GET",
-  headers: headers,
+  credentials: 'include',
   mode: "cors",
   cache: "default"
 };
 
 
 //Localhost path for dev usage. TODO: Change to production path
-const apiURL = "http://127.0.0.1:5001/api";
+const apiURL = "http://localhost:5000/api";
 
 
 const getDisciplines = async () => {
   const response = await fetch(apiURL + "/club/disciplines", fetchConfig);
   if (!response.ok) {
+          console.log("Error fetching disciplines", response);
           const message = `An error has occured: ${response.status} - ${response.statusText}`;
           throw new Error(message);
         }
@@ -64,8 +61,8 @@ onMounted(async () => {
 
         <DisciplineItem>
           <template #name>{{ discipline.name }}</template>
-          <template #category> - 2015</template>
-          <template #schedule>{{ discipline.schedule }}</template>
+          <template #category> {{discipline.category}} </template>
+          <template #schedule> {{discipline.schedule}}</template>
           <template #monthly_price>$ {{ discipline.monthly_price }} mensuales</template>
           <template #description>{{ discipline.description }}</template>
         </DisciplineItem>
