@@ -15,7 +15,7 @@ export default {
         fetchConfig
       );
 
-      return response.json();
+      return await response.json();
     } catch (error) {
       console.log(error);
       return { id: null };
