@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, make_response,current_app
 from flask import Blueprint, request, jsonify
 from src.core import auth
 
@@ -16,7 +16,7 @@ def loginNew():
    password = content['password']
 
    user = auth.find_user_by_mail_and_pass(username, password)
-    
+
    if user:
        access_token = create_access_token(identity=user.id)
        response = jsonify({"msg": "login successful"})
@@ -37,8 +37,12 @@ luego con el metodo get_jwt_identity() obtiene el id de la entidad que se guardo
 def user_jwt():
     current_user = get_jwt_identity()
     user = auth.find_user(current_user)
-    response = jsonify(user.id)
-    return response, 200       
+    current_app.logger.info(jsonify({"id": user.id}))
+    return jsonify({
+        "id": user.id,
+        "firstname": user.firstname,
+        "lastname": user.lastname,
+        "roles": list(map(lambda x: x.name, user.roles))}), 200
 
 
 @auth_api_blueprint.get('/logout_jwt')

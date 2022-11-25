@@ -2,7 +2,7 @@ import pdfkit
 import os.path
 import re
 from pathlib import Path
-from flask import Blueprint
+from flask import Blueprint, Response
 from flask import render_template, current_app,send_from_directory
 from flask import request, flash, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
@@ -285,14 +285,15 @@ def show_license_idf(id):
     options = {
         "orientation": "landscape",
         "page-size": "A4",
-        "encoding": "UTF-8"
+        "encoding": "UTF-8",
+        "enable-local-file-access": True
     }
 
     # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options, css = './public/style.css')
 
     # Download the PDF
-    response = make_response(pdf)
+    response = Response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "filename=output.pdf"
     return response

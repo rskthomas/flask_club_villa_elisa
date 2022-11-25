@@ -16,7 +16,6 @@ def file(filename):
     return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 @cdn_blueprint.get('/qrcode/<int:member_id>')
-@login_required()
 def qr_code(member_id):
     qr = qrcode.QRCode(
         version=1,
