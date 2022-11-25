@@ -1,5 +1,6 @@
-from flask import Blueprint, make_response, jsonify
+from flask import Blueprint, make_response, jsonify, request
 from src.core.discipline import get_disciplines
+from src.web.controllers.api.auth import getMemberId, BAD_MEMBER_RESPONSE, HEADERS, OPTIONS_HEADERS
 
 
 club_api_blueprint = Blueprint("club_api", __name__, url_prefix="/api/club")
@@ -13,10 +14,8 @@ def disciplines():
     """Returns a list of all disciplines (JSON)"""
 
     response = make_response(
-        jsonify([discipline.serialize() for discipline in get_disciplines()]), 200
+        jsonify([discipline.serialize() for discipline in get_disciplines()]), 200, HEADERS
     )
-    response.headers["Content-Type"] = "application/json"
-
     return response
 
 
@@ -28,3 +27,4 @@ def info():
     response.headers["Content-Type"] = "application/json"
 
     return response
+
