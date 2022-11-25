@@ -142,6 +142,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <h2>Estado de cuotas mensuales</h2>
   <Bar
     :chart-options="chartOptions"
     :chart-data="chartData"

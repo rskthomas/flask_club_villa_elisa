@@ -1,7 +1,7 @@
 <script setup>
 import DisciplinesChart from "../components/DisciplinesChart.vue";
 import InvoicesChart from "../components/InvoicesChart.vue";
-import PieChart from "../components/PieChart.ts";
+import MembersByGenderChart from "../components/MembersByGenderChart.vue";
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import PieChart from "../components/PieChart.ts";
       <DisciplinesChart></DisciplinesChart>
     </div>
     <div class="col">
-    <PieChart></PieChart>
+    <MembersByGenderChart></MembersByGenderChart>
     </div>
     <div class="col">
       <InvoicesChart></InvoicesChart>
