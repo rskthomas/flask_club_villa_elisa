@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
 
 /* simple GET request, no headers needed*/
@@ -12,7 +12,7 @@ const fetchConfig = {
 
 
 //Localhost path for dev usage. TODO: Change to production path
-const apiURL = "http://localhost:5000/api";
+const apiURL = inject('ENDPOINT_PATH')
 
 
 const getDisciplines = async () => {
