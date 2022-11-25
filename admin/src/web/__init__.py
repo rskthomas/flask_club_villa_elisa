@@ -3,7 +3,6 @@ from flask import Flask
 from flask import render_template
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.utils import secure_filename
-from flask_cors import CORS
 
 from src.web.config import config
 from src.core import database
@@ -60,13 +59,6 @@ def create_app(static_folder="static", env="development"):
     app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
-    
-
-    #enables Cross Origin Resource Sharing on all api endpoints
-    #TODO: SACAR
-    CORS(app)
-    cors = CORS(app, supports_credentials=True, resources={"/api/*": {"origins": "*"}})
-
 
     @app.get("/")
     def home():
