@@ -41,7 +41,7 @@ let chartOptions = {
 let chartIDKey = "just-a-key";
 let loaded = ref(false);
 const loadData = async () =>{
-  let response = await fetch(BASE_API_URL + "/estadisticas/disciplinas", {
+  let response = await fetch(BASE_API_URL + "/api/estadisticas/disciplinas", {
     method: "GET",
     mode: "cors",
     cache: "default",

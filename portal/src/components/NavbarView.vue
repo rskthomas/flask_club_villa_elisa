@@ -1,6 +1,6 @@
 <script setup>
 import auth from "../auth";
-import { onMounted, ref,defineEmits } from "vue";
+import { onMounted, ref } from "vue";
 
 let user = ref({ id: null });
 let loaded = ref(false);
@@ -8,9 +8,7 @@ let loaded = ref(false);
 const loadUser = async () => {
   user.value = await auth.currentUser();
   loaded.value = true;
-  console.log(user.value);
 };
-const emit = defineEmits(["login"])
 
 const isAdmin = (user) => {
   return user.roles.find((role) => role.includes("Administrador")) != undefined;
@@ -22,7 +20,7 @@ onMounted(() => loadUser());
 </script>
 
 <template>
-  <nav @login="loadUser" class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand">Home</router-link>
       <div>

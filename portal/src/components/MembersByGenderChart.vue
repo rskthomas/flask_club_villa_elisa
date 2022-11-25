@@ -32,7 +32,7 @@ const chartOptions = {
 
 const loadData = async () => {
   let response = await fetch(
-    BASE_API_URL + "/estadisticas/miembros_por_genero",
+    BASE_API_URL + "/api/estadisticas/miembros_por_genero",
     {
       method: "GET",
       mode: "cors",
