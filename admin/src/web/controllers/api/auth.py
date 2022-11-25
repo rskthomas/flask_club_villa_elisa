@@ -83,6 +83,7 @@ def logout_jwt():
 
 
 def getMemberId(jwt_identity):
+    """If the logged user is a member, returns its id, otherwise returns None"""
 
     user = find_user(jwt_identity)
     if not user:
