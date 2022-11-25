@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
 import { BASE_API_URL } from "../main";
 const headers = new Headers({
-  "Access-Control-Allow-Origin": "*",
   "Content-Type": "application/json"
 });
 
