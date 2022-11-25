@@ -38,7 +38,6 @@ const loadData = async () => {
       mode: "cors",
       cache: "default",
       headers: new Headers({
-        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       }),
     }
