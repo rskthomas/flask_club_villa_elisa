@@ -12,7 +12,6 @@ const emit = defineEmits(["logout"]);
 const router = useRouter();
 
 const headers = new Headers({
-  "Access-Control-Allow-Origin": BASE_API_URL,
   "Access-Control-Allow-Credentials": "true",
   "Content-Type": "application/json",
 });
