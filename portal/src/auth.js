@@ -1,4 +1,4 @@
-const ENDPOINT_PATH = "http://localhost:5001";
+import { BASE_API_URL } from "./main";
 
 const fetchConfig = {
   method: "GET",
@@ -11,7 +11,7 @@ export default {
   currentUser: async () => {
     try {
       let response = await fetch(
-        ENDPOINT_PATH + "/api/auth/user_jwt",
+        BASE_API_URL + "/api/auth/user_jwt",
         fetchConfig
       );
 

@@ -15,7 +15,7 @@ const fetchConfig = {
 };
 
 const getDisciplines = async () => {
-  const response = await fetch(BASE_API_URL + "/club/disciplines", fetchConfig);
+  const response = await fetch(BASE_API_URL + "/api/club/disciplines", fetchConfig);
   if (!response.ok) {
     const message = `An error has occured: ${response.status} - ${response.statusText}`;
     throw new Error(message);

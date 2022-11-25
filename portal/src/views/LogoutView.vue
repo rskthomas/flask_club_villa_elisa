@@ -7,18 +7,18 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { defineEmits } from "vue";
-
+import { BASE_API_URL } from "../main";
 const emit = defineEmits(["logout"]);
 const router = useRouter();
 
 const headers = new Headers({
-  "Access-Control-Allow-Origin": "http://localhost:5001",
+  "Access-Control-Allow-Origin": BASE_API_URL,
   "Access-Control-Allow-Credentials": "true",
   "Content-Type": "application/json",
 });
 
 const submit = async () => {
-  const response = await fetch("http://localhost:5001/api/auth/logout_jwt", {
+  const response = await fetch(BASE_API_URL + "/api/auth/logout_jwt", {
     method: "GET",
     credentials: "include",
     mode: "cors",
