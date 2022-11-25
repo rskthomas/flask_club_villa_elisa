@@ -11,6 +11,13 @@ const loadUser = async () => {
   console.log(user.value);
 };
 const emit = defineEmits(["login"])
+
+const isAdmin = (user) => {
+  return user.roles.find((role) => role.includes("Administrador")) != undefined;
+};
+const isOperador = (user) => {
+  return user.roles.find((role) => role.includes("Operador")) != undefined;
+};
 onMounted(() => loadUser());
 </script>
 
@@ -24,11 +31,19 @@ onMounted(() => loadUser());
             <router-link to="/login" class="nav-link active">Login</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/disciplines" class="nav-link active">Disciplinas</router-link>
-                </li>
+            <router-link to="/disciplines" class="nav-link active"
+              >Disciplinas</router-link
+            >
+          </li>
+          <li class="nav-item" v-if="loaded && user.id && (isAdmin(user) || isOperador(user))">
+            <router-link to="/estadisticas" class="nav-link active"
+              >Estadisticas</router-link
+            >
+          </li>
           <li class="nav-item" v-if="loaded && user.id">
-            <router-link to="/logout" class="nav-link active">Logout</router-link>
-                >
+            <router-link to="/logout" class="nav-link active"
+              >Logout</router-link
+            >
           </li>
         </ul>
       </div>
