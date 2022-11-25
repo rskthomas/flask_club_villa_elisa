@@ -66,7 +66,7 @@ let chartOptions = {
 
 let loaded = ref(true);
 const loadData = async () =>{
-  let response = await fetch(BASE_API_URL + "/estadisticas/facturacion", {
+  let response = await fetch(BASE_API_URL + "/api/estadisticas/facturacion", {
     method: "GET",
     mode: "cors",
     cache: "default",
