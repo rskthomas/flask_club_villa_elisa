@@ -1,4 +1,4 @@
-
+from flask import app
 
 ALLOWED_ORIGIN = "http://localhost:3000"
 
@@ -18,7 +18,8 @@ OPTIONS_HEADERS = {
 def apply_CORS(response):
     """Sets CORS headers for the main API endpoints."""
     #if production do this
-    response.headers["Content-Type"] = "application/json"
-    response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
+    if app.config["ENV"] == "production":
+        response.headers["Content-Type"] = "application/json"
+        response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response
