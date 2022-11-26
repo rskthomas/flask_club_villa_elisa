@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { reactive, defineEmits } from "vue";
 import { useRouter } from "vue-router";
-
+import { BASE_API_URL } from "../main";
 const emit = defineEmits(["login"]);
 
 const data = reactive({
@@ -40,7 +40,7 @@ const data = reactive({
 const router = useRouter();
 
 const submit = async () => {
-  let response = await fetch("http://localhost:5000/api/auth/login", {
+  let response = await fetch(BASE_API_URL + "/api/auth/login", {
     method: "POST",
     credentials: "include",
     mode: "cors",

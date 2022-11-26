@@ -3,6 +3,7 @@ from datetime import date
 from operator import inv
 from re import A, M
 from webbrowser import get
+from sqlalchemy import select, func, asc
 from src.web.controllers.payments import invoices
 from src.core.payments.invoice import Invoice
 from src.core.payments.invoice import InvoiceExtraItem
@@ -224,3 +225,18 @@ def member_payments(member_id):
         .order_by(Payment.payment_date.desc())
         .all()
     )
+
+def last_year_invoices():
+    db_rows = db.session.execute(select(Invoice.month,Invoice.paid, func.count())
+        .where(Invoice.year==date.today().year)
+        .group_by(Invoice.month, Invoice.paid)
+        .order_by(asc(Invoice.month)))
+
+    result = []
+    last_month = 0
+    for row in db_rows:
+        month = row[0]
+        paid = row[1]
+        count = row[2]
+        result.append({ 'month': month, 'paid': paid, 'count': count})
+    return result

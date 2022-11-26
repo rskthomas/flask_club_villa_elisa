@@ -1,10 +1,16 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+export const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router) 
-/*global variable to set api URL. USAGE on <script setup>: const apiURL = inject('ENDPOINT_PATH'), importing inject from vue */
-app.provide('ENDPOINT_PATH', "http://localhost:5000/api")
-app.mount('#app')
+app.use(router)
+
+app.mount("#app");
+
+
+
+export default {
+  app: app,
+};

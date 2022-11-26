@@ -1,15 +1,19 @@
 <script setup>
-import Barchart from "../components/BarChart.vue";
-import PieChart from "../components/PieChart.ts";
+import DisciplinesChart from "../components/DisciplinesChart.vue";
+import InvoicesChart from "../components/InvoicesChart.vue";
+import MembersByGenderChart from "../components/MembersByGenderChart.vue";
 </script>
 
 <template>
-    <div class="row">
-  <div class="col">
-    <Barchart></Barchart>
+  <div class="row">
+    <div class="col">
+      <DisciplinesChart></DisciplinesChart>
     </div>
-  <div class="col">
-    <PieChart></PieChart>
+    <div class="col">
+    <MembersByGenderChart></MembersByGenderChart>
+    </div>
+    <div class="col">
+      <InvoicesChart></InvoicesChart>
+    </div>
   </div>
-</div>
 </template>

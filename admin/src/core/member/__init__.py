@@ -2,6 +2,7 @@
 
 """
 from os import abort
+from sqlalchemy import func, select
 from sqlite3 import InternalError
 from sqlalchemy.exc import IntegrityError
 from src.core.member.member import Member
@@ -182,3 +183,27 @@ def get_member_disciplines(member_id):
     """
     member = find_member(member_id)
     return member.disciplines
+
+
+def member_count_by_gender():
+    """ Returns count of members grouped by gender
+
+    Returns:
+        list: every element is a dict with the structure {
+            gender: 'gender',
+            count: 12
+        }
+    """
+    db_rows = db.session.execute(select(Member.gender, func.count()).
+        group_by(Member.gender))
+
+    result = []
+
+    for row in db_rows:
+        result.append({
+            'gender': row[0],
+            'count': row[1]
+        })
+
+    return result
+

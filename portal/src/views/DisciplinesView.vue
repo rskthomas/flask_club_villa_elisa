@@ -3,6 +3,9 @@ import { onMounted, ref, inject } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
 
 /* simple GET request, no headers needed*/
+
+import { BASE_API_URL } from "../main";
+
 const fetchConfig = {
   method: "GET",
   credentials: 'include',
@@ -10,13 +13,8 @@ const fetchConfig = {
   cache: "default"
 };
 
-
-//Localhost path for dev usage. TODO: Change to production path
-const apiURL = inject('ENDPOINT_PATH')
-
-
 const getDisciplines = async () => {
-  const response = await fetch(apiURL + "/club/disciplines", fetchConfig);
+  const response = await fetch(BASE_API_URL + "/club/disciplines", fetchConfig);
   if (!response.ok) {
           console.log("Error fetching disciplines", response);
           const message = `An error has occured: ${response.status} - ${response.statusText}`;

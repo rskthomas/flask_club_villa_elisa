@@ -2,11 +2,13 @@
 Module to handle CRUD of disciplines
 
 """
+from sqlalchemy import select, func
 from src.core.member.member import Member
 from src.core.discipline.discipline import Discipline
 from src.core.database import db
 from src.core.member import find_member
 from src.core.utils import paginated
+from collections import defaultdict
 
 
 class InactiveDiscipline(Exception):
@@ -160,3 +162,28 @@ def get_members(discipline_id):
     """
     discipline = find_discipline(discipline_id)
     return discipline.members
+
+def enrollment_by_discipline():
+    """
+        Returns information about enrollments by gender.
+        Returned list has the form {
+            "Discipline name": {
+                    "gender", 12,
+                    "gender2": 13
+                }
+            }
+
+
+    Returns:
+        list: list of disciplines info
+    """
+    db_rows = db.session.execute(select(Discipline.name, func.count())
+        .join(Discipline.members)
+        .group_by(Discipline.name))
+    result = []
+
+    for row in db_rows:
+        discipline_name = row[0]
+        members_count = row[1]
+        result.append({'name': discipline_name, 'count': members_count})
+    return result
