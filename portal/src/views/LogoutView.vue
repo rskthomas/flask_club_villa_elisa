@@ -12,17 +12,17 @@ const emit = defineEmits(["logout"]);
 const router = useRouter();
 
 const headers = new Headers({
-  "Access-Control-Allow-Origin": "http://localhost:5001",
+  "Access-Control-Allow-Origin": "http://localhost:5000",
   "Access-Control-Allow-Credentials": "true",
   "Content-Type": "application/json",
 });
 
 const submit = async () => {
-  const response = await fetch("http://localhost:5001/api/auth/logout_jwt", {
+  const response = await fetch("http://localhost:5000/api/auth/logout_jwt", {
     method: "GET",
     credentials: "include",
     mode: "cors",
-    headers: headers,
+    //headers: headers,
   });
 
   if (!response.ok) {

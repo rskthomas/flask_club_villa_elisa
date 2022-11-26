@@ -40,11 +40,11 @@ const data = reactive({
 const router = useRouter();
 
 const submit = async () => {
-  let response = await fetch("http://localhost:5001/api/auth/login", {
+  let response = await fetch("http://localhost:5000/api/auth/login", {
     method: "POST",
     credentials: "include",
     mode: "cors",
-    headers: { "Content-Type": "application/json; charset=UTF-8" },
+    //headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(data),
   });
   if (!response.ok) {
