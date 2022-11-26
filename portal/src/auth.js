@@ -1,17 +1,16 @@
-const ENDPOINT_PATH = "http://localhost:5001";
+const ENDPOINT_PATH = "http://localhost:5000/api"
 
 const fetchConfig = {
   method: "GET",
   credentials: "include",
   mode: "cors",
-  headers: { "Content-Type": "application/json; charset=UTF-8" },
 };
 
 export default {
   currentUser: async () => {
     try {
       let response = await fetch(
-        ENDPOINT_PATH + "/api/auth/user_jwt",
+        ENDPOINT_PATH + "/auth/user_jwt",
         fetchConfig
       );
 
