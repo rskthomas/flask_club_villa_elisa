@@ -1,4 +1,4 @@
-from flask import app
+from flask import current_app
 
 ALLOWED_ORIGIN = "http://localhost:3000"
 
@@ -6,6 +6,7 @@ ALLOWED_ORIGIN = "http://localhost:3000"
 the browser will not send a preflight OPTIONS request (CORS specification) and everything works alright. 
 Should a front end request not be simple, headers to the response of the OPTIONS request should be added,
 like the ones below """
+
 OPTIONS_HEADERS = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
@@ -17,9 +18,12 @@ OPTIONS_HEADERS = {
 
 def apply_CORS(response):
     """Sets CORS headers for the main API endpoints."""
-    #if production do this
-    if app.config["ENV"] == "production":
-        response.headers["Content-Type"] = "application/json"
+    
+    if current_app.config["ENV"] == "development":
+        print("CORS headers applied")
         response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
         response.headers["Access-Control-Allow-Credentials"] = "true"
-        return response
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Content-Type"] = "application/json"
+    
+    return response

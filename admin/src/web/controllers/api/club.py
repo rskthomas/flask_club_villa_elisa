@@ -24,7 +24,6 @@ def info():
     """Returns a JSON with the club's email and phone number."""
     response = make_response(jsonify({"email": _EMAIL, "phone": _PHONE}), 200)
 
-    response.headers["Content-Type"] = "application/json"
 
     return response
 
