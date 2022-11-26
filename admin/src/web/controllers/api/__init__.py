@@ -1,18 +1,29 @@
-from flask import Blueprint
-from src.web.controllers.api.members import member_api_blueprint
-from src.web.controllers.api.club import club_api_blueprint
-from src.web.controllers.api.me import me_api_blueprint
-from src.web.controllers.api.auth import auth_api_blueprint
-from src.web.controllers.api.statistics import statistics_api_blueprint
+from flask import current_app
 
-api_blueprint = Blueprint("api", __name__, url_prefix="/api")
+ALLOWED_ORIGIN = "http://localhost:3000"
 
-api_blueprint.register_blueprint(member_api_blueprint)
+"""If a request is a simple one i.e. GET or POST with no fancy header (Content-Type), 
+the browser will not send a preflight OPTIONS request (CORS specification) and everything works alright. 
+Should a front end request not be simple, headers to the response of the OPTIONS request should be added,
+like the ones below """
 
-api_blueprint.register_blueprint(club_api_blueprint)
+OPTIONS_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Max-Age": "86400",
+}
 
-api_blueprint.register_blueprint(me_api_blueprint)
-
-api_blueprint.register_blueprint(auth_api_blueprint)
-
-api_blueprint.register_blueprint(statistics_api_blueprint)
+def apply_CORS(response):
+    """Sets CORS headers for the main API endpoints."""
+    
+    if current_app.config["ENV"] == "development":
+        print("CORS headers applied")
+        response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Content-Type"] = "application/json"
+    
+    return response

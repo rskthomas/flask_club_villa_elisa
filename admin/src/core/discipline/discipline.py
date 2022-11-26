@@ -16,3 +16,14 @@ class Discipline(db.Model):
         "Member",
         secondary='member_discipline',
         passive_deletes=True)
+
+    def serialize(self): return{
+        "id": self.id,
+        "name": self.name,
+        "category": self.category,
+        "coach": self.coach,
+        "schedule": self.schedule,
+        "monthly_price": self.monthly_price,
+        "active": self.active
+        #"members": [member.serialize for member in self.members]
+    }
