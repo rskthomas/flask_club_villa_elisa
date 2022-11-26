@@ -83,6 +83,7 @@ def create_app(static_folder="static", env="development"):
     csrf.exempt(me_api_blueprint)
     csrf.exempt(auth_api_blueprint)
     
+    
     app.register_blueprint(member_api_blueprint)
     app.register_blueprint(club_api_blueprint)
     app.register_blueprint(me_api_blueprint)
@@ -97,5 +98,8 @@ def create_app(static_folder="static", env="development"):
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)
-
+    
+    
+    
     return app
+
