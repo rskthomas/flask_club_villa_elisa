@@ -44,7 +44,7 @@ const submit = async () => {
     method: "POST",
     credentials: "include",
     mode: "cors",
-    //headers: { "Content-Type": "application/json; charset=UTF-8" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!response.ok) {

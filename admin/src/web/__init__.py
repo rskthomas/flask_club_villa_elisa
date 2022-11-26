@@ -29,6 +29,7 @@ from src.web.controllers.api.members import member_api_blueprint
 from src.web.controllers.api.club import club_api_blueprint
 from src.web.controllers.api.me import me_api_blueprint
 from src.web.controllers.api.auth import auth_api_blueprint
+from src.web.controllers.api.statistics import statistics_api_blueprint
 
 
 UPLOAD_FOLDER = './private'
@@ -81,6 +82,7 @@ def create_app(static_folder="static", env="development"):
     csrf.exempt(member_api_blueprint)
     csrf.exempt(club_api_blueprint)
     csrf.exempt(me_api_blueprint)
+    csrf.exempt(statistics_api_blueprint)
     csrf.exempt(auth_api_blueprint)
     
     
@@ -88,9 +90,9 @@ def create_app(static_folder="static", env="development"):
     app.register_blueprint(club_api_blueprint)
     app.register_blueprint(me_api_blueprint)
     app.register_blueprint(auth_api_blueprint)
+    app.register_blueprint(statistics_api_blueprint)
 
 
-    
     app.register_blueprint(cdn_blueprint)
 
     app.register_blueprint(payments_blueprint)
