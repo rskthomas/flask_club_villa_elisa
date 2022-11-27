@@ -53,7 +53,7 @@
   const formatDate = (date) => {
     return moment(date).format("YYYY-MM-DD");
   }
-  
+
 
 </script>
 
@@ -72,9 +72,13 @@
         <PaymentItem>
           <template #month>Factura del mes: {{ pay.month }}</template>
           <template #amount>${{ pay.amount }}</template>
-          <template #paid >
+          <template #paid >               
             <h3 v-if="pay.paid" style="color: green">Pagada</h3>
-            <h3 v-else-if="pay.paid" style="color: red">Impaga</h3>
+            <h3 v-else="pay.paid" style="color: red">Impaga 
+              <router-link :to="`/pay_invoice/${pay.id}`" custom v-slot="{ navigate }" >
+                <button @click="navigate" role="link" class="w-50 h-20 btn btn-lg btn-primary" > Pagar </button>
+              </router-link>
+            </h3>
           </template>
           <template #payment_date>{{ formatDate(pay.payment_date) }}</template>
         </PaymentItem>

@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import DisciplinesView from '../views/DisciplinesView.vue'
 import PaymentsView from '../views/PaymentsView.vue'
+import PayInvoiceView from '../views/PayInvoiceView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +13,8 @@ const router = createRouter({
     {path: '/login', name: 'login', component: LoginView},
     {path: '/logout', name: 'logout', component: LogoutView},
     {path: '/disciplines', name: 'disciplines', component: DisciplinesView},
-    {path: '/payments', name: 'payments', component: PaymentsView}
+    {path: '/payments', name: 'payments', component: PaymentsView},
+    {path: '/pay_invoice/:invoiceId', name: 'pay_invoice', component: PayInvoiceView}
   ]
 })
 

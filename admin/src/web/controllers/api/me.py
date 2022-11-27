@@ -70,9 +70,17 @@ def pay_invoice():
     current_user = get_jwt_identity()
     print(current_user)
     id = current_user
-    least_recent_unpaid_invoice = unpaid_invoices(id).first()
+
+    content = request.json
+    file = content['file']
+    invoiceId = content['invoiceId']
+    print(invoiceId)
+
+
+    '''least_recent_unpaid_invoice = unpaid_invoices(id).first()
     pay_invoice(least_recent_unpaid_invoice)
     amount= least_recent_unpaid_invoice.amount
-    response = make_response(jsonify({'amount': amount}), 200)
+    '''
+    response = make_response(jsonify({'amount': 200}), 200)
     response.headers['Content-Type'] = 'application/json'
     return response

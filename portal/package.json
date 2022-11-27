@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "chart.js": "^4.0.1",
     "moment": "^2.29.4",
     "vue": "^3.2.41",
