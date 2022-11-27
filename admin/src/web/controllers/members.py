@@ -260,7 +260,7 @@ def show_license(id):
     return render_template(
         "members/license.html",
         member=license_member,
-        profile_photo=profile_photo
+        profile_photo=profile_photo.strip()
     )
 
 @member_blueprint.get("/<int:id>/carnet/pdf")
