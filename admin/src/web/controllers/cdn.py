@@ -23,7 +23,7 @@ def qr_code(member_id):
         box_size=6,
         border=2,
     )
-    qr.add_data(url_for('member.show_license', id=member_id))
+    qr.add_data(url_for('member.show_license', id=member_id, _external=True))
     pil_img = qr.make_image(fill_color="white", back_color="black")
 
     img_io = BytesIO()
