@@ -73,8 +73,9 @@
                 <td>{{mem.email}}</td>
                 <td>{{mem.activation_date.strftime('%d-%m-%Y') }}</td>
                 <td style="display: flex; column-gap: 8px">
-                    <a class="button button--primary" href="/miembros/{{ mem.id }}">Detalle</a>
-                    <a class="button button--primary" href="/miembros/{{ mem.id }}/update">Actualizar</a>
+                    <a class="button button--primary" href="/miembros/{{ mem.id }}">Ver</a>
+                    <a class="button button--primary" href="/miembros/{{ mem.id }}/update">Editar</a>
+                    <a class="button button--primary" href={{url_for('member.show_license', id=mem.id)}}>Ver Carnet</a>
                     <a class="button button--danger" href="/miembros/{{ mem.id }}/delete">Eliminar</a>
                 </td>
             </tr>
