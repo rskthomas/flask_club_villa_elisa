@@ -27,6 +27,7 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
     TESTING = True
+    ENV = "development"
     # if no environment variable is found, use the default value
     DB_USER = environ.get("DB_USER", "postgres")
     DB_PASS = environ.get("DB_PASS", "postgres")

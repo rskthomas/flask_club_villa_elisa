@@ -1,14 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import DisciplineItem from '../components/DisciplineItem.vue'
-import { BASE_API_URL } from "../main";
-const headers = new Headers({
-  "Content-Type": "application/json"
-});
 
+import { BASE_API_URL } from "../main";
+
+/* simple GET request, no headers needed*/
 const fetchConfig = {
   method: "GET",
-  headers: headers,
+  credentials: 'include',
   mode: "cors",
   cache: "default"
 };
@@ -16,12 +15,13 @@ const fetchConfig = {
 const getDisciplines = async () => {
   const response = await fetch(BASE_API_URL + "/api/club/disciplines", fetchConfig);
   if (!response.ok) {
+    console.log("Error fetching disciplines", response);
     const message = `An error has occured: ${response.status} - ${response.statusText}`;
     throw new Error(message);
   }
 
   const data = await response.json();
-  return data;
+  return data
 };
 
 /*empty disciplines map*/
@@ -50,22 +50,22 @@ onMounted(async () => {
 
   <div class="disciplines" style>
     <main>
-      <div v-if="loading" class="loader"></div> 
+      <div v-if="loading" class="loader"></div>
       <div v-if="error">{{ error }}</div>
 
       <div v-if="disciplines.length">
         <div v-for="discipline in disciplines" style="margin:15px;">
 
-        <DisciplineItem>
-          <template #name>{{ discipline.name }}</template>
-          <template #category> - 2015</template>
-          <template #schedule>{{ discipline.schedule }}</template>
-          <template #monthly_price>$ {{ discipline.monthly_price }} mensuales</template>
-          <template #description>{{ discipline.description }}</template>
-        </DisciplineItem>
-      
+          <DisciplineItem>
+            <template #name>{{ discipline.name }}</template>
+            <template #category> {{ discipline.category }} </template>
+            <template #schedule> {{ discipline.schedule }}</template>
+            <template #monthly_price>$ {{ discipline.monthly_price }} mensuales</template>
+            <template #description>{{ discipline.description }}</template>
+          </DisciplineItem>
+
+        </div>
       </div>
-    </div>
 
     </main>
   </div>
@@ -76,22 +76,31 @@ onMounted(async () => {
 .disciplines {
   margin: 1rem;
   display: flex;
-  padding: 1rem;  
+  padding: 1rem;
 }
 
 .loader {
-  border: 5px solid #f3f3f3; /* Light grey */
-  border-top: 5px solid #3498db; /* Blue */
+  border: 5px solid #f3f3f3;
+  /* Light grey */
+  border-top: 5px solid #3498db;
+  /* Blue */
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 2s linear infinite;
- 
+
 }
+
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
+
 h1 {
   text-align: center;
   font-size: 60px;
@@ -99,5 +108,4 @@ h1 {
   color: grey;
   background-clip: text;
 }
-
 </style>

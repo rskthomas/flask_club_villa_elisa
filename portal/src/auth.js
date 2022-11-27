@@ -4,7 +4,6 @@ const fetchConfig = {
   method: "GET",
   credentials: "include",
   mode: "cors",
-  headers: { "Content-Type": "application/json; charset=UTF-8" },
 };
 
 export default {

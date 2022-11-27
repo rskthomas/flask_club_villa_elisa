@@ -12,7 +12,6 @@ const emit = defineEmits(["logout"]);
 const router = useRouter();
 
 const headers = new Headers({
-  "Access-Control-Allow-Credentials": "true",
   "Content-Type": "application/json",
 });
 
@@ -21,7 +20,6 @@ const submit = async () => {
     method: "GET",
     credentials: "include",
     mode: "cors",
-    headers: headers,
   });
 
   if (!response.ok) {

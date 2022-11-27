@@ -16,3 +16,10 @@ class Payment(db.Model):
         nullable=False)
     amount = db.Column(db.String(50), nullable=False)
     payment_date = db.Column(db.DateTime(), default=db.func.now())
+
+    def serialize(self): return {
+        'id': self.id,
+        'month': self.invoice.month,
+        'amount': self.amount,
+        'payment_date': self.payment_date,
+    }

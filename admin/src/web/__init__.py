@@ -3,7 +3,6 @@ from flask import Flask
 from flask import render_template
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.utils import secure_filename
-from flask_cors import CORS
 
 from src.web.config import config
 from src.core import database
@@ -19,12 +18,18 @@ from src.web.controllers.discipline import discipline_blueprint
 from src.web.controllers.users import users_blueprint
 from src.web.controllers.system_config import system_config_blueprint
 from src.web.controllers.members import member_blueprint
-from src.web.controllers.api import api_blueprint
 from src.web.controllers.payments import payments_blueprint
 from src.web.controllers.profile import profile_blueprint
 from src.web.controllers.cdn import cdn_blueprint
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
+
+#nested blueprints are not supported by flask-WTF csrf protection, so all should be registered here
+from src.web.controllers.api.members import member_api_blueprint
+from src.web.controllers.api.club import club_api_blueprint
+from src.web.controllers.api.me import me_api_blueprint
+from src.web.controllers.api.auth import auth_api_blueprint
+from src.web.controllers.api.statistics import statistics_api_blueprint
 
 
 UPLOAD_FOLDER = './private'
@@ -55,28 +60,39 @@ def create_app(static_folder="static", env="development"):
     app.logger.info('upload folder: ' + app.config['UPLOAD_FOLDER'])
     database.init_app(app)
     app.secret_key = environ.get("FLASK_SECRET_KEY", "this is just a secret")
-    #csrf = CSRFProtect(app)
-
-    #enables Cross Origin Resource Sharing on all api endpoints
-    cors = CORS(app, supports_credentials=True, resources={"/api*": {"origins": "*"}})
-
 
     @app.get("/")
     def home():
         return render_template("home.html", header_info=get_header_info())
 
+    csrf = CSRFProtect(app)
+    csrf.init_app(app)
+    
     app.register_blueprint(usersbp)
     app.register_blueprint(databasebp)
     app.register_blueprint(seedsbp)
 
     app.register_blueprint(auth_blueprint)
-
     app.register_blueprint(discipline_blueprint)
     app.register_blueprint(system_config_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(member_blueprint)
-    #csrf.exempt(api_blueprint)
-    app.register_blueprint(api_blueprint)
+
+    #csrf protection on the endpoints are handled by the jwt library
+    csrf.exempt(member_api_blueprint)
+    csrf.exempt(club_api_blueprint)
+    csrf.exempt(me_api_blueprint)
+    csrf.exempt(statistics_api_blueprint)
+    csrf.exempt(auth_api_blueprint)
+    
+    
+    app.register_blueprint(member_api_blueprint)
+    app.register_blueprint(club_api_blueprint)
+    app.register_blueprint(me_api_blueprint)
+    app.register_blueprint(auth_api_blueprint)
+    app.register_blueprint(statistics_api_blueprint)
+
+
     app.register_blueprint(cdn_blueprint)
 
     app.register_blueprint(payments_blueprint)
@@ -84,5 +100,8 @@ def create_app(static_folder="static", env="development"):
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)
-
+    
+    
+    
     return app
+
