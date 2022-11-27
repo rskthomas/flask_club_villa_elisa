@@ -20,6 +20,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     )
+    SERVER_NAME = 'admin-grupo30.proyecto2022.linti.unlp.edu.ar'
 
 
 class DevelopmentConfig(Config):
@@ -37,6 +38,7 @@ class DevelopmentConfig(Config):
         f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SERVER_NAME = 'localhost:5001'
 
 
 class TestingConfig(Config):

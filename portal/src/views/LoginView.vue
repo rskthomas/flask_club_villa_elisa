@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submit">
-    <h1 class="h3 mb-3 fw-normal">Login</h1>
+    <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
 
     <div class="form-floating">
       <input
@@ -62,6 +62,14 @@ const submit = async () => {
   max-width: 330px;
   padding: 15px;
   margin: auto;
+}
+input {
+  margin-bottom: 10px;
+}
+h1 {
+  font-size: 5rem;
+  font-weight: 700;
+  text-align: center;
 }
 
 .form-signin .form-floating:focus-within {
