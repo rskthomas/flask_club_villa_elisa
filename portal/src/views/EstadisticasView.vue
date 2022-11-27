@@ -14,7 +14,7 @@ const checkAccessLevel = async () => {
   if (!user.id) {
     alert("usted debe iniciar sesión para ver esta pantalla");
     router.push("/login");
-  } else if (!auth.isAdmin(user) || !auth.isOperador(user)) {
+  } else if (!auth.isAdmin(user) && !auth.isOperador(user)) {
     alert("Usted no tiene permisos suficientes");
     window.location.href = "/";
   }
