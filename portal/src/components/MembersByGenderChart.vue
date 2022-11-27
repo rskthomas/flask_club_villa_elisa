@@ -37,6 +37,7 @@ const loadData = async () => {
       method: "GET",
       mode: "cors",
       cache: "default",
+      credentials: "include",
       headers: new Headers({
         "Content-Type": "application/json",
       }),

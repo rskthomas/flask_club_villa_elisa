@@ -40,11 +40,12 @@ let chartOptions = {
 };
 let chartIDKey = "just-a-key";
 let loaded = ref(false);
-const loadData = async () =>{
+const loadData = async () => {
   let response = await fetch(BASE_API_URL + "/api/estadisticas/disciplinas", {
     method: "GET",
     mode: "cors",
     cache: "default",
+    credentials: "include",
     headers: new Headers({
       "Content-Type": "application/json",
     }),
