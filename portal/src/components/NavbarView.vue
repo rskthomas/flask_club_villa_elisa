@@ -2,7 +2,7 @@
 import auth from "../auth";
 import { onMounted, ref } from "vue";
 
-let user = ref({ id: null });
+let user = ref(0);
 let loaded = ref(false);
 
 const loadUser = async () => {
@@ -10,13 +10,9 @@ const loadUser = async () => {
   loaded.value = true;
 };
 
-const isAdmin = (user) => {
-  return user.roles.find((role) => role.includes("Administrador")) != undefined;
-};
-const isOperador = (user) => {
-  return user.roles.find((role) => role.includes("Operador")) != undefined;
-};
-onMounted(() => loadUser());
+onMounted(() => {
+  loadUser();
+});
 </script>
 
 <template>
@@ -33,7 +29,7 @@ onMounted(() => loadUser());
               >Disciplinas</router-link
             >
           </li>
-          <li class="nav-item" v-if="loaded && user.id && (isAdmin(user) || isOperador(user))">
+          <li class="nav-item" v-if="loaded && user.id && (auth.isAdmin(user) || auth.isOperador(user))">
             <router-link to="/estadisticas" class="nav-link active"
               >Estadisticas</router-link
             >

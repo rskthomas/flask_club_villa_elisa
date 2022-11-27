@@ -22,17 +22,18 @@ ChartJS.register(
 );
 
 let chartData = ref({
-    labels: ['enero', 'febrero'],
-    datasets: [{
-        label: 'Impagas',
-        data: [10, 20],
-        stack: 'stack0'
+  labels: ["enero", "febrero"],
+  datasets: [
+    {
+      label: "Impagas",
+      data: [10, 20],
+      stack: "stack0",
     },
     {
-        label: 'Paga',
-        data: [1, 2],
-        stack: 'stack0',
-        backgroundColor: '#f17172f'
+      label: "Paga",
+      data: [1, 2],
+      stack: "stack0",
+      backgroundColor: "#f17172f",
     }]
 });
 
@@ -51,17 +52,17 @@ let chartOptions = {
   data: chartData,
   plugins: plugins,
   scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true
-      }
+    x: {
+      stacked: true,
     },
-    responsive: true,
-    interaction: {
-      intersect: false,
+    y: {
+      stacked: true,
     },
+  },
+  responsive: true,
+  interaction: {
+    intersect: false,
+  },
 };
 
 let loaded = ref(true);
@@ -70,6 +71,7 @@ const loadData = async () =>{
     method: "GET",
     mode: "cors",
     cache: "default",
+    credentials: "include",
     headers: new Headers({
       "Content-Type": "application/json",
     }),
