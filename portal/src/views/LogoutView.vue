@@ -27,6 +27,9 @@ const submit = async () => {
     throw new Error(message);
   }
   emit("logout");
-  await router.push("/login");
+  
+  await router.push("/");
+  /*awful way to refresh navbar, but gets the job done*/
+  router.go(0);
 };
 </script>

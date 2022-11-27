@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, defineEmits } from "vue";
+import { reactive, defineEmits, inject } from "vue";
 import { useRouter } from "vue-router";
 import { BASE_API_URL } from "../main";
 const emit = defineEmits(["login"]);
@@ -52,8 +52,13 @@ const submit = async () => {
   } else {
     emit("login");
     await router.push("/");
+    /*awful way to refresh navbar, but gets the job done*/
+    router.go(0);
   }
 };
+
+
+
 </script>
 
 <style>
