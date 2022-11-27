@@ -4,8 +4,23 @@ from src.core.payments import unpaid_invoices, pay_invoice, member_payments
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.web.controllers.api.auth import getMemberId, BAD_MEMBER_RESPONSE
 from src.web.controllers.api import apply_CORS
+from src.core import auth
+from src.core import member
 
 me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
+
+
+
+def payment_as_json(payment):
+    """Converts a payment to json and returns it"""
+    return {
+        'id': payment.id,
+        'month': payment.invoice.month,
+        'amount': payment.amount,
+        'payment_date': payment.payment_date,
+        'paid': payment.invoice.paid
+    }
+
 
 @me_api_blueprint.get("/disciplines")
 @jwt_required()
@@ -63,6 +78,13 @@ def profile():
 def pay_invoice():
     
     id = getMemberId( get_jwt_identity() )
+    print(id)
+
+    content = request.json
+    file = content['file']
+    invoiceId = content['invoiceId']
+    print(invoiceId)
+
     if not id:
         return jsonify(BAD_MEMBER_RESPONSE), 401
     
