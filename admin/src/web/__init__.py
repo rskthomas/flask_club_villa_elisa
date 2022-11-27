@@ -67,7 +67,7 @@ def create_app(static_folder="static", env="development"):
 
     csrf = CSRFProtect(app)
     csrf.init_app(app)
-    
+
     app.register_blueprint(usersbp)
     app.register_blueprint(databasebp)
     app.register_blueprint(seedsbp)
