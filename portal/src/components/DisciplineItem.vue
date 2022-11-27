@@ -3,13 +3,15 @@
     <div class="container">
       <h1>
         <slot name="name"> </slot>
-        <slot name="category"> - </slot>
       </h1>
+      <h2>
+        Categoría
+        <slot name="category"> - </slot>
+      </h2>
       <h3>
         <slot name="schedule"> </slot>
       </h3>
-      <slot name="monthly_price"></slot>
-      <br />
+      <p> <slot name="monthly_price"></slot> </p>
       <slot> </slot>
     </div>
   </div>
@@ -30,23 +32,39 @@
 }
 
 .container {
-  padding:15px;
+  padding:10px;
   margin: 5px;
 }
 
 h1 {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 600;
-  background-image: linear-gradient(to right, #2d9529, #025f3b);
+  background-image: linear-gradient(to right, #299590, #023d5f);
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
 }
 
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  background-image: linear-gradient(to right, #299590, #025a5f);
+  color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
 h3 {
   font-size: 1.2rem;
   font-weight: 500;
-  margin-bottom: 0.4rem;
-  color: var(--color-heading);
 }
+
+p {
+  font-size: 18px;
+  font-weight: 700;
+  color: #168a5e;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  text-align: bottom;
+}
+
 </style>
