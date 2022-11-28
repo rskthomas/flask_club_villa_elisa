@@ -2,16 +2,18 @@
   <div class="card">
     <div class="container">
       <h1>
-        <slot name="name"> </slot>
+        <slot name="month"> </slot>
       </h1>
       <h2>
-        Categoría
-        <slot name="category"> - </slot>
+        <slot name="amount"> </slot>
       </h2>
       <h3>
-        <slot name="schedule"> </slot>
+        <slot name="paid"> </slot>
       </h3>
-      <p> <slot name="monthly_price"></slot> </p>
+      <h3>
+        <slot name="payment_date"> </slot>
+      </h3>
+      <br />
       <slot> </slot>
     </div>
   </div>
@@ -32,39 +34,23 @@
 }
 
 .container {
-  padding:10px;
+  padding:15px;
   margin: 5px;
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 600;
-  background-image: linear-gradient(to right, #299590, #023d5f);
+  background-image: linear-gradient(to right, #2d9529, #025f3b);
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
 }
 
-h2 {
-  font-size: 20px;
-  font-weight: 600;
-  background-image: linear-gradient(to right, #299590, #025a5f);
-  color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
-}
 h3 {
   font-size: 1.2rem;
   font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--color-heading);
 }
-
-p {
-  font-size: 18px;
-  font-weight: 700;
-  color: #168a5e;
-  margin-top: 1rem;
-  margin-right: 1rem;
-  text-align: bottom;
-}
-
 </style>

@@ -84,7 +84,7 @@ def create_app(static_folder="static", env="development"):
     csrf.exempt(me_api_blueprint)
     csrf.exempt(statistics_api_blueprint)
     csrf.exempt(auth_api_blueprint)
-    
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     
     app.register_blueprint(member_api_blueprint)
     app.register_blueprint(club_api_blueprint)

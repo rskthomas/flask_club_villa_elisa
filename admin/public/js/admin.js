@@ -17,11 +17,11 @@ function showResults(val) {
       return;
     }
     let list = '';
-    fetch('/api/miembros?q=' + val).then(
+    fetch('/api/members?q=' + val).then(
      function (response) {
        return response.json();
      }).then(function (response) {
-        data=response.members
+        data=response
        for (i=0; i<data.length; i++) {
          list += '<li data-member-id=' + data[i].id + '>' + data[i].personal_id_type + " - " + data[i].personal_id + ' - ' + data[i].last_name + '</li>';
        }
