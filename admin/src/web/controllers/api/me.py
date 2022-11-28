@@ -1,6 +1,6 @@
 from flask import Blueprint, request, make_response, jsonify, Flask
 from src.core.member import get_member_disciplines, find_member
-from src.core.payments import unpaid_invoices, pay_invoice, member_payments, member_invoices
+from src.core.payments import unpaid_invoices, pay_invoice as pay__invoice, member_payments, member_invoices
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.web.controllers.api.auth import getMemberId, BAD_MEMBER_RESPONSE
 from src.web.controllers.api import apply_CORS
@@ -81,17 +81,14 @@ def pay_invoice():
     print(id)
 
     content = request.json
-    file = content['file']
     invoiceId = content['invoiceId']
-    print(invoiceId)
 
     if not id:
         return jsonify(BAD_MEMBER_RESPONSE), 401
     
-    least_recent_unpaid_invoice = unpaid_invoices(id).first()
-    pay_invoice(least_recent_unpaid_invoice)
-    amount = least_recent_unpaid_invoice.amount
-    response = make_response(jsonify({"amount": amount}), 200)
+    payment= pay__invoice(invoiceId)
+    response = make_response(jsonify({"amount": payment.amount}), 200)
+
     response.headers["Content-Type"] = "application/json"
 
     return response
@@ -112,7 +109,6 @@ def license():
         profile= member.serialize()
         ), 200)
             
-    response.headers["Content-Type"] = "application/json"
     return response
 
 @me_api_blueprint.after_request
