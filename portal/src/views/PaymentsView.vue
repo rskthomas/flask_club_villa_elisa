@@ -3,24 +3,18 @@
   import { onMounted, ref } from 'vue';
   import PaymentItem from '../components/PaymentItem.vue';
   import moment from 'moment';
-
-  const headers = new Headers({
-    "Access-Control-Allow-Origin": "http://localhost:5001",
-    "Access-Control-Allow-Credentials": "true",
-    "Content-Type": "application/json"
-  });
+  import { BASE_API_URL } from "../main";
 
   const fetchConfig = {
     method: "GET",
     credentials: 'include',
     mode: "cors",
-    headers: headers,
     cache: "default"
   };
 
 
   const getPayments = async () => {
-    const response = await fetch('http://localhost:5001/api/me/payments', fetchConfig);
+    const response = await fetch(BASE_API_URL+'/api/me/payments', fetchConfig);
     if (!response.ok) {
       const message = `An error has occured: ${response.status} - ${response.statusText}`;
       throw new Error(message);

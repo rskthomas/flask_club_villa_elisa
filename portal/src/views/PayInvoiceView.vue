@@ -22,6 +22,7 @@
    import "bootstrap/dist/css/bootstrap.min.css";
    import { ref } from "vue";
    import { useRoute } from 'vue-router'
+   import { BASE_API_URL } from "../main";
    export default {
 
         setup() {
@@ -32,28 +33,27 @@
             const onchange = (e) => {
                 file.value = e.target.files[0];
             }      
-            
-            const headers = new Headers({
-                "Access-Control-Allow-Credentials": "true",
-                "Content-Type": "multipart/form-data"
-                });
 
+            
             const submitForm = async() => {
                 let invoiceId = route.params.invoiceId     
 
                 const data = new FormData();
-                data.append("file", file.value)
                 data.append("invoiceId", invoiceId)
-
-                let response = await fetch('http://localhost:5001/api/me/payments', {
+                console.log(invoiceId)
+                let response = await fetch(BASE_API_URL+'/api/me/payments', {
                     method: "POST",
                     credentials: "include",
                     mode: "cors",
-                    headers: headers,
-                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "invoiceId": invoiceId,
+                    }),
                 });
                 if (!response.ok){
-                    alert("Credenciales inválidas");
+                    alert("Archivo Inválido");
                 } else {
                     await router.push("/payments");
                 }

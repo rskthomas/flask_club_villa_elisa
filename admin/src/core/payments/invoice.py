@@ -22,6 +22,14 @@ class Invoice(db.Model):
         uselist=False)
     extra_items = db.relationship("InvoiceExtraItem")
 
+    def serialize(self): return {
+        'id': self.id,
+        'month': self.month,
+        'year': self.year,
+        'paid': self.paid,
+        'amount': self.total_price
+    }
+
 
 class InvoiceExtraItem(db.Model):
     """Invoice extra item model"""
@@ -37,3 +45,5 @@ class InvoiceExtraItem(db.Model):
         db.Integer,
         db.ForeignKey('invoice.id'),
         nullable=False)
+
+    
