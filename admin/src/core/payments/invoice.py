@@ -37,3 +37,12 @@ class InvoiceExtraItem(db.Model):
         db.Integer,
         db.ForeignKey('invoice.id'),
         nullable=False)
+
+def serialize(self): return {
+        'id': self.id,
+        'month': self.invoice.month,
+        'year': self.invoice.year,
+        'paid': self.invoice.paid,
+        'amount': self.amount,
+        'payment_date': self.payment_date,
+    }

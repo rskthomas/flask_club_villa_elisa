@@ -1,6 +1,6 @@
 from flask import Blueprint, request, make_response, jsonify, Flask
 from src.core.member import get_member_disciplines, find_member
-from src.core.payments import unpaid_invoices, pay_invoice, member_payments
+from src.core.payments import unpaid_invoices, pay_invoice, member_payments, member_invoices
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.web.controllers.api.auth import getMemberId, BAD_MEMBER_RESPONSE
 from src.web.controllers.api import apply_CORS
@@ -51,9 +51,8 @@ def payments():
         return jsonify(BAD_MEMBER_RESPONSE), 401
     
     response = make_response(
-        jsonify([payment.serialize() for payment in member_payments(id)]), 200
+        jsonify([invoice.serialize() for invoice in member_invoices(id)]), 200
     )
-    response.headers["Content-Type"] = "application/json"
 
     return response
 
