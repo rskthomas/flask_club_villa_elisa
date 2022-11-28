@@ -39,6 +39,11 @@ onMounted(() => {
               >Logout</router-link
             >
           </li>
+          <li class="nav-item" v-if="loaded && user.id">
+            <router-link to="/payments" class="nav-link active"
+              >Mis Pagos</router-link
+            >
+          </li>
         </ul>
       </div>
     </div>

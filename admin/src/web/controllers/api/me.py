@@ -47,6 +47,7 @@ def disciplines():
 def payments():
     """Returns a list of all payments (JSON) of currently logged member"""
     id = getMemberId( get_jwt_identity() )
+    print("id: ", id)
     if not id:
         return jsonify(BAD_MEMBER_RESPONSE), 401
     
