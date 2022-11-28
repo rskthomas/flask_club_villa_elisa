@@ -1,5 +1,6 @@
 from flask import Blueprint, request, make_response, jsonify
 from src.core.member import list_members
+from src.web.controllers.api import apply_CORS
 
 
 member_api_blueprint = Blueprint(
@@ -17,3 +18,7 @@ def index():
     response.headers["Content-Type"] = "application/json"
 
     return response
+
+@member_api_blueprint.after_request
+def cors_HEADERS(response):
+    return apply_CORS(response)
