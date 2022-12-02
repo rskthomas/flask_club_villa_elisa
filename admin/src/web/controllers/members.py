@@ -1,3 +1,4 @@
+from tkinter import Image
 import pdfkit
 import os.path
 import re
@@ -12,6 +13,8 @@ from src.web.controllers.auth import login_required
 from src.web.forms.member import MemberForm
 from src.core import member
 from src.web.helpers.get_header_info import get_header_info
+import base64
+from src.web.controllers.cdn import file, generate_qr_code
 
 member_blueprint = Blueprint("member", __name__, url_prefix="/miembros")
 filters = {}
@@ -265,7 +268,7 @@ def show_license(id):
 
 @member_blueprint.get("/<int:id>/carnet/pdf")
 @login_required('member_show')
-def show_license_idf(id):
+def download_license_pdf(id):
     """Shows users' license based on the receiver id"""
 
     license_member = member.find_member(id)
@@ -274,11 +277,20 @@ def show_license_idf(id):
     else:
         profile_photo = 'default-profile-photo.jpg'
 
+    #profile_image = file(profile_photo)
+    file = open(os.path.join(current_app.config['UPLOAD_FOLDER'], profile_photo), 'rb')
+    profile_string = base64.b64encode(file.read())
+
+    #get QRCODE
+    qr_buff=generate_qr_code(license_member.id)
+    qr_image = base64.b64encode(qr_buff.getvalue())
+
     # Get the HTML output
     out = render_template(
-        "members/license.html",
+        "members/license_pdf.html",
         member=license_member,
-        profile_photo=profile_photo
+        profile_photo=profile_string.decode('utf-8'),
+        qr_code = qr_image.decode('utf-8')
     )
 
     # PDF options
@@ -291,9 +303,10 @@ def show_license_idf(id):
 
     # Build PDF from HTML
     pdf = pdfkit.from_string(out, options=options, css = './public/style.css')
-
+    
+    file.close()
     # Download the PDF
-    response = Response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "filename=output.pdf"
+    response = Response(pdf, mimetype = 'application/pdf', headers = {"Content-Disposition":"attachment;filename=license.pdf"})
+
     return response
+    

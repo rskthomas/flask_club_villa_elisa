@@ -11,12 +11,24 @@ cdn_blueprint = Blueprint(
 
 
 @cdn_blueprint.get('/file/<path:filename>')
-@login_required()
 def file(filename):
     return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 @cdn_blueprint.get('/qrcode/<int:member_id>')
 def qr_code(member_id):
+    img_io = generate_qr_code(member_id)
+
+    return send_file(img_io, mimetype='image/png')
+
+def generate_qr_code(member_id):
+    """Generates a QR code for a member
+
+    Args:
+        member_id (int): id of member
+
+    Returns:
+        BytesIO: in memory buffer of image
+    """
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -30,4 +42,4 @@ def qr_code(member_id):
     pil_img.save(img_io, 'PNG', quality=70)
     img_io.seek(0)
 
-    return send_file(img_io, mimetype='image/png')
+    return img_io
