@@ -83,10 +83,21 @@
 							<p> Monto total recibido: {{invoice.payment.amount}} </p>
 						</td>
 					</tr>
+					<br>
+					<tr>
+						<td>
+							<p>Comprobante de pago:</p>
+							<div>
+								<img src={{ url_for('cdn.file', filename=receipt_photo) }} />
+							</div>
+						</td>
+					</tr>
 				</table>
 			</td>
 		</tr>
 		{% endif %}
+
+
 
 	</div>
 </body>

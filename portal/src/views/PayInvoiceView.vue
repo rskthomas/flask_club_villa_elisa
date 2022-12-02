@@ -3,7 +3,7 @@
     <div class="App container mt-5">
         <h1>Pagar Factura: {{$route.params.invoiceId}}</h1>
         
-        <form enctype="multipart/form-data"  @submit.prevent="submitForm" >
+        <form @submit.prevent="submitForm" encType='multipart/form-data'>
             <div class="mb-3">
                 <label for="formFile" class="form-label">Cargar Comprobante:</label>
                 <input class="form-control" ref="fileInput" type="file" @input="pickFile" @change="onchange">
@@ -21,39 +21,38 @@
    //importing bootstrap 5 and pdf maker Modules
    import "bootstrap/dist/css/bootstrap.min.css";
    import { ref } from "vue";
-   import { useRoute } from 'vue-router'
+   import { useRoute, useRouter } from 'vue-router'
    import { BASE_API_URL } from "../main";
    export default {
 
         setup() {
             const route = useRoute()
+            const router = useRouter();
 
             const file = ref("");
          
             const onchange = (e) => {
+                console.log("Cambio");
                 file.value = e.target.files[0];
             }      
 
-            
             const submitForm = async() => {
                 let invoiceId = route.params.invoiceId     
 
-                const data = new FormData();
-                data.append("invoiceId", invoiceId)
+                let formData = new FormData(); 
+                formData.append("invoiceId", invoiceId);
+                formData.append("file", file.value);
+
                 console.log(invoiceId)
-                let response = await fetch(BASE_API_URL+'/api/me/payments', {
-                    method: "POST",
+                let response = await fetch(BASE_API_URL+'/api/me/makepayment', {
+                    method: 'POST',
                     credentials: "include",
                     mode: "cors",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        "invoiceId": invoiceId,
-                    }),
+                    body: formData               
                 });
                 if (!response.ok){
-                    alert("Archivo Inválido");
+                    const message = `An error has occured: ${response.status} - ${response.statusText}`;
+                    throw new Error(message);
                 } else {
                     await router.push("/payments");
                 }
