@@ -99,8 +99,18 @@ def show_invoice(invoice_id):
         invoice_id (int): id of invoice
     """
     invoice = Payments.get_invoice(invoice_id)
+
+    # Set photo of receipt of payment
+    if invoice.receipt_photo_name:
+        receipt = invoice.receipt_photo_name
+    else:
+        receipt = 'default-receipt-photo.jpg'
+
     return render_template(
-        "payments/show.html", invoice=invoice, header_info=get_header_info()
+        "payments/show.html", 
+        invoice=invoice, 
+        header_info=get_header_info(),
+        receipt_photo = receipt.strip()
     )
 
 

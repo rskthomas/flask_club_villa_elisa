@@ -21,6 +21,7 @@ class Invoice(db.Model):
         back_populates="invoice",
         uselist=False)
     extra_items = db.relationship("InvoiceExtraItem")
+    receipt_photo_name = db.Column(db.String(50), unique=True)
 
     def serialize(self): return {
         'id': self.id,
