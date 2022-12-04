@@ -177,6 +177,28 @@ def pay_invoice(invoice_id):
     db.session.commit()
     return payment
 
+def pay_invoice_with_receipt(invoice_id, filename):
+    """Creates a new payment for an invoice
+
+    Args:
+        invoice_id(int): id of the invoice
+        receipt(largeBinary): image of receipt
+
+    Returns: new_payment(Payment)
+    """
+    invoice = get_invoice(invoice_id)
+    if invoice.paid:
+        return False
+    invoice.paid = True
+    payment = Payment(
+        amount=invoice.total_price,
+        invoice_id=invoice.id,
+        member_id=invoice.member_id)
+    invoice = update_invoice(invoice, paid=True, payment=payment.id, receipt_photo_name=filename)
+    db.session.add(payment)
+    db.session.commit()
+    return payment    
+
 
 def amount_paid(invoice_id):
     """Returns the sum of all payments of an invoice for a given invoice_id
@@ -240,3 +262,17 @@ def last_year_invoices():
         count = row[2]
         result.append({ 'month': month, 'paid': paid, 'count': count})
     return result
+
+
+def get_payment(invoice: int):
+    """looks up for an invoice based on received id
+
+    Args:
+        invoice_id (int): if of the invoice
+
+    Returns:
+        Invoice: Invoice from the DB
+    """
+
+    payment = Payment.query.filter(Payment.invoice_id == invoice).first()
+    return payment    

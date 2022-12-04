@@ -76,6 +76,7 @@
                     <a class="button button--primary" href="/miembros/{{ mem.id }}">Ver</a>
                     <a class="button button--primary" href="/miembros/{{ mem.id }}/update">Editar</a>
                     <a class="button button--primary" href={{url_for('member.show_license', id=mem.id)}}>Ver Carnet</a>
+                    <a class="button button--primary" href={{url_for('member.download_license_pdf', id=mem.id)}}>Descargar Carnet</a>
                     <a class="button button--danger" href="/miembros/{{ mem.id }}/delete">Eliminar</a>
                 </td>
             </tr>
