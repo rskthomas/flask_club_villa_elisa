@@ -97,40 +97,42 @@ const loadData = async () =>{
     datasets: [
       {
         label: "Pagas",
-        backgroundColor: "#ed0505",
+        backgroundColor: "#8feb34",
         data: [],
       },
       {
         label: "Impagas",
-        backgroundColor: "#8feb34",
+        backgroundColor: "#ed0505",
         data: [],
       },
     ],
   };
-  let last_paid_month = 1;
-  let last_unpaid_month = 1;
+  let last_paid_month = 0;
+  let last_unpaid_month = 0;
   for (const month_count of invoice_info) {
     let dataset_index;
     if (month_count.paid) {
       dataset_index = 0;
       if (last_paid_month < month_count.month - 1) {
         let i = last_paid_month;
-        while (i < month_count.month - 1 - last_paid_month) {
+        while (i < month_count.month - 1) {
           chartData.value.datasets[dataset_index].data.push(0);
           i++;
+          last_paid_month++;
         }
-        last_paid_month = month_count.count;
       }
+      last_paid_month++;
     } else {
       dataset_index = 1;
       if (last_unpaid_month < month_count.month - 1) {
         let i = last_unpaid_month;
-        while (i < month_count.month - 1 - last_unpaid_month) {
+        while (i < month_count.month - 1) {
           chartData.value.datasets[dataset_index].data.push(0);
           i++;
+          last_unpaid_month++;
         }
-        last_paid_month = month_count.count;
       }
+      last_unpaid_month++;
     }
     chartData.value.datasets[dataset_index].data.push(month_count.count);
   }
