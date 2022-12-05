@@ -277,9 +277,10 @@ def download_license_pdf(id):
     else:
         profile_photo = 'default-profile-photo.jpg'
 
+    profile_photo = profile_photo.strip()
     #profile_image = file(profile_photo)
     file = open(os.path.join(current_app.config['UPLOAD_FOLDER'], profile_photo), 'rb')
-    profile_string = base64.b64encode(file.read()).strip()
+    profile_string = base64.b64encode(file.read())
 
     #get QRCODE
     qr_buff=generate_qr_code(license_member.id)
