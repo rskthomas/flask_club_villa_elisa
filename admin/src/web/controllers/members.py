@@ -1,3 +1,4 @@
+from tkinter import Image
 import pdfkit
 import os.path
 import re
@@ -278,7 +279,7 @@ def download_license_pdf(id):
 
     #profile_image = file(profile_photo)
     file = open(os.path.join(current_app.config['UPLOAD_FOLDER'], profile_photo), 'rb')
-    profile_string = base64.b64encode(file.read())
+    profile_string = base64.b64encode(file.read()).strip()
 
     #get QRCODE
     qr_buff=generate_qr_code(license_member.id)
