@@ -87,6 +87,7 @@ const loadData = async () =>{
       "Abril",
       "Mayo",
       "Junio",
+      "Julio",
       "Agosto",
       "Septiembre",
       "Octubre",
@@ -95,12 +96,12 @@ const loadData = async () =>{
     ],
     datasets: [
       {
-        label: "Impagas",
+        label: "Pagas",
         backgroundColor: "#ed0505",
         data: [],
       },
       {
-        label: "Pagas",
+        label: "Impagas",
         backgroundColor: "#8feb34",
         data: [],
       },
