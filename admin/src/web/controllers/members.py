@@ -1,4 +1,3 @@
-from tkinter import Image
 import pdfkit
 import os.path
 import re
