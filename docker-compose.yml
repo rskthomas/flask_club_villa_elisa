@@ -6,19 +6,22 @@ services:
       - 5001:5000
     depends_on:
       - db
+    container_name: g30-backend
     environment:
-      FLASK_DEBUG: True
+      FLASK_DEBUG: "True"
       PYTHONUNBUFFERED: 1
       DB_HOST: db
     volumes:
     - ./admin:/var/www
   fe:
+    container_name: g30-frontend
     build: ./portal
     ports:
       - 8080:5173
     volumes:
     - ./portal:/app
   db:
+    container_name: g30-db
     image: postgres:14-alpine
     ports:
       - 5432:5432
