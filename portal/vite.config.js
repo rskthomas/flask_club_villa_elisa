@@ -35,9 +35,24 @@ export default defineConfig({
             purpose: 'any maskable'
           }
         ]
+      },
+      workbox: {
+        runtimeCaching: [{
+          urlPattern: (url)=>{
+            return url.pathname.startsWith('/api')
+          },
+          handler: 'NetworkFirst',
+          options: {
+            networkTimeoutSeconds: 20,
+            cacheName: 'api-cache',
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        }]
       }
-    }      
-    )],
+    }
+  )],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
