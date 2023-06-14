@@ -14,8 +14,8 @@
      </div>
       <div class="col">
 
-        <img srcset="/pwa-192x192.png 320w,
-             /pwa-icon-192x192.png 192w,
+        <img srcset="/pwa-192x192.png 300w,
+             /pwa-512x512.png 400w,
              /logo.png 800w"
           sizes="(max-width: 320px) 200px,
                   (max-width: 480px) 400px,
