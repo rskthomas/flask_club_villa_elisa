@@ -12,6 +12,7 @@ export default defineConfig({
     vueJsx(), 
     VitePWA({
       registerType: 'autoUpdate',
+      useCredentials: true,
       includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'Club Deportivo Villa Elisa',
@@ -37,11 +38,12 @@ export default defineConfig({
         ]
       },
       workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}'],
         runtimeCaching: [{
           urlPattern: (url)=>{
             return url.pathname.startsWith('/api')
           },
-          handler: 'NetworkFirst',
+          handler: 'CacheFirst',
           options: {
             networkTimeoutSeconds: 20,
             cacheName: 'api-cache',
