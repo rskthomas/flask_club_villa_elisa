@@ -13,7 +13,15 @@
         </ul>
      </div>
       <div class="col">
-        <img src="/logo.png" />
+
+        <img srcset="/pwa-192x192.png 300w,
+             /pwa-512x512.png 400w,
+             /logo.png 800w"
+          sizes="(max-width: 320px) 200px,
+                  (max-width: 480px) 400px,
+                  800px"
+          src="/logo.png" alt="logo">
+
       </div>
     </div>
     </div>
