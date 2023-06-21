@@ -1,4 +1,4 @@
-describe('Test APIs', () => {
+describe('Test APIs with login', () => {
 
   beforeEach(() => {
     
@@ -23,54 +23,13 @@ describe('Test APIs', () => {
   });
 
 
-
-  // ----------------------------------------
-  // API para obtener la Informacion del Club
-  // ----------------------------------------
-  it('API Club test Info', () => { 
-    cy.request({
-      method: 'GET',
-      url: 'http://localhost:5001/api/club/info',
-      headers:{
-              'Content-Type':'application/json'
-              }      
-
-    }).then( (response) => {
-      expect(response.status).to.equal(200)
-      expect(response.body.email).to.equal('clubdeportivovillaelisa@gmail.com')
-      expect(response.body.phone).to.equal('0221 487-0193')
-    })
-  })
-
-
-
-  // ----------------------------------------
-  // API para obtener todas las disciplinas
-  // ----------------------------------------
-  it('API Club test Disciplines', () => {  
-    cy.request({
-        method: 'GET',
-        url: 'http://localhost:5001/api/club/disciplines',
-        headers:{
-                'Content-Type':'application/json'
-                }      
-
-    }).then( (response) => {
-      expect(response.status).to.equal(200)
-      expect(response.body[0].active).to.equal(true)
-      expect(response.body[0].category).to.equal('Armas')
-      expect(response.body[1].category).to.equal('Atletismo')
-    })
-  })
-
-
   // ----------------------------------------------------
   // API para obtener todas las disciplinas de un miembro
   // ---------------------------------------------------- 
-  it('API Club test Disciplines by Member', () => {  
+  it('API Me test Disciplines by Member', () => {  
     cy.request({
         method: 'GET',
-        url: 'http://localhost:5001/api/club/disciplines',
+        url: 'http://localhost:5001/api/me/disciplines',
         headers:{
                 'Content-Type':'application/json',
                 'Authorization': 1
@@ -100,8 +59,43 @@ describe('Test APIs', () => {
       expect(response.body.first_name).to.equal('Nicolas')
       expect(response.body.last_name).to.equal('Barone')
     })
-
   })
 
 
+  // ----------------------------------------
+  // API para obtener los pagos de un miembro
+  // ----------------------------------------
+  it('API Me test Payments of some member', () => {
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:5001/api/me/payments',
+      headers:{
+              'Content-Type':'application/json',
+              'Authorization': 1
+              }
+    }).then( (response) => {
+      expect(response.status).to.equal(200)
+      expect(response.body[0].paid).to.equal(true)
+      expect(response.body[0].month).to.equal(6)
+      expect(response.body[0].amount).to.equal(1760.0)
+    })
+  })
+
+
+  // ----------------------------------------
+  // API para obtener las licencias de un miembro
+  // ----------------------------------------
+  it('API Me test License of some member', () => {
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:5001/api/me/license',
+      headers:{
+              'Content-Type':'application/json',
+              'Authorization': 1
+              }
+    }).then( (response) => {
+      expect(response.status).to.equal(200)
+      expect(response.body.description).to.equal('El miembro no presenta ninguna deuda')
+    })
+  })
 })

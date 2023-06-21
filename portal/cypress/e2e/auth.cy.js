@@ -1,4 +1,4 @@
-describe('Test Website', () => {
+describe('Test Login', () => {
 
   it('Visit front-end website and Wrong Login', () => {
     Cypress.on('uncaught:exception', (err, runnable) => {
@@ -45,29 +45,6 @@ describe('Test Website', () => {
     // Realiza algunas validaciones
     cy.contains('Logout')
   })
-
-
-  it('Obtain disciplines for member logged', () => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false
-    })
-  
-    cy.visit('http://localhost:3000')
-    
-    // Hace click en el link Login
-    cy.contains('Login').click()
-    cy.url().should('include', '/login')
-  
-    // Ingresamos los datos para Loguearnos y realizar el Logueo
-    cy.get('input[type="username"]').type('nicolasbarone@gmail.com')
-    cy.get('input[type="password"]').type('123')
-
-    cy.get('button[type="submit"]').click();
-  
-    // Hace click en el link Login
-    cy.contains('Disciplinas').click()
-  })
-
 
 
 })
