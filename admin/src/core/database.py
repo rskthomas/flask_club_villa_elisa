@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask import current_app
+from src.core import seeds
 
 db = SQLAlchemy()
 
@@ -15,6 +17,11 @@ def config_db(app):
     @app.before_first_request
     def init_database():
         db.create_all()
+        """If server is on dev mode, initialize the database with some data"""
+        if current_app.config["ENV"] == "development":
+            seeds.run()
+        print("Database initialized!")
+        
 
     @app.teardown_request
     def close_session(exception=None):
@@ -39,3 +46,4 @@ def drop_db():
     """Drops all tables from the database"""
     print("Dropping all tables!")
     db.drop_all()
+
